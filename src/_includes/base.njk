@@ -1,0 +1,255 @@
+{# ── Macros ───────────────────────────────────────────────────────────────── #}
+{% macro githubIcon(cls='w-3.5 h-3.5') %}
+<svg class="{{ cls }} flex-shrink-0" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+</svg>
+{% endmacro %}
+
+<!DOCTYPE html>
+<html lang="vi" x-data="appState()" x-init="init()">
+<head>
+  <script>(function(){var m=localStorage.getItem('theme')||'auto';var q=window.matchMedia('(prefers-color-scheme: dark)');if(m==='dark'||(m==='auto'&&q.matches))document.documentElement.classList.add('dark');})()</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% if title %}{{ title }} — {% endif %} {{ siteConfig.site_name }}</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <style>[x-cloak]{display:none!important}</style>
+  <script>
+    window.STORAGE_PREFIX   = '{{ siteConfig.storage_prefix }}';
+    window.SITE_TIMEZONE    = '{{ siteConfig.timezone }}';
+    window.BET_LOCK_MINUTES = {{ siteConfig.bet_lock_minutes }};
+    window.SITE_PUSH_POINTS = {{ siteConfig.points.PUSH }};
+    window.__USERS_DATA__   = {{ users.data | dump | safe }};
+  </script>
+  {% if sheetConfig.bets_url %}<script>window.__SHEET_BETS_URL__   = '{{ sheetConfig.bets_url   | safe }}';</script>{% endif %}
+  {% if sheetConfig.users_url %}<script>window.__SHEET_USERS_URL__ = '{{ sheetConfig.users_url | safe }}';</script>{% endif %}
+  <script src="/assets/js/app.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+
+  <nav class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 text-xl font-bold text-emerald-600 dark:text-emerald-400">
+        <img src="/assets/favicon.svg" class="w-8 h-8" alt="" aria-hidden="true">
+        {{ siteConfig.site_name }}
+      </a>
+
+      <!-- Desktop nav -->
+      <div class="hidden sm:flex gap-6 text-sm font-medium items-center">
+        <a href="/" class="transition
+          {% if page.url == '/' %}text-gray-900 dark:text-white font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white{% endif %}">
+          Trang chủ
+        </a>
+        <a href="/fixtures/" class="transition
+          {% if page.url == '/fixtures/' %}text-gray-900 dark:text-white font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white{% endif %}">
+          Lịch thi đấu
+        </a>
+        <a href="/leaderboard/" class="transition
+          {% if page.url == '/leaderboard/' %}text-gray-900 dark:text-white font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white{% endif %}">
+          Bảng xếp hạng
+        </a>
+        <div x-show="currentUser" x-cloak class="relative" x-data="{ open: false }" @click.outside="open = false">
+          <button @click="open = !open"
+                  class="flex items-center gap-1 transition {% if page.url == '/my-picks/' %}text-emerald-600 dark:text-emerald-400 font-semibold{% else %}text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300{% endif %}">
+            <span x-text="currentUser?.display_name"></span>
+            <svg class="w-3 h-3 transition-transform duration-150" :class="open ? 'rotate-180' : ''" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
+            </svg>
+          </button>
+          <div x-show="open" x-cloak
+               x-transition:enter="transition ease-out duration-100"
+               x-transition:enter-start="opacity-0 scale-95"
+               x-transition:enter-end="opacity-100 scale-100"
+               x-transition:leave="transition ease-in duration-75"
+               x-transition:leave-start="opacity-100 scale-100"
+               x-transition:leave-end="opacity-0 scale-95"
+               class="absolute right-0 top-full mt-1.5 w-44 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 z-50 origin-top-right">
+            <a href="/my-picks/" @click="open = false"
+               class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition rounded-t-xl">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25Z"/>
+              </svg>
+              Dự đoán của tôi
+            </a>
+            <hr class="my-1 border-gray-100 dark:border-gray-800">
+            <button @click="logout(); open = false"
+                    class="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition rounded-b-xl">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"/>
+              </svg>
+              Đăng xuất
+            </button>
+          </div>
+        </div>
+        <a x-show="!currentUser" href="/login/" class="transition
+          {% if page.url == '/login/' %}text-gray-900 dark:text-white font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white{% endif %}">
+          Đăng nhập
+        </a>
+        <a x-show="!currentUser" href="/register/"
+           class="{% if page.url == '/register/' %}bg-emerald-800{% else %}bg-emerald-700 hover:bg-emerald-600{% endif %} text-white px-3 py-1 rounded-lg transition text-xs font-semibold">
+          Đăng ký
+        </a>
+        {% if siteConfig.github_url %}
+        <a href="{{ siteConfig.github_url | safe }}" target="_blank" rel="noopener noreferrer"
+           title="Xem mã nguồn trên GitHub"
+           class="flex items-center gap-1.5 border border-gray-200 dark:border-gray-700 rounded-md px-2 py-1 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100 hover:border-gray-400 dark:hover:border-gray-500 transition">
+          {{ githubIcon('w-3.5 h-3.5') }}
+          GitHub
+        </a>
+        {% endif %}
+        <button @click="refreshCache()" :disabled="refreshing"
+                title="Làm mới dữ liệu (Ctrl+Shift+R)"
+                class="w-7 h-7 flex items-center justify-center rounded-md text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition disabled:opacity-40">
+          <svg :class="refreshing ? 'animate-spin' : ''" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+        </button>
+        <button @click="$store.theme.cycle()"
+                :title="{'auto':'Theo hệ thống','light':'Chế độ sáng','dark':'Chế độ tối'}[$store.theme.mode]"
+                class="w-7 h-7 flex items-center justify-center rounded-md text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+          <!-- auto: monitor -->
+          <svg x-show="$store.theme.mode === 'auto'" x-cloak xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0H3" />
+          </svg>
+          <!-- light: sun -->
+          <svg x-show="$store.theme.mode === 'light'" x-cloak xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+          </svg>
+          <!-- dark: moon -->
+          <svg x-show="$store.theme.mode === 'dark'" x-cloak xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile: refresh + theme toggle + menu button -->
+      <div class="sm:hidden flex items-center gap-1">
+        <button @click="refreshCache()" :disabled="refreshing"
+                class="w-8 h-8 flex items-center justify-center rounded-md text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition disabled:opacity-40">
+          <svg :class="refreshing ? 'animate-spin' : ''" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+        </button>
+        <button @click="$store.theme.cycle()"
+                class="w-8 h-8 flex items-center justify-center rounded-md text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+          <svg x-show="$store.theme.mode === 'auto'" x-cloak xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0H3" />
+          </svg>
+          <svg x-show="$store.theme.mode === 'light'" x-cloak xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+          </svg>
+          <svg x-show="$store.theme.mode === 'dark'" x-cloak xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+          </svg>
+        </button>
+        <button class="w-8 h-8 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white" @click="mobileMenuOpen = !mobileMenuOpen">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div x-show="mobileMenuOpen" class="sm:hidden border-t border-gray-200 dark:border-gray-800 px-4 py-3 flex flex-col gap-3 text-sm font-medium">
+      <a href="/" class="transition
+        {% if page.url == '/' %}text-gray-900 dark:text-white font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white{% endif %}">
+        Trang chủ
+      </a>
+      <a href="/fixtures/" class="transition
+        {% if page.url == '/fixtures/' %}text-gray-900 dark:text-white font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white{% endif %}">
+        Lịch thi đấu
+      </a>
+      <a href="/leaderboard/" class="transition
+        {% if page.url == '/leaderboard/' %}text-gray-900 dark:text-white font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white{% endif %}">
+        Bảng xếp hạng
+      </a>
+      <a x-show="currentUser" x-cloak href="/my-picks/"
+         class="transition {% if page.url == '/my-picks/' %}text-emerald-600 dark:text-emerald-400 font-semibold{% else %}text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300{% endif %}"
+         x-text="currentUser?.display_name"></a>
+      <button x-show="currentUser" x-cloak @click="logout(); mobileMenuOpen = false"
+              class="flex items-center gap-2 text-sm text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 transition">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"/>
+        </svg>
+        Đăng xuất
+      </button>
+      <a x-show="!currentUser" href="/login/" class="transition
+        {% if page.url == '/login/' %}text-gray-900 dark:text-white font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white{% endif %}">
+        Đăng nhập
+      </a>
+      <a x-show="!currentUser" href="/register/" class="transition
+        {% if page.url == '/register/' %}text-emerald-600 dark:text-emerald-400 font-semibold{% else %}text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300{% endif %}">
+        Đăng ký
+      </a>
+      {% if siteConfig.github_url %}
+      <a href="{{ siteConfig.github_url | safe }}" target="_blank" rel="noopener noreferrer"
+         class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100 transition text-sm">
+        {{ githubIcon('w-4 h-4') }}
+        GitHub
+      </a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto px-4 py-8">
+    {{ content | safe }}
+  </main>
+
+  {% if siteConfig.demo_mode %}
+  <div class="border-t-4 border-amber-400 dark:border-amber-500 bg-amber-50 dark:bg-amber-950/40">
+    <div class="max-w-5xl mx-auto px-4 py-5">
+      <div class="flex gap-3 items-start">
+        <span class="text-2xl flex-shrink-0 mt-0.5" aria-hidden="true">🎮</span>
+        <div class="space-y-2 min-w-0">
+          <p class="font-bold text-amber-800 dark:text-amber-300 text-sm">
+            Đây là bản demo — dữ liệu giả lập, tự động cập nhật &amp; reset theo lịch (giờ Việt Nam)
+          </p>
+          <div class="flex flex-wrap gap-x-6 gap-y-1.5 text-xs text-amber-700 dark:text-amber-400">
+            <span>⚽ <span class="font-semibold">Cập nhật kết quả:</span> 8–9 giờ · 12–13 giờ · 20–21 giờ</span>
+            <span>🔄 <span class="font-semibold">Reset toàn bộ dữ liệu:</span> 2–3 giờ sáng</span>
+            <span>✅ <span class="font-semibold">Đăng ký:</span> kích hoạt tự động, không cần admin duyệt</span>
+          </div>
+          <p class="text-xs text-amber-600 dark:text-amber-500 italic">
+            Dự đoán, điểm số và bảng xếp hạng sẽ reset mỗi đêm — hãy trải nghiệm tự do!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <footer class="border-t border-gray-200 dark:border-gray-800 mt-12 py-6 text-center text-xs text-gray-500 dark:text-gray-600">
+    <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+      <span>Cập nhật lúc: {{ leaderboard.generated_at | dateDisplay if leaderboard.generated_at else "—" }}</span>
+      {% if siteConfig.github_url %}
+      <span class="text-gray-300 dark:text-gray-700" aria-hidden="true">·</span>
+      <a href="{{ (siteConfig.github_url + '/commits/main?path=src%2F_data') | safe }}" target="_blank" rel="noopener noreferrer"
+         class="hover:text-gray-700 dark:hover:text-gray-400 transition">🕒 Lịch sử dữ liệu</a>
+      {% endif %}
+    </div>
+  </footer>
+
+  <!-- Refresh toast: modal canh giữa trang (hiện khi refreshing=true) -->
+  <div x-show="refreshing" x-cloak
+       x-transition:enter="transition ease-out duration-200"
+       x-transition:enter-start="opacity-0"
+       x-transition:enter-end="opacity-100"
+       x-transition:leave="transition ease-in duration-150"
+       x-transition:leave-start="opacity-100"
+       x-transition:leave-end="opacity-0"
+       class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 dark:bg-black/40 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl px-8 py-5 flex items-center gap-4 min-w-[220px]">
+      <svg class="w-5 h-5 text-emerald-500 animate-spin flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+      </svg>
+      <span class="font-medium text-gray-800 dark:text-gray-100" x-text="'Đang cập nhật dữ liệu' + _dots"></span>
+    </div>
+  </div>
+
+</body>
+</html>

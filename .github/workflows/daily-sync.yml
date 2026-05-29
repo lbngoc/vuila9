@@ -1,0 +1,47 @@
+name: Daily data sync
+
+on:
+  # schedule:
+  #   - cron: '0 2 * * *'   # 02:00 UTC = 09:00 ICT — sáng, sau khi trận 01:00 VN kết thúc
+  #   - cron: '0 7 * * *'   # 07:00 UTC = 14:00 ICT — trưa, sau khi trận 07:00 VN kết thúc
+  #   - cron: '0 14 * * *'  # 14:00 UTC = 21:00 ICT — tối, trước betting window (lock 00:00 VN)
+  workflow_dispatch:        # manual trigger từ GitHub Actions tab
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write       # cho phép push commit lại repo
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Fetch from Google Sheets
+        env:
+          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+          USERS_GID: ${{ secrets.USERS_GID }}
+          FIXTURES_GID: ${{ secrets.FIXTURES_GID }}
+          BETS_GID: ${{ secrets.BETS_GID }}
+        run: npm run fetch
+
+      - name: Calculate and export to src/_data
+        run: npm run calculate
+
+      - name: Commit snapshot if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/_data/users.json src/_data/fixtures.json src/_data/bets.json src/_data/leaderboard.json
+          if git diff --cached --quiet; then
+            echo "No data changes — skipping commit"
+          else
+            git commit -m "data: sync $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git push
+          fi

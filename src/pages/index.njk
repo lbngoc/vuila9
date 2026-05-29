@@ -1,0 +1,135 @@
+---
+layout: base.njk
+title: Trang chủ
+permalink: /
+---
+
+<div class="space-y-8">
+
+  <section>
+    <h1 class="text-3xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">{{ siteConfig.site_name }}</h1>
+    <div class="flex items-center gap-4 flex-wrap">
+      <p class="text-gray-600 dark:text-gray-400">Dự đoán kết quả World Cup 2026 cùng anh em.</p>
+      <a href="#how-to-play" class="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-gray-600 hover:text-emerald-600 dark:hover:text-emerald-400 transition">
+        ❓ Hướng dẫn chơi
+        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+          <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Leaderboard preview -->
+  <section>
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white">🏆 Top 5 bảng xếp hạng</h2>
+      <a href="/leaderboard/" class="text-sm text-emerald-600 dark:text-emerald-400 hover:underline">Xem đầy đủ →</a>
+    </div>
+
+    {% if leaderboard.data %}
+    <div class="bg-white dark:bg-gray-900 rounded-xl overflow-hidden">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-gray-500 text-xs border-b border-gray-200 dark:border-gray-800">
+            <th class="text-left px-4 py-3">#</th>
+            <th class="text-left px-4 py-3">Người chơi</th>
+            <th class="text-right px-4 py-3 hidden sm:table-cell">Trận</th>
+            <th class="text-right px-4 py-3">Điểm</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in leaderboard.data | first(5) %}
+          <tr class="border-b border-gray-100 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+            <td class="px-4 py-3 text-gray-500">
+              {% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% elif loop.index == 3 %}🥉{% else %}{{ loop.index }}{% endif %}
+            </td>
+            <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">{{ user.display_name }}</td>
+            <td class="px-4 py-3 text-right text-gray-500 text-xs hidden sm:table-cell">{{ user.played }}</td>
+            <td class="px-4 py-3 text-right font-bold text-lg
+                       {% if user.points > 0 %}text-emerald-500 dark:text-emerald-400{% elif user.points < 0 %}text-red-500 dark:text-red-400{% else %}text-gray-400{% endif %}">
+              {% if user.points > 0 %}+{% endif %}{{ user.points }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="bg-white dark:bg-gray-900 rounded-xl p-8 text-center text-gray-500">Chưa có dữ liệu.</div>
+    {% endif %}
+  </section>
+
+  <!-- Upcoming fixtures preview -->
+  <section>
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white">📅 Trận sắp diễn ra</h2>
+      <a href="/fixtures/" class="text-sm text-emerald-600 dark:text-emerald-400 hover:underline">Xem tất cả →</a>
+    </div>
+
+    {% set upcomingFixtures = [] %}
+    {% for f in fixtures.data %}
+      {% if f.status == "upcoming" %}
+        {% set upcomingFixtures = upcomingFixtures.concat([f]) %}
+      {% endif %}
+    {% endfor %}
+
+    {% if upcomingFixtures | length %}
+    <div class="grid gap-3">
+      {% for fixture in upcomingFixtures | first(5) %}
+      <div class="bg-white dark:bg-gray-900 rounded-xl p-4 flex items-center justify-between">
+        <div>
+          <p class="font-medium text-gray-900 dark:text-white">{{ fixture.home_team }} vs {{ fixture.away_team }}</p>
+          <p class="text-xs text-gray-500 mt-1">{{ fixture.league }} · {{ fixture.kickoff_at | dateDisplay }}</p>
+        </div>
+        <a href="/fixtures/#fixture-{{ fixture.fixture_id }}" class="text-xs text-emerald-600 dark:text-emerald-400 hover:underline">Dự đoán →</a>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="bg-white dark:bg-gray-900 rounded-xl p-8 text-center text-gray-500">Chưa có trận sắp diễn ra.</div>
+    {% endif %}
+  </section>
+
+  <!-- How to play guide -->
+  <section id="how-to-play" class="bg-white dark:bg-gray-900 rounded-xl p-6 space-y-5">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">📖 Hướng dẫn & quy tắc</h2>
+
+    <ol class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+      {% for step in siteConfig.how_to_play %}
+      <li class="flex gap-3">
+        <span class="text-emerald-500 font-bold flex-shrink-0">{{ loop.index }}.</span>
+        <span>{{ step }}</span>
+      </li>
+      {% endfor %}
+    </ol>
+
+    {% if siteConfig.handicap_note or siteConfig.handicap_half_note %}
+    <details class="bg-gray-100 dark:bg-gray-800 rounded-lg text-xs overflow-hidden group">
+      <summary class="px-3 py-2.5 cursor-pointer list-none flex items-center justify-between font-medium text-gray-600 dark:text-gray-400 select-none hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+        <span>📋 Chi tiết điểm chấp</span>
+        <svg class="w-3.5 h-3.5 flex-shrink-0 transition-transform group-open:rotate-180" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+          <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
+        </svg>
+      </summary>
+      <div class="px-3 pb-3 pt-1 space-y-2 text-gray-600 dark:text-gray-500 leading-relaxed">
+        {% if siteConfig.handicap_note %}
+        <p><span class="text-amber-600 dark:text-amber-500 font-semibold">🎯 Chấp nguyên bàn (1, 2, 3...): </span>{{ siteConfig.handicap_note }}</p>
+        {% endif %}
+        {% if siteConfig.handicap_half_note %}
+        <p class="{% if siteConfig.handicap_note %}border-t border-gray-200 dark:border-gray-700 pt-2{% endif %}"><span class="text-blue-600 dark:text-blue-400 font-semibold">⚡ Chấp lẻ (0.5, 1.5, 2.5...): </span>{{ siteConfig.handicap_half_note }}</p>
+        {% endif %}
+      </div>
+    </details>
+    {% endif %}
+
+    <div class="border-t border-gray-200 dark:border-gray-800 pt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm">
+      <span class="text-gray-500 font-semibold">Điểm:</span>
+      <span>✅ Đoán đúng → <span class="text-emerald-500 dark:text-emerald-400 font-bold">{% if siteConfig.points.WIN > 0 %}+{% endif %}{{ siteConfig.points.WIN }} điểm</span></span>
+      {% if siteConfig.points.PUSH != siteConfig.points.LOSE %}
+      <span>🤝 Hòa chấp → <span class="text-yellow-500 dark:text-yellow-400 font-bold">{% if siteConfig.points.PUSH > 0 %}+{% endif %}{{ siteConfig.points.PUSH }} điểm</span></span>
+      {% endif %}
+      <span>❌ Đoán sai → <span class="{% if siteConfig.points.LOSE < 0 %}text-red-500 dark:text-red-400{% else %}text-gray-500{% endif %} font-bold">{% if siteConfig.points.LOSE > 0 %}+{% endif %}{{ siteConfig.points.LOSE }} điểm</span></span>
+    </div>
+  </section>
+
+</div>

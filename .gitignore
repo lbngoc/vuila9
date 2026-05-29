@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env.local
+data/raw/*.csv
+data/generated/
+data/archive/
+src/assets/css/style.css
+.netlify/
+.playwright-mcp/
+.memsearch/
+*.patch

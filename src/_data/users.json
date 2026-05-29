@@ -1,0 +1,69 @@
+{
+  "generated_at": "2026-05-29T04:13:35.819Z",
+  "data": [
+    {
+      "id": "u_000",
+      "username": "lam_mau",
+      "display_name": "Mẫu Chính",
+      "passcode_hash": "fdc212329e83ab51f258e264895327f6f31984098eaea48342de5d0f9ea51230",
+      "created_at": "2026-05-25T16:24:25.115Z",
+      "status": "active"
+    },
+    {
+      "id": "u_001",
+      "username": "vui_la_9",
+      "display_name": "Vui Là Chính",
+      "passcode_hash": "97c69df77f10754b2c06cde78377da04a9631ca6246359c73a8302a829acebcb",
+      "created_at": "2026-05-26T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "u_002",
+      "username": "choi_cho_vui",
+      "display_name": "Chơi Cho Vui",
+      "passcode_hash": "f6847a6efc10e0fd59e1b3feab9735f26dd3ce6ea6a7e1de2aee3c5026b673ca",
+      "created_at": "2026-05-26T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "u_003",
+      "username": "thich_la_chon",
+      "display_name": "Thích Là Chọn",
+      "passcode_hash": "d919a1f979409862d253161b3671282e3cde9eec7afa53cda228aafb20d9be35",
+      "created_at": "2026-05-26T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "u_004",
+      "username": "sao_cung_duoc",
+      "display_name": "Sao Cũng Được",
+      "passcode_hash": "c4864483a9143dc9f481c029a1e09335d700d5a0bc21082073c266af6a268059",
+      "created_at": "2026-05-26T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "u_20260529_081732_zplu",
+      "username": "test",
+      "display_name": "Test",
+      "passcode_hash": "85777f270ad7cf2a790981bbae3c4e484a1dc55e24a77390d692fbf1cffa12fa",
+      "created_at": "2026-05-29T01:17:33.075Z",
+      "status": "active"
+    },
+    {
+      "id": "u_20260529_081903_jae4",
+      "username": "test1",
+      "display_name": "test1",
+      "passcode_hash": "8bd2a2d6e18774586909be919ec6ae37b84ef9de8c7501bbe416aec9ece38023",
+      "created_at": "2026-05-29T01:19:03.669Z",
+      "status": "active"
+    },
+    {
+      "id": "u_20260529_084934_jif8",
+      "username": "test2",
+      "display_name": "test2",
+      "passcode_hash": "8b23a48ae85abf06f7529794b5eb1d5b54842bcb5be937b23ee1548b961d01c0",
+      "created_at": "2026-05-29T01:49:34.710Z",
+      "status": "active"
+    }
+  ]
+}

@@ -1,0 +1,549 @@
+---
+layout: base.njk
+title: Lịch thi đấu
+permalink: /fixtures/
+---
+
+<script>
+  window.__BUILD_BETS__ = {{ bets.data | dump | safe }};
+  // window.__USERS_DATA__ injected globally by base.njk
+</script>
+
+{# ─── Macro: một thẻ fixture (tái sử dụng ở cả 2 nhóm) ────────────────────── #}
+{% macro fixtureCard(fixture) %}
+<div id="fixture-{{ fixture.fixture_id }}"
+     class="bg-white dark:bg-gray-900 rounded-xl p-5"
+     x-data="betForm('{{ fixture.fixture_id }}','{{ fixture.kickoff_at }}','{{ fixture.handicap or "" }}','{{ fixture.home_team }}','{{ fixture.away_team }}')">
+
+  <!-- Match header -->
+  <div class="flex justify-between items-start mb-5">
+    <div>
+      <p class="font-bold text-lg leading-tight text-gray-900 dark:text-white">{{ fixture.home_team }} vs {{ fixture.away_team }}</p>
+      <p class="text-xs text-gray-500 mt-1">{{ fixture.league }} · {{ fixture.kickoff_at | dateDisplay }} (giờ VN)
+        <span x-show="selected" x-cloak class="text-emerald-600 dark:text-emerald-500 font-semibold">● Đã dự đoán</span>
+      </p>
+      {% if fixture.handicap %}
+      <p class="text-xs text-amber-600 mt-1">Điểm chấp: {{ fixture.home_team }} chấp {{ fixture.handicap | replace("-", "") | replace(".0", "") }} bàn</p>
+      {% endif %}
+    </div>
+    <div class="flex-shrink-0 ml-3 text-right">
+      <span class="text-xs" :class="countdownClass" x-text="isLocked ? '🔒 Đã đóng' : countdown"></span>
+      <p x-show="betCount > 0" x-cloak x-text="`👥 ${betCount} dự đoán`" class="text-xs text-gray-400 dark:text-gray-600 mt-1"></p>
+    </div>
+  </div>
+
+  <!-- Pick buttons (before selection) -->
+  <div x-show="!pick && !message" class="grid grid-cols-3 gap-2">
+
+    <!-- Home win -->
+    <button @click="selectPick('home')" :disabled="isLocked"
+            :class="selected === 'home' ? 'ring-2 ring-red-500 bg-red-100 dark:bg-red-900/30' : 'hover:bg-red-50 dark:hover:bg-red-900/40 cursor-pointer'"
+            class="bg-gray-100 dark:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl p-4 min-h-[4.5rem] text-center transition text-sm group">
+      <div class="text-gray-500 group-hover:text-red-600 dark:group-hover:text-red-300 text-xs mb-1.5 transition">Đội nhà</div>
+      <div class="font-semibold text-gray-900 dark:text-white leading-tight truncate" title="{{ fixture.home_team }}">{{ fixture.home_team }}</div>
+      <div class="flex items-center justify-center gap-1 mt-1.5 transition">
+        <span :class="selected === 'home' ? 'text-red-500 dark:text-red-400' : 'text-emerald-500 dark:text-emerald-400 group-hover:text-red-500 dark:group-hover:text-red-400'" class="text-xs font-medium">thắng</span>
+        <span x-show="selected === 'home'" x-cloak class="text-red-500 dark:text-red-400 text-xs font-bold">✓</span>
+      </div>
+    </button>
+
+    <!-- Draw -->
+    <button @click="selectPick('draw')" :disabled="isLocked || isDrawDisabled"
+            :class="isDrawDisabled ? 'opacity-30 cursor-not-allowed' : selected === 'draw' ? 'ring-2 ring-yellow-500 bg-yellow-100 dark:bg-yellow-900/30' : 'hover:bg-yellow-50 dark:hover:bg-yellow-900/40 cursor-pointer'"
+            class="bg-gray-100 dark:bg-gray-800 disabled:opacity-40 rounded-xl p-4 min-h-[4.5rem] text-center transition text-sm group">
+      <div class="text-gray-500 group-hover:text-yellow-600 dark:group-hover:text-yellow-300 text-xs mb-1.5 transition"
+           x-text="isDrawDisabled ? 'Không khả dụng' : 'Kết quả'">
+      </div>
+      <div class="font-semibold text-gray-900 dark:text-white text-lg">🤝</div>
+      <div class="flex items-center justify-center gap-1 mt-1.5 transition">
+        <span class="text-xs font-medium"
+              :class="isDrawDisabled ? 'text-gray-400 dark:text-gray-600' : selected === 'draw' ? 'text-yellow-500 dark:text-yellow-400' : 'text-emerald-500 dark:text-emerald-400 group-hover:text-yellow-500 dark:group-hover:text-yellow-400'"
+              x-text="isDrawDisabled ? '(chấp lẻ)' : 'Hòa chấp'">
+        </span>
+        <span x-show="selected === 'draw'" x-cloak class="text-yellow-500 dark:text-yellow-400 text-xs font-bold">✓</span>
+      </div>
+    </button>
+
+    <!-- Away win -->
+    <button @click="selectPick('away')" :disabled="isLocked"
+            :class="selected === 'away' ? 'ring-2 ring-blue-500 bg-blue-100 dark:bg-blue-900/30' : 'hover:bg-blue-50 dark:hover:bg-blue-900/40 cursor-pointer'"
+            class="bg-gray-100 dark:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl p-4 min-h-[4.5rem] text-center transition text-sm group">
+      <div class="text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-300 text-xs mb-1.5 transition">Đội khách</div>
+      <div class="font-semibold text-gray-900 dark:text-white leading-tight truncate" title="{{ fixture.away_team }}">{{ fixture.away_team }}</div>
+      <div class="flex items-center justify-center gap-1 mt-1.5 transition">
+        <span :class="selected === 'away' ? 'text-blue-500 dark:text-blue-400' : 'text-emerald-500 dark:text-emerald-400 group-hover:text-blue-500 dark:group-hover:text-blue-400'" class="text-xs font-medium">thắng</span>
+        <span x-show="selected === 'away'" x-cloak class="text-blue-500 dark:text-blue-400 text-xs font-bold">✓</span>
+      </div>
+    </button>
+
+  </div>
+
+  <!-- Confirmation form (after pick selected) -->
+  <div x-show="pick && !message" x-cloak class="space-y-3">
+
+    <!-- Selected pick + tip -->
+    <div class="bg-gray-100 dark:bg-gray-800 rounded-xl p-4 space-y-2">
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-gray-500">Lựa chọn:</span>
+        <span class="font-bold text-gray-900 dark:text-white" x-text="pickDisplayLabel"></span>
+      </div>
+      <p class="text-xs text-amber-600 dark:text-amber-400 leading-relaxed" x-text="tip" x-show="tip"></p>
+    </div>
+
+    <!-- Not logged in: login + submit in one step -->
+    <template x-if="!isLoggedIn">
+      <div class="space-y-2">
+        <p class="text-xs text-gray-500 dark:text-gray-400 text-center">Đăng nhập để gửi dự đoán</p>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">Username</label>
+            <input x-model="username" type="text" autocomplete="username"
+                   class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-transparent rounded-lg px-3 py-2 text-base text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                   placeholder="vd: lam_mau" />
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">Passcode</label>
+            <input x-model="passcode" type="password" autocomplete="current-password"
+                   class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-transparent rounded-lg px-3 py-2 text-base text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                   placeholder="••••••" />
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- Logged in: show user -->
+    <template x-if="isLoggedIn">
+      <p class="text-sm text-center text-gray-500 dark:text-gray-400">
+        Dự đoán với tài khoản:
+        <span class="text-gray-900 dark:text-white font-semibold" x-text="currentUser?.display_name"></span>
+      </p>
+    </template>
+
+    <!-- honeypot -->
+    <input type="text" x-model="website" style="display:none" tabindex="-1" autocomplete="off" />
+
+    <p x-show="error" x-text="error" x-cloak class="text-red-500 dark:text-red-400 text-sm text-center"></p>
+
+    <div class="flex gap-2">
+      <button @click="pick = ''; error = ''"
+              class="px-4 py-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-gray-800 rounded-lg transition flex-shrink-0">
+        ← Đổi
+      </button>
+      <button @click="submitBet()" :disabled="loading || isLocked"
+              class="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:bg-gray-200 dark:disabled:bg-gray-700 disabled:text-gray-400 dark:disabled:text-gray-500 text-white font-semibold py-2 rounded-lg transition text-sm"
+              x-text="loading ? 'Đang xử lý...' : (isLoggedIn ? 'Xác nhận' : 'Đăng nhập & Dự đoán')">
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Success / error result -->
+  <div x-show="message" x-cloak class="text-center py-1 space-y-2">
+    <p :class="isError ? 'text-red-500 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'" class="font-medium" x-text="message"></p>
+    <button @click="message = ''; isError = false"
+            class="text-xs text-gray-500 dark:text-gray-600 hover:text-gray-700 dark:hover:text-gray-400 underline">
+      Đặt lại
+    </button>
+  </div>
+
+  <!-- Community picks — chỉ hiện khi user đã dự đoán -->
+  <div x-show="communityPicks && communityPicks.total > 0" x-cloak
+       class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-800/60">
+    <div class="flex items-center gap-4 text-xs mb-1.5">
+      <span class="text-gray-500">Cộng đồng:</span>
+      <span class="text-red-500 dark:text-red-400">🏠 <span x-text="communityPicks?.home"></span></span>
+      <span class="text-yellow-500 dark:text-yellow-400">🤝 <span x-text="communityPicks?.draw"></span></span>
+      <span class="text-blue-500 dark:text-blue-400">✈️ <span x-text="communityPicks?.away"></span></span>
+    </div>
+    <div class="flex h-1.5 rounded overflow-hidden gap-px bg-gray-200 dark:bg-gray-800">
+      <div class="bg-red-500 transition-all duration-500"
+           :style="`width:${communityPicks?.total ? (communityPicks.home/communityPicks.total*100) : 0}%`"></div>
+      <div class="bg-yellow-500 transition-all duration-500"
+           :style="`width:${communityPicks?.total ? (communityPicks.draw/communityPicks.total*100) : 0}%`"></div>
+      <div class="bg-blue-500 transition-all duration-500"
+           :style="`width:${communityPicks?.total ? (communityPicks.away/communityPicks.total*100) : 0}%`"></div>
+    </div>
+  </div>
+
+</div>
+{% endmacro %}
+
+{# ─── Main layout ─────────────────────────────────────────────────────────── #}
+<div class="space-y-8">
+  <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">📅 Lịch thi đấu</h1>
+    <p class="text-xs text-gray-500 dark:text-gray-600 sm:text-right sm:flex-shrink-0">
+      {% if fixtures.generated_at %}Cập nhật: {{ fixtures.generated_at | dateDisplay }}{% endif %}
+      {% if sheetConfig.fixtures_tab_url %}
+        {% if fixtures.generated_at %} · {% endif %}
+        <a href="{{ sheetConfig.fixtures_tab_url }}" target="_blank" rel="noopener noreferrer"
+           class="hover:text-gray-700 dark:hover:text-gray-400 transition">📊 Dữ liệu gốc ↗</a>
+      {% endif %}
+    </p>
+  </div>
+
+  <!-- Upcoming -->
+  <section>
+    <h2 class="text-lg font-semibold text-emerald-600 dark:text-emerald-400 mb-4">Sắp diễn ra — gửi dự đoán ngay</h2>
+
+    {% set upcoming = fixtures.data | where("status", "upcoming") %}
+    {% set upcomingGroups = upcoming | groupByDateKey %}
+
+    {% if upcomingGroups | length %}
+
+    {# Wrap toàn bộ khối trong một Alpine component quản lý accordion #}
+    <div x-data="{ showAll: false }" class="space-y-6">
+
+      {# Nhóm 1 & 2: luôn hiển thị #}
+      {% for group in upcomingGroups %}
+        {% if loop.index <= 2 %}
+        <div class="space-y-4">
+          {# Date header #}
+          <div class="flex items-center gap-3">
+            <span class="text-sm font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap capitalize">📅 {{ group.label }}</span>
+            <div class="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
+          </div>
+          {# Các trận trong nhóm này #}
+          <div class="grid gap-4">
+            {% for fixture in group.fixtures %}
+              {{ fixtureCard(fixture) }}
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+
+      {# Nhóm 3 trở đi: ẩn/hiện theo accordion #}
+      {% if upcomingGroups | length > 2 %}
+
+        {# Wrapper xổ xuống — transition slide-down #}
+        <div x-show="showAll"
+             x-cloak
+             x-transition:enter="transition-all ease-out duration-400"
+             x-transition:enter-start="opacity-0 -translate-y-3"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition-all ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-3"
+             class="space-y-6">
+          {% for group in upcomingGroups %}
+            {% if loop.index > 2 %}
+            <div class="space-y-4">
+              <div class="flex items-center gap-3">
+                <span class="text-sm font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap capitalize">📅 {{ group.label }}</span>
+                <div class="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
+              </div>
+              <div class="grid gap-4">
+                {% for fixture in group.fixtures %}
+                  {{ fixtureCard(fixture) }}
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        {# Nút Xem thêm / Thu gọn #}
+        {% set extraCount = upcomingGroups | length - 2 %}
+        <div class="flex justify-center pt-1">
+          <button @click="showAll = !showAll"
+                  class="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-medium
+                         bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300
+                         hover:bg-emerald-50 dark:hover:bg-emerald-900/30 hover:text-emerald-700 dark:hover:text-emerald-300
+                         border border-gray-200 dark:border-gray-700
+                         transition-colors duration-150">
+            <span x-show="!showAll">
+              Xem thêm
+              <span class="text-xs text-gray-400 dark:text-gray-500 font-normal">({{ extraCount }} ngày nữa)</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 inline ml-0.5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
+              </svg>
+            </span>
+            <span x-show="showAll" x-cloak>
+              Thu gọn
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 inline ml-0.5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M14.78 11.78a.75.75 0 0 1-1.06 0L10 8.06l-3.72 3.72a.75.75 0 0 1-1.06-1.06l4.25-4.25a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06Z" clip-rule="evenodd"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+
+      {% endif %}
+
+    </div>
+    {% else %}
+    <div class="bg-white dark:bg-gray-900 rounded-xl p-8 text-center text-gray-500">Chưa có trận sắp diễn ra.</div>
+    {% endif %}
+  </section>
+
+  <!-- Finished -->
+  <section>
+    <h2 class="text-lg font-semibold text-gray-500 dark:text-gray-400 mb-4">Đã kết thúc</h2>
+    {% set finished = fixtures.data | where("status", "finished") %}
+    {% if finished | length %}
+    <div class="grid gap-3">
+      {% for fixture in finished %}
+      <div class="bg-white dark:bg-gray-900 rounded-xl p-4 flex items-center justify-between">
+        <div>
+          <p class="font-medium text-gray-900 dark:text-white">
+            {{ fixture.home_team }}
+            <span class="font-bold mx-2">{{ fixture.result_home }} – {{ fixture.result_away }}</span>
+            {{ fixture.away_team }}
+          </p>
+          <p class="text-xs text-gray-500 mt-1">{{ fixture.league }} · {{ fixture.kickoff_at | dateDisplay }}</p>
+        </div>
+        <span class="text-xs text-gray-400 dark:text-gray-600">FT</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="bg-white dark:bg-gray-900 rounded-xl p-8 text-center text-gray-500">Chưa có trận nào kết thúc.</div>
+    {% endif %}
+  </section>
+
+</div>
+
+<script>
+function betForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
+  return {
+    fixtureId, handicap, homeTeam, awayTeam,
+    kickoffAt: new Date(kickoffAt),
+    _now: Date.now(),
+    _user: null,
+    pick: '',
+    selected: '',
+    communityPicks: null,
+    _buildBetCount: 0,
+    username: '',
+    passcode: '',
+    website: '',
+    loading: false,
+    message: '',
+    error: '',
+    isError: false,
+
+    init() {
+      const u = (() => { try { return JSON.parse(localStorage.getItem(_KEY) || 'null'); } catch { return null; } })();
+      this._user = u;
+      if (u) this.username = u.username;
+      setInterval(() => { this._now = Date.now(); }, 60000);
+
+      // Khi card khác đăng nhập → cập nhật trạng thái cho card này
+      window.addEventListener('funnybet:login', (e) => {
+        this._user = e.detail;
+        if (!this.username) this.username = e.detail.username;
+      });
+
+      const buildBet   = (window.__BUILD_BETS__ || []).find(b => b.fixture_id === fixtureId && b.user_id === u?.user_id);
+      const pendingBet = (() => {
+        try { return JSON.parse(localStorage.getItem(_PENDING_KEY) || '[]').find(b => b.fixture_id === fixtureId); }
+        catch { return null; }
+      })();
+      this.selected = pendingBet?.pick_type || buildBet?.pick_type || '';
+
+      // Cache build-snapshot bet count for betCount getter (computed once, never changes)
+      this._buildBetCount = aggregatePicks(window.__BUILD_BETS__ || [], fixtureId).total;
+
+      // Show community picks immediately from build snapshot if user already has a bet
+      if (this.selected) {
+        this.communityPicks = { ...aggregatePicks(window.__BUILD_BETS__ || [], fixtureId) };
+      }
+
+      // Update from fresh CSV: cross-device sync + up-to-date counts
+      if (u) syncOwnBets(u).then(() => fetchLiveBets()).then(all => {
+        if (!all) return;
+        const csvBet = all.find(b => b.fixture_id === fixtureId && b.user_id === u.user_id);
+        if (csvBet) this.selected = csvBet.pick_type;
+        if (this.selected) this.communityPicks = aggregatePicks(all, fixtureId);
+      });
+
+      // "Làm mới" button: re-aggregate from fresh CSV data
+      window.addEventListener('funnybet:refresh', (e) => {
+        const all = e.detail;
+        const cu = this.currentUser;
+        if (cu) {
+          const csvBet = all.find(b => b.fixture_id === fixtureId && b.user_id === cu.user_id);
+          if (csvBet) this.selected = csvBet.pick_type;
+        }
+        if (this.selected) this.communityPicks = aggregatePicks(all, fixtureId);
+      });
+    },
+
+    get currentUser() { return this._user; },
+    get isLoggedIn()  { return !!this._user; },
+    get isLocked()    { return this._now >= this.kickoffAt.getTime() - (window.BET_LOCK_MINUTES || 60) * 60 * 1000; },
+    // Thời gian còn lại để dự đoán (ms). Âm khi đã khoá → dùng chung cho countdownClass và countdown.
+    get timeToLock()  { return this.kickoffAt.getTime() - this._now - (window.BET_LOCK_MINUTES || 60) * 60000; },
+    // Số dự đoán đã gửi: dùng live count nếu đã load, fallback về build snapshot (tính 1 lần trong init)
+    get betCount()    { return this.communityPicks ? this.communityPicks.total : this._buildBetCount; },
+    get countdownClass() {
+      if (this.isLocked) return 'px-2.5 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
+      const ttl = this.timeToLock;  // thời gian còn lại để dự đoán (luôn > 0 khi !isLocked)
+      if (ttl >= 86400000) return 'font-medium text-emerald-600 dark:text-emerald-400';  // > 1 ngày: xanh
+      if (ttl >= 3600000)  return 'font-medium text-amber-500 dark:text-amber-400';       // 1h–1ngày: vàng
+      return 'font-medium text-orange-500 dark:text-orange-400';                           // < 1h: cam
+    },
+
+    get countdown() {
+      if (this.isLocked) return '';
+      const ms = this.kickoffAt.getTime() - this._now;
+      if (ms <= 0) return '';
+      const days  = Math.floor(ms / 86400000);
+      const hours = Math.floor(ms / 3600000);
+      const mins  = Math.floor(ms / 60000);
+      const ttl   = this.timeToLock;  // thời gian còn lại để dự đoán
+      const emoji = ttl >= 86400000 ? '✅' : ttl >= 3600000 ? '⚠️' : '⚡';
+      if (days  >= 1) return `${emoji} Còn ${days} ngày`;
+      if (hours >= 1) return `${emoji} Còn ${hours} giờ`;
+      if (mins  >= 1) return `${emoji} Còn ${mins} phút`;
+      return '⚡ Sắp bắt đầu';
+    },
+
+    get isDrawDisabled() {
+      const H = Math.abs(parseFloat(this.handicap) || 0);
+      return H > 0 && !Number.isInteger(H);
+    },
+
+    get pickDisplayLabel() {
+      return { home: `${this.homeTeam} thắng`, draw: 'Hòa chấp', away: `${this.awayTeam} thắng` }[this.pick] || '';
+    },
+
+    get tip() {
+      if (!this.pick) return '';
+      const h  = parseFloat(this.handicap) || 0;
+      const H  = Math.abs(h);
+      const hw = Number.isInteger(H);
+      const minWin  = Math.floor(H) + 1;
+      const maxHome = Math.ceil(H) - 1;
+      const pushAt  = Math.round(H);
+      const a = this.homeTeam, b = this.awayTeam;
+      const p = window.SITE_PUSH_POINTS ?? 0;
+      const pushNote = p > 0 ? `+${p}đ` : p < 0 ? `${p}đ` : 'không tính điểm';
+      if (this.pick === 'home') {
+        if (H === 0) return `Thắng khi ${a} thắng trận · Hòa chấp (${pushNote}) khi hòa nhau`;
+        const s = `Thắng khi ${a} thắng từ ${minWin} bàn trở lên (vd. ${minWin}-0, ${minWin+1}-1)`;
+        return hw ? s + ` · Hòa chấp (${pushNote}) khi thắng đúng ${pushAt} bàn` : s;
+      }
+      if (this.pick === 'away') {
+        if (H === 0) return `Thắng khi ${b} thắng trận · Hòa chấp (${pushNote}) khi hòa nhau`;
+        const winDesc = maxHome === 0
+          ? `${b} thắng hoặc hòa (vd. 0-1, 0-0)`
+          : `${b} thắng, hòa, hoặc ${a} thắng không quá ${maxHome} bàn (vd. 0-1, 0-0, ${maxHome}-0)`;
+        const s = `Thắng khi ${winDesc}`;
+        return hw ? s + ` · Hòa chấp (${pushNote}) khi ${a} thắng đúng ${pushAt} bàn` : s;
+      }
+      if (this.pick === 'draw') {
+        if (H === 0) return `Thắng khi hai đội hòa nhau`;
+        return `Thắng khi ${a} thắng đúng ${pushAt} bàn (vd. ${pushAt}-0, ${pushAt+1}-1)`;
+      }
+      return '';
+    },
+
+    selectPick(type) {
+      if (this.isLocked) return;
+      if (type === 'draw' && this.isDrawDisabled) return;
+      this.pick  = type;
+      this.error = '';
+    },
+
+    async submitBet() {
+      if (this.isLocked || this.loading) return;
+      if (this.website) return;
+      this.error = '';
+
+      let u = this.currentUser;
+
+      // Not logged in: authenticate via live CSV then submit
+      if (!u) {
+        const uname = this.username.toLowerCase().trim();
+        const pcode = this.passcode.trim();
+        if (!uname || !pcode) {
+          this.error = 'Vui lòng nhập username và passcode.';
+          return;
+        }
+        try {
+          u = await authenticate(uname, pcode);
+          localStorage.setItem(_KEY, JSON.stringify(u));
+          this._user = u;
+          window.dispatchEvent(new CustomEvent('funnybet:login', { detail: u }));
+        } catch (err) {
+          if (err.code === 'NOT_FOUND' || err.code === 'WRONG_PASSWORD')
+            this.error = 'Username hoặc passcode không đúng.';
+          else if (err.code === 'INACTIVE')
+            this.error = 'Tài khoản chưa được kích hoạt. Liên hệ admin.';
+          else
+            this.error = 'Lỗi kết nối. Vui lòng thử lại.';
+          return;
+        }
+      }
+
+      const payload = {
+        fixture_id:     this.fixtureId,
+        pick_type:      this.pick,
+        username:       u.username,
+        _session_hash:  u._ph,
+        website:        this.website,
+      };
+
+      this.loading = true;
+      try {
+        const res  = await fetch('/.netlify/functions/submit-pick', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          savePendingBet(this.fixtureId, this.pick, data.bet_id);
+          this.selected = this.pick;
+          this.message  = data.updated ? '✅ Đã cập nhật dự đoán!' : '✅ Gửi dự đoán thành công!';
+          this.isError  = false;
+          this.pick     = '';
+          localStorage.removeItem(_LIVE_CACHE_KEY);
+          fetchLiveBets().then(all => { if (all) this.communityPicks = aggregatePicks(all, this.fixtureId); });
+        } else {
+          this.error   = data.error || 'Lỗi không xác định.';
+          this.isError = true;
+        }
+      } catch {
+        this.error   = '❌ Lỗi kết nối. Vui lòng thử lại.';
+        this.isError = true;
+      } finally {
+        this.loading = false;
+      }
+    },
+  };
+}
+</script>
+
+<script>
+// ── Hash sync: URL fragment tự cập nhật khi scroll qua các fixture card ──
+// Dùng IntersectionObserver → replaceState (không thêm vào history).
+// Chỉ bắt đầu cập nhật SAU lần scroll đầu tiên của user — giữ nguyên
+// anchor hash khi navigate vào trang từ trang chủ (#fixture-XXX).
+setTimeout(() => {
+  const cards = [...document.querySelectorAll('[id^="fixture-"]')];
+  if (!cards.length) return;
+
+  const visible = new Set();
+  let userScrolled = false;
+
+  // Đánh dấu khi user thực sự scroll (không phải auto-scroll của browser)
+  window.addEventListener('scroll', () => { userScrolled = true; }, { passive: true, once: true });
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => e.isIntersecting ? visible.add(e.target) : visible.delete(e.target));
+    if (!visible.size || !userScrolled) return;
+
+    // Ưu tiên card có top gần 0 nhất và còn trong viewport (top >= -10px)
+    const inView = [...visible].filter(el => el.getBoundingClientRect().top >= -10);
+    const target = inView.length
+      ? inView.reduce((a, b) => a.getBoundingClientRect().top <= b.getBoundingClientRect().top ? a : b)
+      : [...visible].reduce((a, b) => a.getBoundingClientRect().top >= b.getBoundingClientRect().top ? a : b);
+
+    history.replaceState(null, '', '#' + target.id);
+  }, { threshold: 0.25 });
+
+  cards.forEach(c => io.observe(c));
+}, 150);
+</script>

@@ -1,0 +1,24 @@
+{
+  "name": "vuila9",
+  "version": "1.0.1",
+  "description": "Vui Là Chính — lightweight football betting tracker powered by Google Sheets",
+  "scripts": {
+    "build": "npm run pipeline && npm run css && npx @11ty/eleventy",
+    "dev": "concurrently \"npx @11ty/eleventy --serve --port=8080\" \"npx @tailwindcss/cli -i src/assets/css/input.css -o src/assets/css/style.css --watch\"",
+    "pipeline": "node scripts/fetch-sheet.js && node scripts/normalize.js && node scripts/calculate-results.js && node scripts/build-leaderboard.js && node scripts/export-json.js",
+    "css": "npx @tailwindcss/cli -i src/assets/css/input.css -o src/assets/css/style.css",
+    "fetch": "node scripts/fetch-sheet.js",
+    "calculate": "node scripts/normalize.js && node scripts/calculate-results.js && node scripts/build-leaderboard.js && node scripts/export-json.js"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.5",
+    "@tailwindcss/cli": "^4.3.0",
+    "concurrently": "^9.2.1",
+    "tailwindcss": "^4.3.0"
+  },
+  "dependencies": {
+    "csv-parse": "^6.2.1",
+    "dotenv": "^17.4.2"
+  }
+}

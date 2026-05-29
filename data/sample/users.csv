@@ -1,0 +1,6 @@
+id,username,display_name,passcode,passcode_hash,created_at,status
+u_000,lam_mau,Mẫu Chính,123456,,2026-05-25T16:24:25.115Z,active
+u_001,vui_la_9,Vui Là Chính,111111,,2026-05-26T00:00:00.000Z,active
+u_002,choi_cho_vui,Chơi Cho Vui,222222,,2026-05-26T00:00:00.000Z,active
+u_003,thich_la_chon,Thích Là Chọn,333333,,2026-05-26T00:00:00.000Z,active
+u_004,sao_cung_duoc,Sao Cũng Được,444444,,2026-05-26T00:00:00.000Z,active

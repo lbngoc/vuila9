@@ -1,0 +1,188 @@
+---
+layout: base.njk
+title: Đăng ký tài khoản
+permalink: /register/
+---
+
+<script>
+  const REGISTER_USERS = {{ users.data | dump | safe }};
+</script>
+
+<div class="max-w-sm mx-auto py-4 space-y-6">
+  <div class="text-center">
+    <p class="text-3xl mb-2">📝</p>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Đăng ký tham gia</h1>
+    <p class="text-sm text-gray-500 mt-1">Điền thông tin để tạo tài khoản. Admin sẽ kích hoạt sau.</p>
+    <a href="/#how-to-play" class="inline-block mt-2 text-xs text-gray-500 dark:text-gray-600 hover:text-emerald-600 dark:hover:text-emerald-400 transition">❓ Hướng dẫn chơi</a>
+  </div>
+
+  <div x-data="registerForm(REGISTER_USERS)" class="bg-white dark:bg-gray-900 rounded-xl p-6 space-y-4">
+
+    <!-- Success state -->
+    <template x-if="done">
+      <div class="text-center space-y-3 py-4">
+        <p class="text-4xl">✅</p>
+        <p class="text-emerald-600 dark:text-emerald-400 font-semibold text-lg">Đăng ký thành công!</p>
+        <template x-if="registeredStatus === 'active'">
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            Tài khoản đã được kích hoạt. Bạn có thể đăng nhập ngay!
+          </p>
+        </template>
+        <template x-if="registeredStatus !== 'active'">
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            Tài khoản của bạn đang chờ admin kích hoạt.<br>
+            Vui lòng quay lại sau để đăng nhập.
+          </p>
+        </template>
+        <a x-show="registeredStatus === 'active'" href="/login/"
+           class="inline-block mt-2 px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg">
+          Đăng nhập ngay →
+        </a>
+        <a x-show="registeredStatus !== 'active'" href="/"
+           class="inline-block mt-2 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 underline">
+          Về trang chủ
+        </a>
+      </div>
+    </template>
+
+    <template x-if="!done">
+      <div class="space-y-4">
+
+        <!-- Username -->
+        <div>
+          <label class="text-xs text-gray-500 mb-1 block">Username <span class="text-red-500">*</span></label>
+          <input x-model="username" @blur="checkUsername()" type="text"
+                 autocomplete="username" spellcheck="false"
+                 class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-transparent rounded-lg px-3 py-2 text-base text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                 placeholder="vd: lam_mau (chữ thường, không dấu)" />
+          <p x-show="errors.username" x-text="errors.username" x-cloak
+             class="text-red-500 dark:text-red-400 text-xs mt-1"></p>
+        </div>
+
+        <!-- Display name -->
+        <div>
+          <label class="text-xs text-gray-500 mb-1 block">Tên hiển thị <span class="text-red-500">*</span></label>
+          <input x-model="display_name" type="text" autocomplete="name"
+                 class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-transparent rounded-lg px-3 py-2 text-base text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                 placeholder="vd: Mẫu Chính" />
+          <p x-show="errors.display_name" x-text="errors.display_name" x-cloak
+             class="text-red-500 dark:text-red-400 text-xs mt-1"></p>
+        </div>
+
+        <!-- Passcode -->
+        <div>
+          <label class="text-xs text-gray-500 mb-1 block">Passcode <span class="text-red-500">*</span></label>
+          <input x-model="passcode" type="password" autocomplete="new-password"
+                 class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-transparent rounded-lg px-3 py-2 text-base text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                 placeholder="Tối thiểu 6 ký tự" />
+          <p x-show="errors.passcode" x-text="errors.passcode" x-cloak
+             class="text-red-500 dark:text-red-400 text-xs mt-1"></p>
+        </div>
+
+        <!-- Confirm passcode -->
+        <div>
+          <label class="text-xs text-gray-500 mb-1 block">Xác nhận passcode <span class="text-red-500">*</span></label>
+          <input x-model="passcode_confirm" type="password" autocomplete="new-password"
+                 class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-transparent rounded-lg px-3 py-2 text-base text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                 placeholder="Nhập lại passcode" />
+          <p x-show="errors.passcode_confirm" x-text="errors.passcode_confirm" x-cloak
+             class="text-red-500 dark:text-red-400 text-xs mt-1"></p>
+        </div>
+
+        <!-- Honeypot -->
+        <input type="text" x-model="website" style="display:none" tabindex="-1" autocomplete="off" />
+
+        <!-- Server error -->
+        <p x-show="serverError" x-text="serverError" x-cloak class="text-red-500 dark:text-red-400 text-sm text-center"></p>
+
+        <button @click="submit()" :disabled="loading"
+                class="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-gray-200 dark:disabled:bg-gray-700 disabled:text-gray-400 dark:disabled:text-gray-500 text-white font-semibold py-2.5 rounded-lg transition text-sm cursor-pointer"
+                x-text="loading ? 'Đang gửi...' : 'Đăng ký'">
+        </button>
+
+        <p class="text-center text-xs text-gray-500">
+          Đã có tài khoản?
+          <a href="/login/" class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300">Đăng nhập</a>
+        </p>
+      </div>
+    </template>
+
+  </div>
+</div>
+
+<script>
+function registerForm(usersData) {
+  const existingUsernames = usersData.map(u => u.username);
+  return {
+    username: '',
+    display_name: '',
+    passcode: '',
+    passcode_confirm: '',
+    website: '',
+    loading: false,
+    done: false,
+    registeredStatus: 'inactive',
+    submitted: false,
+    errors: {},
+    serverError: '',
+
+    checkUsername() {
+      if (!this.submitted) return;
+      const u = this.username.toLowerCase().trim();
+      const e = { ...this.errors };
+      delete e.username;
+      if (!u) e.username = 'Vui lòng nhập username.';
+      else if (!/^[a-z0-9_]{3,20}$/.test(u)) e.username = 'Chỉ dùng chữ thường, số, gạch dưới (3–20 ký tự).';
+      else if (existingUsernames.includes(u)) e.username = 'Username này đã được sử dụng.';
+      this.errors = e;
+    },
+
+    validate() {
+      const e = {};
+      const u = this.username.toLowerCase().trim();
+      if (!u) e.username = 'Vui lòng nhập username.';
+      else if (!/^[a-z0-9_]{3,20}$/.test(u)) e.username = 'Chỉ dùng chữ thường, số, gạch dưới (3–20 ký tự).';
+      else if (existingUsernames.includes(u)) e.username = 'Username này đã được sử dụng.';
+      if (!this.display_name.trim()) e.display_name = 'Vui lòng nhập tên hiển thị.';
+      if (this.passcode.length < 6) e.passcode = 'Passcode phải có ít nhất 6 ký tự.';
+      if (this.passcode !== this.passcode_confirm) e.passcode_confirm = 'Passcode xác nhận không khớp.';
+      this.errors = e;
+      return Object.keys(e).length === 0;
+    },
+
+    async submit() {
+      this.serverError = '';
+      this.submitted = true;
+      if (!this.validate()) return;
+      if (this.website) return;
+      this.loading = true;
+      try {
+        const res = await fetch('/.netlify/functions/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username:     this.username.toLowerCase().trim(),
+            display_name: this.display_name.trim(),
+            passcode:     this.passcode,
+            website:      this.website,
+          }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          this.registeredStatus = data.status || 'inactive';
+          this.done = true;
+          invalidateUsersCache(); // clear cache — login tiếp theo sẽ thấy user mới trong Sheet
+        } else if (data.code === 'DUPLICATE_USERNAME') {
+          this.errors = { ...this.errors, username: 'Username đã được sử dụng.' };
+        } else {
+          this.serverError = data.error || 'Đã có lỗi xảy ra. Vui lòng thử lại.';
+        }
+      } catch {
+        this.serverError = '❌ Lỗi kết nối. Vui lòng thử lại.';
+      } finally {
+        this.loading = false;
+      }
+    },
+  };
+}
+</script>
