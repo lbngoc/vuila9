@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-29T13:58:39.533Z",
+  "generated_at": "2026-05-29T19:06:08.007Z",
   "data": [
     {
       "id": "u_000",
@@ -39,30 +39,6 @@
       "display_name": "Sao Cũng Được",
       "passcode_hash": "c4864483a9143dc9f481c029a1e09335d700d5a0bc21082073c266af6a268059",
       "created_at": "2026-05-26T00:00:00.000Z",
-      "status": "active"
-    },
-    {
-      "id": "u_20260529_081732_zplu",
-      "username": "test",
-      "display_name": "Test",
-      "passcode_hash": "85777f270ad7cf2a790981bbae3c4e484a1dc55e24a77390d692fbf1cffa12fa",
-      "created_at": "2026-05-29T01:17:33.075Z",
-      "status": "active"
-    },
-    {
-      "id": "u_20260529_081903_jae4",
-      "username": "test1",
-      "display_name": "test1",
-      "passcode_hash": "8bd2a2d6e18774586909be919ec6ae37b84ef9de8c7501bbe416aec9ece38023",
-      "created_at": "2026-05-29T01:19:03.669Z",
-      "status": "active"
-    },
-    {
-      "id": "u_20260529_084934_jif8",
-      "username": "test2",
-      "display_name": "test2",
-      "passcode_hash": "8b23a48ae85abf06f7529794b5eb1d5b54842bcb5be937b23ee1548b961d01c0",
-      "created_at": "2026-05-29T01:49:34.710Z",
       "status": "active"
     }
   ]
