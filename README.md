@@ -163,6 +163,12 @@ Xem hướng dẫn từng bước: [`SETUP.md`](SETUP.md)
 
 ---
 
+## Miễn trừ trách nhiệm
+
+Đây là game dự đoán bóng đá thuần túy giải trí, **không liên quan đến cờ bạc hay tiền thật**. Kết quả, điểm số và bảng xếp hạng không có giá trị pháp lý hay tài chính. Dữ liệu thi đấu lấy từ nguồn công khai, có thể chưa chính xác hoàn toàn.
+
+---
+
 ## Đóng góp
 
 Mọi ý kiến, bug report, và PR đều được chào đón! Xem [`CONTRIBUTING.md`](CONTRIBUTING.md) để bắt đầu.
