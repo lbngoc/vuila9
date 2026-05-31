@@ -1,60 +1,60 @@
 {
-  "generated_at": "2026-05-31T01:54:22.357Z",
+  "generated_at": "2026-05-31T05:17:38.454Z",
   "data": [
     {
       "user_id": "u_002",
       "username": "choi_cho_vui",
       "display_name": "Chơi Cho Vui",
-      "played": 8,
-      "wins": 4,
+      "played": 10,
+      "wins": 5,
       "draws": 3,
-      "losses": 1,
-      "points": 13,
+      "losses": 2,
+      "points": 14,
       "win_rate": 0.5
     },
     {
       "user_id": "u_001",
       "username": "vui_la_9",
       "display_name": "Vui Là Chính",
-      "played": 9,
-      "wins": 3,
+      "played": 11,
+      "wins": 4,
       "draws": 3,
-      "losses": 3,
-      "points": 12,
-      "win_rate": 0.3333
+      "losses": 4,
+      "points": 13,
+      "win_rate": 0.3636
     },
     {
       "user_id": "u_000",
       "username": "lam_mau",
       "display_name": "Mẫu Chính",
-      "played": 8,
+      "played": 10,
       "wins": 5,
       "draws": 2,
-      "losses": 1,
+      "losses": 3,
       "points": 11,
-      "win_rate": 0.625
+      "win_rate": 0.5
     },
     {
       "user_id": "u_004",
       "username": "sao_cung_duoc",
       "display_name": "Sao Cũng Được",
-      "played": 6,
+      "played": 7,
       "wins": 3,
       "draws": 2,
-      "losses": 1,
+      "losses": 2,
       "points": 9,
-      "win_rate": 0.5
+      "win_rate": 0.4286
     },
     {
       "user_id": "u_003",
       "username": "thich_la_chon",
       "display_name": "Thích Là Chọn",
-      "played": 9,
+      "played": 11,
       "wins": 3,
       "draws": 2,
-      "losses": 4,
+      "losses": 6,
       "points": 9,
-      "win_rate": 0.3333
+      "win_rate": 0.2727
     }
   ]
 }
