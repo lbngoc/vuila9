@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-04T01:54:24.694Z",
+  "generated_at": "2026-06-04T05:17:37.191Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -125,10 +125,10 @@
       "home_team": "Hà Lan",
       "away_team": "Nhật Bản",
       "handicap": "-0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -138,10 +138,10 @@
       "home_team": "Bờ Biển Ngà",
       "away_team": "Ecuador",
       "handicap": "0",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -151,10 +151,10 @@
       "home_team": "Thụy Điển",
       "away_team": "Tunisia",
       "handicap": "-0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
