@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-05T19:06:05.675Z",
+  "generated_at": "2026-06-06T01:54:23.234Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -86,10 +86,10 @@
       "home_team": "Haiti",
       "away_team": "Scotland",
       "handicap": "1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -99,10 +99,10 @@
       "home_team": "Úc",
       "away_team": "Thổ Nhĩ Kỳ",
       "handicap": "0",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 2,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -112,10 +112,10 @@
       "home_team": "Đức",
       "away_team": "Curaçao",
       "handicap": "-2",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 2,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {

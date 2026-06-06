@@ -1,60 +1,60 @@
 {
-  "generated_at": "2026-06-05T19:06:05.675Z",
+  "generated_at": "2026-06-06T01:54:23.234Z",
   "data": [
-    {
-      "user_id": "u_000",
-      "username": "lam_mau",
-      "display_name": "Mẫu Chính",
-      "played": 6,
-      "wins": 5,
-      "draws": 1,
-      "losses": 0,
-      "points": 8,
-      "win_rate": 0.8333
-    },
     {
       "user_id": "u_002",
       "username": "choi_cho_vui",
       "display_name": "Chơi Cho Vui",
-      "played": 5,
-      "wins": 4,
-      "draws": 1,
-      "losses": 0,
-      "points": 7,
-      "win_rate": 0.8
+      "played": 8,
+      "wins": 5,
+      "draws": 2,
+      "losses": 1,
+      "points": 11,
+      "win_rate": 0.625
     },
     {
-      "user_id": "u_004",
-      "username": "sao_cung_duoc",
-      "display_name": "Sao Cũng Được",
-      "played": 4,
-      "wins": 2,
-      "draws": 1,
+      "user_id": "u_000",
+      "username": "lam_mau",
+      "display_name": "Mẫu Chính",
+      "played": 8,
+      "wins": 5,
+      "draws": 2,
       "losses": 1,
-      "points": 5,
-      "win_rate": 0.5
+      "points": 11,
+      "win_rate": 0.625
     },
     {
       "user_id": "u_001",
       "username": "vui_la_9",
       "display_name": "Vui Là Chính",
+      "played": 9,
+      "wins": 2,
+      "draws": 2,
+      "losses": 5,
+      "points": 8,
+      "win_rate": 0.2222
+    },
+    {
+      "user_id": "u_003",
+      "username": "thich_la_chon",
+      "display_name": "Thích Là Chọn",
+      "played": 9,
+      "wins": 4,
+      "draws": 1,
+      "losses": 4,
+      "points": 7,
+      "win_rate": 0.4444
+    },
+    {
+      "user_id": "u_004",
+      "username": "sao_cung_duoc",
+      "display_name": "Sao Cũng Được",
       "played": 6,
       "wins": 2,
       "draws": 1,
       "losses": 3,
       "points": 5,
       "win_rate": 0.3333
-    },
-    {
-      "user_id": "u_003",
-      "username": "thich_la_chon",
-      "display_name": "Thích Là Chọn",
-      "played": 6,
-      "wins": 3,
-      "draws": 0,
-      "losses": 3,
-      "points": 3,
-      "win_rate": 0.5
     }
   ]
 }
