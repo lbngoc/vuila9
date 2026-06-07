@@ -1,60 +1,60 @@
 {
-  "generated_at": "2026-06-07T13:58:38.360Z",
+  "generated_at": "2026-06-07T19:06:08.841Z",
   "data": [
     {
       "user_id": "u_000",
       "username": "lam_mau",
       "display_name": "Mẫu Chính",
-      "played": 10,
+      "played": 6,
       "wins": 5,
-      "draws": 2,
-      "losses": 3,
-      "points": 11,
-      "win_rate": 0.5
+      "draws": 1,
+      "losses": 0,
+      "points": 8,
+      "win_rate": 0.8333
     },
     {
       "user_id": "u_002",
       "username": "choi_cho_vui",
       "display_name": "Chơi Cho Vui",
-      "played": 10,
+      "played": 5,
       "wins": 4,
-      "draws": 2,
-      "losses": 4,
-      "points": 10,
-      "win_rate": 0.4
-    },
-    {
-      "user_id": "u_001",
-      "username": "vui_la_9",
-      "display_name": "Vui Là Chính",
-      "played": 11,
-      "wins": 6,
       "draws": 1,
-      "losses": 4,
-      "points": 9,
-      "win_rate": 0.5455
-    },
-    {
-      "user_id": "u_003",
-      "username": "thich_la_chon",
-      "display_name": "Thích Là Chọn",
-      "played": 11,
-      "wins": 5,
-      "draws": 1,
-      "losses": 5,
-      "points": 8,
-      "win_rate": 0.4545
+      "losses": 0,
+      "points": 7,
+      "win_rate": 0.8
     },
     {
       "user_id": "u_004",
       "username": "sao_cung_duoc",
       "display_name": "Sao Cũng Được",
-      "played": 7,
-      "wins": 3,
+      "played": 4,
+      "wins": 2,
+      "draws": 1,
+      "losses": 1,
+      "points": 5,
+      "win_rate": 0.5
+    },
+    {
+      "user_id": "u_001",
+      "username": "vui_la_9",
+      "display_name": "Vui Là Chính",
+      "played": 6,
+      "wins": 2,
       "draws": 1,
       "losses": 3,
-      "points": 6,
-      "win_rate": 0.4286
+      "points": 5,
+      "win_rate": 0.3333
+    },
+    {
+      "user_id": "u_003",
+      "username": "thich_la_chon",
+      "display_name": "Thích Là Chọn",
+      "played": 6,
+      "wins": 3,
+      "draws": 0,
+      "losses": 3,
+      "points": 3,
+      "win_rate": 0.5
     }
   ]
 }
