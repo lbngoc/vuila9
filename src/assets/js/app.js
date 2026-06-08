@@ -238,7 +238,7 @@ function loginForm(_usersData) { // _usersData kept for backward compat, not use
     loading: false,
     async submit() {
       this.error = '';
-      const u = this.username.toLowerCase().trim();
+      const u = this.username.trim();
       const p = this.passcode.trim();
       if (!u || !p) { this.error = 'Vui lòng nhập đầy đủ thông tin.'; return; }
       if (p.length < 6) { this.error = 'Passcode phải có ít nhất 6 ký tự.'; return; }
@@ -284,6 +284,35 @@ document.addEventListener('alpine:init', () => {
     },
   });
 });
+
+function leaderboardPage(staticRows) {
+  return {
+    rows: staticRows,
+    async init() {
+      const [liveUsers, liveBets] = await Promise.all([fetchLiveUsers(), fetchLiveBets()]);
+      if (!liveUsers) return;
+      const knownIds = new Set(staticRows.map(u => u.user_id));
+      const fresh = liveUsers
+        .filter(u => u.status === 'active' && !knownIds.has(u.id))
+        .map(u => {
+          const bets   = liveBets ? liveBets.filter(b => b.user_id === u.id) : [];
+          const scored = bets.filter(b => b.result);
+          return {
+            user_id:      u.id,
+            username:     u.username,
+            display_name: u.display_name,
+            played: bets.length,
+            wins:   scored.filter(b => b.result === 'WIN').length,
+            draws:  scored.filter(b => b.result === 'PUSH').length,
+            losses: scored.filter(b => b.result === 'LOSE').length,
+            points: scored.reduce((s, b) => s + (parseFloat(b.points) || 0), 0),
+            _new: true,
+          };
+        });
+      if (fresh.length) this.rows = [...staticRows, ...fresh];
+    },
+  };
+}
 
 function myBetsPage(buildBetsData, fixturesData) {
   return {

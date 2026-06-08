@@ -54,7 +54,7 @@ permalink: /register/
           <input x-model="username" @blur="checkUsername()" type="text"
                  autocomplete="username" spellcheck="false"
                  class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-transparent rounded-lg px-3 py-2 text-base text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                 placeholder="vd: lam_mau (chữ thường, không dấu)" />
+                 placeholder="vd: lam_mau hoặc LamMau9 (bắt đầu bằng chữ cái)" />
           <p x-show="errors.username" x-text="errors.username" x-cloak
              class="text-red-500 dark:text-red-400 text-xs mt-1"></p>
         </div>
@@ -112,7 +112,7 @@ permalink: /register/
 
 <script>
 function registerForm(usersData) {
-  const existingUsernames = usersData.map(u => u.username);
+  const existingUsernames = usersData.map(u => u.username.toLowerCase());
   return {
     username: '',
     display_name: '',
@@ -128,21 +128,21 @@ function registerForm(usersData) {
 
     checkUsername() {
       if (!this.submitted) return;
-      const u = this.username.toLowerCase().trim();
+      const u = this.username.trim();
       const e = { ...this.errors };
       delete e.username;
       if (!u) e.username = 'Vui lòng nhập username.';
-      else if (!/^[a-z0-9_]{3,20}$/.test(u)) e.username = 'Chỉ dùng chữ thường, số, gạch dưới (3–20 ký tự).';
-      else if (existingUsernames.includes(u)) e.username = 'Username này đã được sử dụng.';
+      else if (!/^[a-zA-Z][a-zA-Z0-9_]{2,19}$/.test(u)) e.username = 'Phải bắt đầu bằng chữ cái, dùng chữ cái, số, gạch dưới (3–20 ký tự).';
+      else if (existingUsernames.includes(u.toLowerCase())) e.username = 'Username này đã được sử dụng.';
       this.errors = e;
     },
 
     validate() {
       const e = {};
-      const u = this.username.toLowerCase().trim();
+      const u = this.username.trim();
       if (!u) e.username = 'Vui lòng nhập username.';
-      else if (!/^[a-z0-9_]{3,20}$/.test(u)) e.username = 'Chỉ dùng chữ thường, số, gạch dưới (3–20 ký tự).';
-      else if (existingUsernames.includes(u)) e.username = 'Username này đã được sử dụng.';
+      else if (!/^[a-zA-Z][a-zA-Z0-9_]{2,19}$/.test(u)) e.username = 'Phải bắt đầu bằng chữ cái, dùng chữ cái, số, gạch dưới (3–20 ký tự).';
+      else if (existingUsernames.includes(u.toLowerCase())) e.username = 'Username này đã được sử dụng.';
       if (!this.display_name.trim()) e.display_name = 'Vui lòng nhập tên hiển thị.';
       if (this.passcode.length < 6) e.passcode = 'Passcode phải có ít nhất 6 ký tự.';
       if (this.passcode !== this.passcode_confirm) e.passcode_confirm = 'Passcode xác nhận không khớp.';
@@ -161,7 +161,7 @@ function registerForm(usersData) {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            username:     this.username.toLowerCase().trim(),
+            username:     this.username.trim(),
             display_name: this.display_name.trim(),
             passcode:     this.passcode,
             website:      this.website,

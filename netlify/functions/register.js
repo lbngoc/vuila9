@@ -23,7 +23,7 @@ async function checkUsernameTaken(username) {
         else cur += ch;
       }
       cols.push(cur.trim());
-      return cols[1]?.toLowerCase() === username;
+      return cols[1]?.toLowerCase() === username.toLowerCase();
     });
   } catch {
     return false; // timeout or error → skip, let Apps Script handle
@@ -66,9 +66,9 @@ exports.handler = async (event) => {
   if (!username || !display_name || !passcode)
     return err(400, 'Thiếu thông tin bắt buộc.', 'MISSING_FIELDS');
 
-  const u = String(username).toLowerCase().trim();
-  if (!/^[a-z0-9_]{3,20}$/.test(u))
-    return err(400, 'Username chỉ được dùng chữ thường, số, dấu gạch dưới (3–20 ký tự).', 'INVALID_USERNAME');
+  const u = String(username).trim();
+  if (!/^[a-zA-Z][a-zA-Z0-9_]{2,19}$/.test(u))
+    return err(400, 'Username phải bắt đầu bằng chữ cái, chỉ dùng chữ cái, số, gạch dưới (3–20 ký tự).', 'INVALID_USERNAME');
 
   const p = String(passcode).trim();
   if (p.length < 6)
