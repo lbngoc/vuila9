@@ -367,9 +367,8 @@
       "user_id": "u_000",
       "fixture_id": "NED-JPN",
       "pick_type": "home",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "WIN",
+      "points": 1
     },
     {
       "bet_id": "bet_042",
@@ -377,9 +376,8 @@
       "user_id": "u_001",
       "fixture_id": "NED-JPN",
       "pick_type": "away",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "LOSE",
+      "points": 0
     },
     {
       "bet_id": "bet_043",
@@ -387,9 +385,8 @@
       "user_id": "u_002",
       "fixture_id": "NED-JPN",
       "pick_type": "home",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "WIN",
+      "points": 1
     },
     {
       "bet_id": "bet_044",
@@ -397,9 +394,8 @@
       "user_id": "u_003",
       "fixture_id": "NED-JPN",
       "pick_type": "home",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "WIN",
+      "points": 1
     },
     {
       "bet_id": "bet_045",
@@ -407,9 +403,8 @@
       "user_id": "u_004",
       "fixture_id": "NED-JPN",
       "pick_type": "draw",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "LOSE",
+      "points": 0
     },
     {
       "bet_id": "bet_046",
@@ -417,9 +412,8 @@
       "user_id": "u_000",
       "fixture_id": "CIV-ECU",
       "pick_type": "home",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "PUSH",
+      "points": 3
     },
     {
       "bet_id": "bet_047",
@@ -427,9 +421,8 @@
       "user_id": "u_001",
       "fixture_id": "CIV-ECU",
       "pick_type": "draw",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "WIN",
+      "points": 1
     },
     {
       "bet_id": "bet_048",
@@ -437,9 +430,8 @@
       "user_id": "u_002",
       "fixture_id": "CIV-ECU",
       "pick_type": "away",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "PUSH",
+      "points": 3
     },
     {
       "bet_id": "bet_049",
@@ -447,6 +439,53 @@
       "user_id": "u_003",
       "fixture_id": "CIV-ECU",
       "pick_type": "home",
+      "result": "PUSH",
+      "points": 3
+    },
+    {
+      "bet_id": "bet_20260608_211109_kep6",
+      "created_at": "2026-06-08T14:12:30.872Z",
+      "user_id": "u_20260608_210949_y3pr",
+      "fixture_id": "IRN-NZL",
+      "pick_type": "home",
+      "result": "LOSE",
+      "points": 0
+    },
+    {
+      "bet_id": "bet_20260608_211130_vzj0",
+      "created_at": "2026-06-08T14:20:03.815Z",
+      "user_id": "u_20260608_210949_y3pr",
+      "fixture_id": "FRA-SEN",
+      "pick_type": "home",
+      "result": "WIN",
+      "points": 1
+    },
+    {
+      "bet_id": "bet_20260608_212019_oo4a",
+      "created_at": "2026-06-08T14:20:16.632Z",
+      "user_id": "u_20260608_210949_y3pr",
+      "fixture_id": "IRQ-NOR",
+      "pick_type": "home",
+      "result": null,
+      "points": null,
+      "profit": null
+    },
+    {
+      "bet_id": "bet_20260608_212027_8adk",
+      "created_at": "2026-06-08T14:20:25.591Z",
+      "user_id": "u_20260608_210949_y3pr",
+      "fixture_id": "ARG-ALG",
+      "pick_type": "home",
+      "result": null,
+      "points": null,
+      "profit": null
+    },
+    {
+      "bet_id": "bet_20260608_212034_dc46",
+      "created_at": "2026-06-08T14:20:32.486Z",
+      "user_id": "u_20260608_210949_y3pr",
+      "fixture_id": "AUT-JOR",
+      "pick_type": "draw",
       "result": null,
       "points": null,
       "profit": null
