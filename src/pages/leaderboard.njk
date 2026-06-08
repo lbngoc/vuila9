@@ -4,12 +4,16 @@ title: Bảng xếp hạng
 permalink: /leaderboard/
 ---
 
-<div class="space-y-6">
+<script>
+  const LEADERBOARD_DATA = {{ leaderboard.data | dump | safe }};
+</script>
+
+<div class="space-y-6" x-data="leaderboardPage(LEADERBOARD_DATA)">
   <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">🏆 Bảng xếp hạng</h1>
     <p class="text-xs text-gray-500 dark:text-gray-600 sm:text-right sm:flex-shrink-0">
       {% if leaderboard.generated_at %}Cập nhật: {{ leaderboard.generated_at | dateDisplay }}{% endif %}
-      {% if sheetConfig.bets_tab_url %}
+      {% if sheetConfig.bets_tab_url and siteConfig.public_mode %}
         {% if leaderboard.generated_at %} · {% endif %}
         <a href="{{ sheetConfig.bets_tab_url }}" target="_blank" rel="noopener noreferrer"
            class="hover:text-gray-700 dark:hover:text-gray-400 transition">📊 Dữ liệu gốc ↗</a>
@@ -17,8 +21,7 @@ permalink: /leaderboard/
     </p>
   </div>
 
-  {% if leaderboard.data | length %}
-  <div class="bg-white dark:bg-gray-900 rounded-xl overflow-x-auto">
+  <div class="bg-white dark:bg-gray-900 rounded-xl overflow-x-auto" x-show="rows.length">
     <table class="w-full text-sm">
       <thead>
         <tr class="text-gray-500 text-xs border-b border-gray-200 dark:border-gray-800">
@@ -33,34 +36,38 @@ permalink: /leaderboard/
         </tr>
       </thead>
       <tbody>
-        {% for user in leaderboard.data %}
-        <tr class="border-b border-gray-100 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition {% if loop.index <= 3 %}font-semibold{% endif %}">
-          <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-gray-500 text-base">
-            {% if loop.index == 1 %}🥇
-            {% elif loop.index == 2 %}🥈
-            {% elif loop.index == 3 %}🥉
-            {% else %}<span class="text-gray-400 dark:text-gray-600">{{ loop.index }}</span>{% endif %}
-          </td>
-          <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-gray-900 dark:text-white max-w-[8rem] sm:max-w-none truncate">{{ user.display_name }}</td>
-          <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right text-gray-500 hidden sm:table-cell">{{ user.played }}</td>
-          <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right text-gray-500 text-xs whitespace-nowrap">
-            <span class="text-emerald-500 dark:text-emerald-400">{{ user.wins }}</span>
-            /
-            <span class="text-gray-400 dark:text-gray-500">{{ user.draws }}</span>
-            /
-            <span class="text-red-500 dark:text-red-400">{{ user.losses }}</span>
-          </td>
-          <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right font-bold text-lg
-                     {% if user.points > 0 %}text-emerald-500 dark:text-emerald-400{% elif user.points < 0 %}text-red-500 dark:text-red-400{% else %}text-gray-400{% endif %}">
-            {% if user.points > 0 %}+{% endif %}{{ user.points }}
-          </td>
-        </tr>
-        {% endfor %}
+        <template x-for="(user, idx) in rows" :key="user.user_id">
+          <tr class="border-b border-gray-100 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+              :class="idx < 3 ? 'font-semibold' : ''">
+            <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-gray-500 text-base">
+              <span :class="idx >= 3 ? 'text-gray-400 dark:text-gray-600' : ''"
+                    x-text="idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : (idx + 1)"></span>
+            </td>
+            <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-gray-900 dark:text-white max-w-[8rem] sm:max-w-none truncate">
+              <span x-text="user.display_name"></span>
+              <span x-show="user._new"
+                    class="ml-1 text-[10px] font-normal text-blue-400 dark:text-blue-500 align-middle">mới</span>
+            </td>
+            <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right text-gray-500 hidden sm:table-cell"
+                x-text="user.played"></td>
+            <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right text-gray-500 text-xs whitespace-nowrap">
+              <span class="text-emerald-500 dark:text-emerald-400" x-text="user.wins"></span>
+              /
+              <span class="text-gray-400 dark:text-gray-500" x-text="user.draws"></span>
+              /
+              <span class="text-red-500 dark:text-red-400" x-text="user.losses"></span>
+            </td>
+            <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right font-bold text-lg"
+                :class="user.points > 0 ? 'text-emerald-500 dark:text-emerald-400' : user.points < 0 ? 'text-red-500 dark:text-red-400' : 'text-gray-400'"
+                x-text="(user.points > 0 ? '+' : '') + user.points"></td>
+          </tr>
+        </template>
       </tbody>
     </table>
   </div>
 
-  <div class="bg-white dark:bg-gray-900 rounded-xl p-4 text-xs text-gray-500 dark:text-gray-600 space-y-1">
+  <div class="bg-white dark:bg-gray-900 rounded-xl p-4 text-xs text-gray-500 dark:text-gray-600 space-y-1"
+       x-show="rows.length">
     <p><span class="font-semibold text-gray-600 dark:text-gray-400">Cách tính điểm:</span></p>
     <p>✅ Đoán đúng →
       <span class="text-emerald-500 dark:text-emerald-400 font-semibold">{% if siteConfig.points.WIN > 0 %}+{% endif %}{{ siteConfig.points.WIN }} điểm</span>
@@ -75,10 +82,9 @@ permalink: /leaderboard/
     </p>
   </div>
 
-  {% else %}
-  <div class="bg-white dark:bg-gray-900 rounded-xl p-12 text-center text-gray-500">
+  <div class="bg-white dark:bg-gray-900 rounded-xl p-12 text-center text-gray-500"
+       x-show="!rows.length">
     <p class="text-4xl mb-3">🏆</p>
     <p>Chưa có dữ liệu xếp hạng.</p>
   </div>
-  {% endif %}
 </div>
