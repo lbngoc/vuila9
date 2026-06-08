@@ -133,3 +133,14 @@ permalink: /
   </section>
 
 </div>
+
+<script>
+  (function () {
+    function openHowToPlay() {
+      if (location.hash === '#how-to-play')
+        document.querySelector('#how-to-play details')?.setAttribute('open', '');
+    }
+    openHowToPlay();
+    window.addEventListener('hashchange', openHowToPlay);
+  })();
+</script>

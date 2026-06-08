@@ -174,7 +174,7 @@ permalink: /fixtures/
     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">📅 Lịch thi đấu</h1>
     <p class="text-xs text-gray-500 dark:text-gray-600 sm:text-right sm:flex-shrink-0">
       {% if fixtures.generated_at %}Cập nhật: {{ fixtures.generated_at | dateDisplay }}{% endif %}
-      {% if sheetConfig.fixtures_tab_url %}
+      {% if sheetConfig.fixtures_tab_url and siteConfig.public_mode %}
         {% if fixtures.generated_at %} · {% endif %}
         <a href="{{ sheetConfig.fixtures_tab_url }}" target="_blank" rel="noopener noreferrer"
            class="hover:text-gray-700 dark:hover:text-gray-400 transition">📊 Dữ liệu gốc ↗</a>

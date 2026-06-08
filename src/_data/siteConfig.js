@@ -4,11 +4,13 @@
 const bet_lock_minutes = parseInt(process.env.BET_LOCK_MINUTES)  || 60;    // default 60 phút
 const auto_lose_no_bet = (process.env.AUTO_LOSE_NO_BET || 'false') === 'true'; // default false
 const demo_mode        = (process.env.DEMO_MODE        || 'false') === 'true'; // default false
+const public_mode      = (process.env.PUBLIC_MODE      || 'true' ) === 'true'; // default true — hiện link Dữ liệu gốc
 
 module.exports = {
   site_name:      'Vui Là Chính',
   storage_prefix: 'vuila9',   // localStorage key prefix (synced with app.js)
   timezone:       process.env.TIMEZONE || 'Asia/Ho_Chi_Minh',
+  public_mode,    // default: true — set PUBLIC_MODE=false để ẩn link "Dữ liệu gốc" đến Google Sheet
 
   // ── Bet lock ────────────────────────────────────────────────────────────
   // Số phút trước giờ đá mà dự đoán bị khoá.
@@ -26,6 +28,19 @@ module.exports = {
   // Khung giờ do Apps Script time trigger quyết định — banner chỉ thông báo,
   // không tự động điều chỉnh hành vi của site.
   demo_mode,          // default: false
+
+  // Giờ hiển thị trên banner — phải khớp với Apps Script trigger schedule.
+  // Thay đổi qua Netlify Build env vars (không ảnh hưởng logic, chỉ thay đổi text banner).
+  demo_update_time:    process.env.DEMO_UPDATE_TIME || '08:00,12:00,20:00',
+  demo_reset_time:     process.env.DEMO_RESET_TIME  || '02:00',
+  demo_update_display: (() => {
+    const raw = process.env.DEMO_UPDATE_TIME || '08:00,12:00,20:00';
+    return raw.split(',').map(s => { const h = parseInt(s.trim()); return `${h}–${h + 1} giờ`; }).join(' · ');
+  })(),
+  demo_reset_display: (() => {
+    const raw = process.env.DEMO_RESET_TIME || '02:00';
+    return raw.split(',').map(s => { const h = parseInt(s.trim()); return `${h}–${h + 1} giờ sáng`; }).join(' · ');
+  })(),
 
   // ── Scoring config ──────────────────────────────────────────────────────
   // Thay đổi WIN/LOSE để điều chỉnh điểm thưởng/phạt.
