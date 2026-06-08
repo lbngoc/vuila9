@@ -137,9 +137,21 @@ Script Properties → `RESET_TABS` = `bets`
 
 Script Properties → `SEED_BRANCH` = `dev`
 
+### Đổi giờ hiển thị trên banner demo
+
+Khi thay đổi trigger schedule trong Apps Script, cập nhật Netlify Build env vars để banner trên site hiển thị đúng giờ:
+
+| Key | Giá trị mặc định | Mô tả |
+|-----|-----------------|-------|
+| `DEMO_UPDATE_TIME` | `08:00,12:00,20:00` | Giờ ICT các lần update kết quả (phân cách bằng dấu phẩy) |
+| `DEMO_RESET_TIME` | `02:00` | Giờ ICT reset dữ liệu (phân cách bằng dấu phẩy nếu nhiều khung) |
+
+> Các giá trị này **chỉ ảnh hưởng đến text trên banner** — không tự động thay đổi Apps Script triggers.
+
 ### Chạy 4 lần/ngày thay vì 3
 
 Thêm Trigger 5 cho `runDemoUpdate` lúc **3:00 AM – 4:00 AM** UTC (= 10:00 ICT).
+Cập nhật Netlify env: `DEMO_UPDATE_TIME=08:00,10:00,12:00,20:00`
 
 ---
 

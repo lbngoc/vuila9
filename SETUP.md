@@ -262,6 +262,7 @@ BETS_GID=987654321
 # Luật chơi (tùy chọn — bỏ trống = dùng giá trị mặc định)
 BET_LOCK_MINUTES=60    # khoá dự đoán N phút trước giờ đá (mặc định: 60)
 AUTO_LOSE_NO_BET=false # tự tính thua khi bỏ qua trận (mặc định: false)
+PUBLIC_MODE=true       # false → ẩn link "Dữ liệu gốc" ở fixtures + leaderboard (mặc định: true)
 ```
 
 ---
@@ -369,6 +370,7 @@ GitHub repo → **Settings → Secrets and variables → Actions → New reposit
 |---|---|---|
 | `BET_LOCK_MINUTES` | Phút trước kickoff để khoá dự đoán | `60` |
 | `AUTO_LOSE_NO_BET` | `true` → active user bỏ trận finished tự động bị tính LOSE | `false` |
+| `PUBLIC_MODE` | `false` → ẩn link "Dữ liệu gốc" đến Sheet ở fixtures + leaderboard | `true` |
 
 > Các giá trị này cũng có thể set trong `.env.local` để test local.
 
@@ -424,7 +426,10 @@ Các biến này được đọc tại **build time** (trong `siteConfig.js` và
 |---|---|---|
 | `BET_LOCK_MINUTES` | Phút trước kickoff để khoá form dự đoán | `60` |
 | `AUTO_LOSE_NO_BET` | `true` → active user không dự đoán trận finished → tự động LOSE | `false` |
-| `DEMO_MODE` | `true` → hiện banner lịch demo ở cuối mọi trang (8–9h, 12–13h, 16–17h cập nhật; 2–3h reset) | `false` |
+| `PUBLIC_MODE` | `false` → ẩn link "Dữ liệu gốc" đến Sheet ở fixtures + leaderboard | `true` |
+| `DEMO_MODE` | `true` → hiện banner lịch demo ở cuối mọi trang | `false` |
+| `DEMO_UPDATE_TIME` | Giờ ICT cập nhật kết quả, phân cách dấu phẩy — khớp Apps Script triggers | `08:00,12:00,20:00` |
+| `DEMO_RESET_TIME` | Giờ ICT reset demo — hỗ trợ nhiều khung giờ bằng dấu phẩy | `02:00` |
 
 > **Lưu ý scope:** Chọn scope **"Builds"** (không phải "Functions") khi thêm các biến này vào Netlify. Sau khi thay đổi phải **trigger redeploy** để có hiệu lực.
 

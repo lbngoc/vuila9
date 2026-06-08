@@ -214,8 +214,14 @@ AUTO_LOSE_NO_BET=    # 'true' → active user không gửi dự đoán trận fi
 
 # Demo mode (Netlify Build env):
 DEMO_MODE=           # 'true' → hiện banner demo ở cuối mọi trang: lịch cập nhật kết quả
-                     # (8–9h, 12–13h, 20–21h) và reset dữ liệu (2–3h sáng) giờ Việt Nam
-                     # (default: false) — chỉ hiển thị UI, không thay đổi logic nào khác
+                     # và reset dữ liệu giờ Việt Nam (default: false) — chỉ hiển thị UI
+DEMO_UPDATE_TIME=    # Giờ ICT các lần update kết quả, phân cách dấu phẩy (default: '08:00,12:00,20:00')
+                     # Chỉ ảnh hưởng text banner — phải khớp Apps Script trigger schedule
+DEMO_RESET_TIME=     # Giờ ICT reset demo (default: '02:00') — hỗ trợ nhiều khung giờ bằng dấu ','
+
+# Hiển thị (Netlify Build env):
+PUBLIC_MODE=         # 'false' → ẩn link "Dữ liệu gốc" đến Google Sheet ở fixtures + leaderboard
+                     # (default: true)
 
 # Tuỳ chọn:
 TIMEZONE=            # mặc định: Asia/Ho_Chi_Minh
