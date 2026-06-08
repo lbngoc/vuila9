@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-08T14:48:25.144Z",
+  "generated_at": "2026-06-08T15:04:57.830Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -242,10 +242,10 @@
       "home_team": "Argentina",
       "away_team": "Algérie",
       "handicap": "-1.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -255,10 +255,10 @@
       "home_team": "Áo",
       "away_team": "Jordan",
       "handicap": "-1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -268,10 +268,10 @@
       "home_team": "Bồ Đào Nha",
       "away_team": "CH Congo",
       "handicap": "-1.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 0,
+      "is_finished": true,
       "is_locked": false
     },
     {

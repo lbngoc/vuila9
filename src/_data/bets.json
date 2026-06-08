@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-08T14:48:25.144Z",
+  "generated_at": "2026-06-08T15:04:57.830Z",
   "data": [
     {
       "bet_id": "bet_001",
@@ -475,9 +475,8 @@
       "user_id": "u_20260608_210949_y3pr",
       "fixture_id": "ARG-ALG",
       "pick_type": "home",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "LOSE",
+      "points": 0
     },
     {
       "bet_id": "bet_20260608_212034_dc46",
@@ -485,9 +484,8 @@
       "user_id": "u_20260608_210949_y3pr",
       "fixture_id": "AUT-JOR",
       "pick_type": "draw",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "LOSE",
+      "points": 0
     }
   ]
 }

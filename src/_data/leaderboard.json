@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-08T14:48:25.144Z",
+  "generated_at": "2026-06-08T15:04:57.830Z",
   "data": [
     {
       "user_id": "u_002",
@@ -60,12 +60,12 @@
       "user_id": "u_20260608_210949_y3pr",
       "username": "dudoan_wc",
       "display_name": "Tram",
-      "played": 3,
+      "played": 5,
       "wins": 1,
       "draws": 0,
-      "losses": 2,
+      "losses": 4,
       "points": 1,
-      "win_rate": 0.3333
+      "win_rate": 0.2
     }
   ]
 }
