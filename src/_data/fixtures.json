@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-08T15:04:57.830Z",
+  "generated_at": "2026-06-08T19:06:09.052Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -86,10 +86,10 @@
       "home_team": "Haiti",
       "away_team": "Scotland",
       "handicap": "1",
-      "status": "finished",
-      "result_home": 0,
-      "result_away": 0,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -99,10 +99,10 @@
       "home_team": "Úc",
       "away_team": "Thổ Nhĩ Kỳ",
       "handicap": "0",
-      "status": "finished",
-      "result_home": 0,
-      "result_away": 1,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -112,10 +112,10 @@
       "home_team": "Đức",
       "away_team": "Curaçao",
       "handicap": "-2",
-      "status": "finished",
-      "result_home": 2,
-      "result_away": 1,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -125,10 +125,10 @@
       "home_team": "Hà Lan",
       "away_team": "Nhật Bản",
       "handicap": "-0.5",
-      "status": "finished",
-      "result_home": 2,
-      "result_away": 1,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -138,10 +138,10 @@
       "home_team": "Bờ Biển Ngà",
       "away_team": "Ecuador",
       "handicap": "0",
-      "status": "finished",
-      "result_home": 2,
-      "result_away": 2,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -151,10 +151,10 @@
       "home_team": "Thụy Điển",
       "away_team": "Tunisia",
       "handicap": "-0.5",
-      "status": "finished",
-      "result_home": 2,
-      "result_away": 1,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -164,10 +164,10 @@
       "home_team": "Tây Ban Nha",
       "away_team": "Cabo Verde",
       "handicap": "-2",
-      "status": "finished",
-      "result_home": 1,
-      "result_away": 0,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -177,10 +177,10 @@
       "home_team": "Bỉ",
       "away_team": "Ai Cập",
       "handicap": "-1",
-      "status": "finished",
-      "result_home": 2,
-      "result_away": 2,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -190,10 +190,10 @@
       "home_team": "Ả Rập Xê Út",
       "away_team": "Uruguay",
       "handicap": "0.5",
-      "status": "finished",
-      "result_home": 1,
-      "result_away": 0,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -203,10 +203,10 @@
       "home_team": "Iran",
       "away_team": "New Zealand",
       "handicap": "-0.5",
-      "status": "finished",
-      "result_home": 1,
-      "result_away": 1,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -216,10 +216,10 @@
       "home_team": "Pháp",
       "away_team": "Senegal",
       "handicap": "-1",
-      "status": "finished",
-      "result_home": 2,
-      "result_away": 0,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -229,10 +229,10 @@
       "home_team": "Iraq",
       "away_team": "Na Uy",
       "handicap": "0.5",
-      "status": "finished",
-      "result_home": 0,
-      "result_away": 1,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -242,10 +242,10 @@
       "home_team": "Argentina",
       "away_team": "Algérie",
       "handicap": "-1.5",
-      "status": "finished",
-      "result_home": 0,
-      "result_away": 1,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -255,10 +255,10 @@
       "home_team": "Áo",
       "away_team": "Jordan",
       "handicap": "-1",
-      "status": "finished",
-      "result_home": 0,
-      "result_away": 1,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -268,10 +268,10 @@
       "home_team": "Bồ Đào Nha",
       "away_team": "CH Congo",
       "handicap": "-1.5",
-      "status": "finished",
-      "result_home": 0,
-      "result_away": 0,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
