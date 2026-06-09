@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-09T01:54:26.434Z",
+  "generated_at": "2026-06-09T04:03:56.131Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -126,8 +126,8 @@
       "away_team": "Nhật Bản",
       "handicap": "-0.5",
       "status": "finished",
-      "result_home": 2,
-      "result_away": 1,
+      "result_home": 0,
+      "result_away": 0,
       "is_finished": true,
       "is_locked": false
     },
@@ -140,7 +140,7 @@
       "handicap": "0",
       "status": "finished",
       "result_home": 2,
-      "result_away": 2,
+      "result_away": 1,
       "is_finished": true,
       "is_locked": false
     },
@@ -153,7 +153,7 @@
       "handicap": "-0.5",
       "status": "finished",
       "result_home": 2,
-      "result_away": 1,
+      "result_away": 2,
       "is_finished": true,
       "is_locked": false
     },
@@ -164,10 +164,10 @@
       "home_team": "Tây Ban Nha",
       "away_team": "Cabo Verde",
       "handicap": "-2",
-      "status": "finished",
-      "result_home": 1,
-      "result_away": 0,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -177,10 +177,10 @@
       "home_team": "Bỉ",
       "away_team": "Ai Cập",
       "handicap": "-1",
-      "status": "finished",
-      "result_home": 2,
-      "result_away": 2,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -190,10 +190,10 @@
       "home_team": "Ả Rập Xê Út",
       "away_team": "Uruguay",
       "handicap": "0.5",
-      "status": "finished",
-      "result_home": 1,
-      "result_away": 0,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -203,10 +203,10 @@
       "home_team": "Iran",
       "away_team": "New Zealand",
       "handicap": "-0.5",
-      "status": "finished",
-      "result_home": 1,
-      "result_away": 1,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
@@ -216,10 +216,10 @@
       "home_team": "Pháp",
       "away_team": "Senegal",
       "handicap": "-1",
-      "status": "finished",
-      "result_home": 2,
-      "result_away": 0,
-      "is_finished": true,
+      "status": "upcoming",
+      "result_home": null,
+      "result_away": null,
+      "is_finished": false,
       "is_locked": false
     },
     {
