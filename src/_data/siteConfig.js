@@ -55,7 +55,7 @@ module.exports = {
   points: {
     WIN:  1,   // chọn đúng (đội thắng/thua theo điểm chấp)
     PUSH: 3,   // hòa chấp chính xác — chấp nguyên bàn, home/away pick đúng ranh giới
-    LOSE: 0,   // chọn sai — đổi thành -1 để trừ điểm
+    LOSE: -1,   // chọn sai — đổi thành -1 để trừ điểm
   },
 
   // ── Hướng dẫn chơi ─────────────────────────────────────────────────────

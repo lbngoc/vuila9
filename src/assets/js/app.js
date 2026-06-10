@@ -291,6 +291,10 @@ function leaderboardPage(staticRows) {
     async init() {
       const [liveUsers, liveBets] = await Promise.all([fetchLiveUsers(), fetchLiveBets()]);
       if (!liveUsers) return;
+      const enriched = staticRows.map(u => ({
+        ...u,
+        total_submitted: liveBets ? liveBets.filter(b => b.user_id === u.user_id).length : null,
+      }));
       const knownIds = new Set(staticRows.map(u => u.user_id));
       const fresh = liveUsers
         .filter(u => u.status === 'active' && !knownIds.has(u.id))
@@ -298,10 +302,11 @@ function leaderboardPage(staticRows) {
           const bets   = liveBets ? liveBets.filter(b => b.user_id === u.id) : [];
           const scored = bets.filter(b => b.result);
           return {
-            user_id:      u.id,
-            username:     u.username,
-            display_name: u.display_name,
-            played: bets.length,
+            user_id:         u.id,
+            username:        u.username,
+            display_name:    u.display_name,
+            played:          scored.length,
+            total_submitted: bets.length,
             wins:   scored.filter(b => b.result === 'WIN').length,
             draws:  scored.filter(b => b.result === 'PUSH').length,
             losses: scored.filter(b => b.result === 'LOSE').length,
@@ -309,7 +314,7 @@ function leaderboardPage(staticRows) {
             _new: true,
           };
         });
-      if (fresh.length) this.rows = [...staticRows, ...fresh];
+      this.rows = [...enriched, ...fresh];
     },
   };
 }

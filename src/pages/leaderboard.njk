@@ -27,10 +27,16 @@ permalink: /leaderboard/
         <tr class="text-gray-500 text-xs border-b border-gray-200 dark:border-gray-800">
           <th class="text-left px-2 py-2.5 sm:px-4 sm:py-3 w-8 sm:w-auto">#</th>
           <th class="text-left px-2 py-2.5 sm:px-4 sm:py-3">Người chơi</th>
-          <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3 hidden sm:table-cell">Dự đoán</th>
+          <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3 hidden sm:table-cell">Có KQ</th>
+          <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3 hidden sm:table-cell">Đã gửi</th>
           <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3">
-            <span class="hidden sm:inline">Thắng / Hòa / Thua</span>
-            <span class="sm:hidden">T / H / T</span>
+            {% if siteConfig.points.PUSH != siteConfig.points.LOSE %}
+              <span class="hidden sm:inline">Đúng / Hòa chấp / Sai</span>
+              <span class="sm:hidden">Đ / H / S</span>
+            {% else %}
+              <span class="hidden sm:inline">Đúng / Sai</span>
+              <span class="sm:hidden">Đ / S</span>
+            {% endif %}
           </th>
           <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3">Điểm</th>
         </tr>
@@ -50,12 +56,17 @@ permalink: /leaderboard/
             </td>
             <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right text-gray-500 hidden sm:table-cell"
                 x-text="user.played"></td>
+            <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right text-gray-500 hidden sm:table-cell"
+                x-text="user.total_submitted != null ? user.total_submitted : user.played"></td>
             <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right text-gray-500 text-xs whitespace-nowrap">
               <span class="text-emerald-500 dark:text-emerald-400" x-text="user.wins"></span>
+              {% if siteConfig.points.PUSH != siteConfig.points.LOSE %}
               /
-              <span class="text-gray-400 dark:text-gray-500" x-text="user.draws"></span>
+              <span class="text-yellow-500 dark:text-yellow-400" x-text="user.draws"></span>
+              {% endif %}
               /
-              <span class="text-red-500 dark:text-red-400" x-text="user.losses"></span>
+              <span class="text-red-500 dark:text-red-400"
+                    x-text="{{ 'user.losses + user.draws' if siteConfig.points.PUSH == siteConfig.points.LOSE else 'user.losses' }}"></span>
             </td>
             <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right font-bold text-lg"
                 :class="user.points > 0 ? 'text-emerald-500 dark:text-emerald-400' : user.points < 0 ? 'text-red-500 dark:text-red-400' : 'text-gray-400'"
