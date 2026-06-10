@@ -324,10 +324,11 @@ function runDemoUpdate() {
 //
 function resetDemoData() {
   const props  = PropertiesService.getScriptProperties();
+  const repo = props.getProperty('GITHUB_REPO') || 'lbngoc/vuila9';
   const branch = props.getProperty('SEED_BRANCH') || 'main';
   const tabs   = (props.getProperty('RESET_TABS') || 'users,bets,fixtures').split(',').map(s => s.trim());
 
-  const BASE_URL = `https://raw.githubusercontent.com/lbngoc/vuila9/${branch}/data/sample`;
+  const BASE_URL = `https://raw.githubusercontent.com/${repo}/${branch}/data/sample`;
   const log = [];
 
   for (const tab of tabs) {
