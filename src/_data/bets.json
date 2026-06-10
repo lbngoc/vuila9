@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-10T04:03:55.547Z",
+  "generated_at": "2026-06-10T07:45:52.843Z",
   "data": [
     {
       "bet_id": "bet_001",
@@ -17,7 +17,7 @@
       "fixture_id": "MEX-RSA",
       "pick_type": "draw",
       "result": "LOSE",
-      "points": 0
+      "points": -1
     },
     {
       "bet_id": "bet_003",
@@ -98,7 +98,7 @@
       "fixture_id": "CAN-BIH",
       "pick_type": "away",
       "result": "LOSE",
-      "points": 0
+      "points": -1
     },
     {
       "bet_id": "bet_012",
@@ -152,7 +152,7 @@
       "fixture_id": "USA-PAR",
       "pick_type": "away",
       "result": "LOSE",
-      "points": 0
+      "points": -1
     },
     {
       "bet_id": "bet_018",
@@ -161,7 +161,7 @@
       "fixture_id": "USA-PAR",
       "pick_type": "draw",
       "result": "LOSE",
-      "points": 0
+      "points": -1
     },
     {
       "bet_id": "bet_019",
@@ -179,7 +179,7 @@
       "fixture_id": "BRA-MAR",
       "pick_type": "away",
       "result": "LOSE",
-      "points": 0
+      "points": -1
     },
     {
       "bet_id": "bet_021",
@@ -197,7 +197,7 @@
       "fixture_id": "BRA-MAR",
       "pick_type": "draw",
       "result": "LOSE",
-      "points": 0
+      "points": -1
     },
     {
       "bet_id": "bet_023",
@@ -242,7 +242,7 @@
       "fixture_id": "QAT-SUI",
       "pick_type": "home",
       "result": "LOSE",
-      "points": 0
+      "points": -1
     },
     {
       "bet_id": "bet_028",
@@ -287,7 +287,7 @@
       "fixture_id": "AUS-TUR",
       "pick_type": "draw",
       "result": "LOSE",
-      "points": 0
+      "points": -1
     },
     {
       "bet_id": "bet_033",
@@ -305,7 +305,7 @@
       "fixture_id": "AUS-TUR",
       "pick_type": "away",
       "result": "LOSE",
-      "points": 0
+      "points": -1
     },
     {
       "bet_id": "bet_035",
@@ -314,7 +314,7 @@
       "fixture_id": "AUS-TUR",
       "pick_type": "draw",
       "result": "LOSE",
-      "points": 0
+      "points": -1
     },
     {
       "bet_id": "bet_036",
@@ -377,7 +377,7 @@
       "fixture_id": "NED-JPN",
       "pick_type": "away",
       "result": "LOSE",
-      "points": 0
+      "points": -1
     },
     {
       "bet_id": "bet_043",
@@ -404,7 +404,7 @@
       "fixture_id": "NED-JPN",
       "pick_type": "draw",
       "result": "LOSE",
-      "points": 0
+      "points": -1
     },
     {
       "bet_id": "bet_046",
@@ -422,7 +422,7 @@
       "fixture_id": "CIV-ECU",
       "pick_type": "draw",
       "result": "LOSE",
-      "points": 0
+      "points": -1
     },
     {
       "bet_id": "bet_048",
@@ -431,7 +431,7 @@
       "fixture_id": "CIV-ECU",
       "pick_type": "away",
       "result": "LOSE",
-      "points": 0
+      "points": -1
     },
     {
       "bet_id": "bet_049",
