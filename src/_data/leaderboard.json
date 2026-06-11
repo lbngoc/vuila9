@@ -1,89 +1,65 @@
 {
-  "generated_at": "2026-06-11T14:48:25.402Z",
+  "generated_at": "2026-06-11T19:06:11.182Z",
   "data": [
     {
       "user_id": "u_000",
       "username": "lam_mau",
       "display_name": "Mẫu Chính",
-      "played": 26,
-      "wins": 7,
+      "played": 6,
+      "wins": 5,
       "draws": 1,
-      "losses": 2,
-      "no_picks": 16,
-      "points": -9,
-      "win_rate": 0.2692
-    },
-    {
-      "user_id": "u_003",
-      "username": "thich_la_chon",
-      "display_name": "Thích Là Chọn",
-      "played": 26,
-      "wins": 7,
-      "draws": 0,
-      "losses": 4,
-      "no_picks": 15,
-      "points": -12,
-      "win_rate": 0.2692
+      "losses": 0,
+      "no_picks": 0,
+      "points": 7,
+      "win_rate": 0.8333
     },
     {
       "user_id": "u_002",
       "username": "choi_cho_vui",
       "display_name": "Chơi Cho Vui",
-      "played": 26,
-      "wins": 5,
-      "draws": 1,
-      "losses": 4,
-      "no_picks": 16,
-      "points": -13,
-      "win_rate": 0.1923
-    },
-    {
-      "user_id": "u_001",
-      "username": "vui_la_9",
-      "display_name": "Vui Là Chính",
-      "played": 26,
+      "played": 6,
       "wins": 4,
       "draws": 1,
-      "losses": 6,
-      "no_picks": 15,
-      "points": -15,
-      "win_rate": 0.1538
+      "losses": 0,
+      "no_picks": 1,
+      "points": 5,
+      "win_rate": 0.6667
     },
     {
       "user_id": "u_004",
       "username": "sao_cung_duoc",
       "display_name": "Sao Cũng Được",
-      "played": 26,
-      "wins": 3,
+      "played": 6,
+      "wins": 2,
+      "draws": 1,
+      "losses": 1,
+      "no_picks": 2,
+      "points": 1,
+      "win_rate": 0.3333
+    },
+    {
+      "user_id": "u_001",
+      "username": "vui_la_9",
+      "display_name": "Vui Là Chính",
+      "played": 6,
+      "wins": 2,
       "draws": 1,
       "losses": 3,
-      "no_picks": 19,
-      "points": -17,
-      "win_rate": 0.1154
+      "no_picks": 0,
+      "points": 1,
+      "win_rate": 0.3333
     },
     {
-      "user_id": "u_20260611_133521_itnl",
-      "username": "hunglp97",
-      "display_name": "Hưng Lê",
-      "played": 26,
-      "wins": 0,
+      "user_id": "u_003",
+      "username": "thich_la_chon",
+      "display_name": "Thích Là Chọn",
+      "played": 6,
+      "wins": 3,
       "draws": 0,
-      "losses": 2,
-      "no_picks": 24,
-      "points": -26,
-      "win_rate": 0
-    },
-    {
-      "user_id": "u_20260611_133701_uh7h",
-      "username": "hunglp98",
-      "display_name": "Hưng Lê 1",
-      "played": 26,
-      "wins": 0,
-      "draws": 0,
-      "losses": 2,
-      "no_picks": 24,
-      "points": -26,
-      "win_rate": 0
+      "losses": 3,
+      "no_picks": 0,
+      "points": 0,
+      "win_rate": 0.5
     }
   ]
 }
