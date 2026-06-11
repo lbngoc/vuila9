@@ -357,10 +357,10 @@ function leaderboardPage(staticRows) {
 
       // Listen for cache refresh to update submitted counts dynamically
       window.addEventListener('funnybet:refresh', (e) => {
-        const freshBets = e.detail;
+        const freshPicks = e.detail;
         this.rows = this.rows.map(u => ({
           ...u,
-          total_submitted: freshBets ? freshBets.filter(b => b.user_id === u.user_id).length : null,
+          total_submitted: freshPicks ? freshPicks.filter(b => b.user_id === u.user_id).length : null,
         }));
       });
     },
@@ -397,7 +397,7 @@ function leaderboardPage(staticRows) {
         const data = await res.json();
         if (res.ok) {
           if (data.copiedCount > 0) {
-            // Clear pending bets for these copied fixtures if any to prevent UI override
+            // Clear pending picks for these copied fixtures if any to prevent UI override
             if (data.copiedFixtureIds && data.copiedFixtureIds.length > 0) {
               try {
                 const pending = JSON.parse(localStorage.getItem(_PENDING_KEY) || '[]');
@@ -408,9 +408,9 @@ function leaderboardPage(staticRows) {
 
             // Invalidate cache and trigger reload
             localStorage.removeItem(_LIVE_CACHE_KEY);
-            const freshBets = await fetchLiveBets();
-            if (freshBets) {
-              window.dispatchEvent(new CustomEvent('funnybet:refresh', { detail: freshBets }));
+            const freshPicks = await fetchLivePicks();
+            if (freshPicks) {
+              window.dispatchEvent(new CustomEvent('funnybet:refresh', { detail: freshPicks }));
             }
 
             this.copyMessage = `✅ Đã sao chép thành công ${data.copiedCount} dự đoán của ${this.copyTarget.display_name}!`;
