@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config({ path: '.env.local' });
 const fs     = require('fs');
 const crypto = require('crypto');
 const { parse } = require('csv-parse/sync');

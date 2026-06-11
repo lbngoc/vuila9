@@ -21,14 +21,26 @@ permalink: /leaderboard/
     </p>
   </div>
 
+  {% set _upcoming = [] %}{% set _finished = [] %}
+  {% for f in fixtures.data %}
+    {% if f.status == "upcoming" %}{% set _upcoming = _upcoming.concat([1]) %}{% endif %}
+    {% if f.is_finished %}{% set _finished = _finished.concat([1]) %}{% endif %}
+  {% endfor %}
+  <div class="text-xs text-gray-500 dark:text-gray-600 flex gap-4">
+    {% if _upcoming | length %}<span>📈 Sắp diễn ra: <strong class="text-gray-700 dark:text-gray-400">{{ _upcoming | length }}</strong></span>{% endif %}
+    {% if _finished | length %}<span>✅ Đã kết thúc: <strong class="text-gray-700 dark:text-gray-400">{{ _finished | length }}</strong></span>{% endif %}
+  </div>
+
   <div class="bg-white dark:bg-gray-900 rounded-xl overflow-x-auto" x-show="rows.length">
     <table class="w-full text-sm">
       <thead>
         <tr class="text-gray-500 text-xs border-b border-gray-200 dark:border-gray-800">
           <th class="text-left px-2 py-2.5 sm:px-4 sm:py-3 w-8 sm:w-auto">#</th>
           <th class="text-left px-2 py-2.5 sm:px-4 sm:py-3">Người chơi</th>
-          <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3 hidden sm:table-cell">Có KQ</th>
           <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3 hidden sm:table-cell">Đã gửi</th>
+          {% if siteConfig.points.NO_BET < 0 %}
+          <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3 hidden sm:table-cell">Bỏ qua</th>
+          {% endif %}
           <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3">
             {% if siteConfig.points.PUSH != siteConfig.points.LOSE %}
               <span class="hidden sm:inline">Đúng / Hòa chấp / Sai</span>
@@ -55,9 +67,11 @@ permalink: /leaderboard/
                     class="ml-1 text-[10px] font-normal text-blue-400 dark:text-blue-500 align-middle">mới</span>
             </td>
             <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right text-gray-500 hidden sm:table-cell"
-                x-text="user.played"></td>
-            <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right text-gray-500 hidden sm:table-cell"
                 x-text="user.total_submitted != null ? user.total_submitted : user.played"></td>
+            {% if siteConfig.points.NO_BET < 0 %}
+            <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right text-pink-400 dark:text-pink-500 hidden sm:table-cell"
+                x-text="user.no_bets ?? 0"></td>
+            {% endif %}
             <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right text-gray-500 text-xs whitespace-nowrap">
               <span class="text-emerald-500 dark:text-emerald-400" x-text="user.wins"></span>
               {% if siteConfig.points.PUSH != siteConfig.points.LOSE %}
@@ -91,6 +105,11 @@ permalink: /leaderboard/
     <p>❌ Đoán sai →
       <span class="{% if siteConfig.points.LOSE < 0 %}text-red-500 dark:text-red-400{% else %}text-gray-500{% endif %} font-semibold">{% if siteConfig.points.LOSE > 0 %}+{% endif %}{{ siteConfig.points.LOSE }} điểm</span>
     </p>
+    {% if siteConfig.points.NO_BET < 0 %}
+    <p>📭 Không dự đoán →
+      <span class="text-pink-500 dark:text-pink-400 font-semibold">{% if siteConfig.points.NO_BET > 0 %}+{% endif %}{{ siteConfig.points.NO_BET }} điểm</span>
+    </p>
+    {% endif %}
   </div>
 
   <div class="bg-white dark:bg-gray-900 rounded-xl p-12 text-center text-gray-500"

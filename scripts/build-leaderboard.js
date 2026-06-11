@@ -22,14 +22,15 @@ function main() {
   for (const bet of bets) {
     if (bet.result === null) continue;
     if (!stats[bet.user_id]) {
-      stats[bet.user_id] = { played: 0, wins: 0, pushes: 0, losses: 0, points: 0 };
+      stats[bet.user_id] = { played: 0, wins: 0, pushes: 0, losses: 0, no_bets: 0, points: 0 };
     }
     const s = stats[bet.user_id];
     s.played++;
     s.points += bet.points;
-    if (bet.result === 'WIN')  s.wins++;
+    if (bet.result === 'WIN')       s.wins++;
     else if (bet.result === 'PUSH') s.pushes++;
     else if (bet.result === 'LOSE') s.losses++;
+    else if (bet.result === 'NO_BET') s.no_bets++;
   }
 
   const leaderboard = Object.entries(stats).map(([user_id, s]) => {
@@ -43,6 +44,7 @@ function main() {
       wins:         s.wins,
       draws:        s.pushes,
       losses:       s.losses,
+      no_bets:      s.no_bets,
       points:       s.points,
       win_rate,
     };

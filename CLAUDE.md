@@ -149,13 +149,14 @@ Dự đoán bị khoá `BET_LOCK_MINUTES` phút trước `kickoff_at` (default: 
 
 Thay đổi giá trị: set env var `BET_LOCK_MINUTES` trong GitHub Actions **và** Netlify Build, sau đó redeploy.
 
-### Auto-lose no-bet (AUTO_LOSE_NO_BET)
+### No-bet point (points.NO_BET)
 
-Khi `AUTO_LOSE_NO_BET=true`, `calculate-results.js` thêm entry synthetic cho mỗi active user bỏ qua trận finished:
-- `pick_type: null`, `result: 'LOSE'`, `points: POINTS.LOSE`, `_auto_lose: true`
-- Entry này xuất hiện trong `bets.json` → ảnh hưởng leaderboard và trang My Bets (hiện "— Không dự đoán")
+Khi `points.NO_BET < 0`, `calculate-results.js` thêm entry synthetic cho mỗi active user bỏ qua trận finished:
+- `pick_type: null`, `result: 'NO_BET'`, `points: POINTS.NO_BET`, `_no_bet: true`
+- Entry này xuất hiện trong `bets.json` → ảnh hưởng leaderboard (cột "Bỏ qua") và trang My Bets (hiện "— Không dự đoán · Bỏ qua")
+- Giá trị điểm hardcoded tại `siteConfig.points.NO_BET` trong `src/_data/siteConfig.js`
 - Chỉ áp dụng user có `status: 'active'`
-- Default: `false` (không phạt)
+- Bật/tắt: `NO_BET < 0` → bật; `NO_BET >= 0` → tắt (không tạo entry, không hiện cột)
 
 ## Auth Flow
 
@@ -209,8 +210,7 @@ BETS_GID=
 # Game rules (GitHub Actions + Netlify Build — đọc tại build time):
 BET_LOCK_MINUTES=    # phút trước kickoff thì khoá dự đoán (default: 60)
                      # Ảnh hưởng: normalize.js (is_locked field), frontend betForm.isLocked
-AUTO_LOSE_NO_BET=    # 'true' → active user không gửi dự đoán trận finished → tự động LOSE
-                     # (default: false) — áp dụng trong calculate-results.js
+# NO_BET: không có env var — set points.NO_BET < 0 trong siteConfig.js để bật feature
 
 # Demo mode (Netlify Build env):
 DEMO_MODE=           # 'true' → hiện banner demo ở cuối mọi trang: lịch cập nhật kết quả

@@ -1,0 +1,9 @@
+<span class="font-semibold text-gray-600 dark:text-gray-400">Điểm:</span>
+<span>✅ Đoán đúng → <span class="text-emerald-500 dark:text-emerald-400 font-bold">{% if siteConfig.points.WIN > 0 %}+{% endif %}{{ siteConfig.points.WIN }} điểm</span></span>
+{% if siteConfig.points.PUSH != siteConfig.points.LOSE %}
+<span>🤝 Hòa chấp → <span class="text-yellow-500 dark:text-yellow-400 font-bold">{% if siteConfig.points.PUSH > 0 %}+{% endif %}{{ siteConfig.points.PUSH }} điểm</span></span>
+{% endif %}
+<span>❌ Đoán sai → <span class="{% if siteConfig.points.LOSE < 0 %}text-red-500 dark:text-red-400{% else %}text-gray-500{% endif %} font-bold">{% if siteConfig.points.LOSE > 0 %}+{% endif %}{{ siteConfig.points.LOSE }} điểm</span></span>
+{% if siteConfig.points.NO_BET < 0 %}
+<span>📭 Bỏ qua → <span class="text-pink-500 dark:text-pink-400 font-bold">{% if siteConfig.points.NO_BET > 0 %}+{% endif %}{{ siteConfig.points.NO_BET }} điểm</span></span>
+{% endif %}

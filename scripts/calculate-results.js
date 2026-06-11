@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config({ path: '.env.local' });
 const fs = require('fs');
 
 const GEN = 'data/generated';
@@ -10,7 +11,7 @@ function load(name) {
 }
 
 // ── Scoring config — chỉnh trong src/_data/siteConfig.js ─────────────
-const { points: POINTS, auto_lose_no_bet } = require('../src/_data/siteConfig');
+const { points: POINTS } = require('../src/_data/siteConfig');
 
 // ── Resolution ─────────────────────────────────────────────────────────
 //
@@ -65,16 +66,15 @@ function main() {
     return { ...bet, result, points: POINTS[result] ?? 0 };
   });
 
-  // ── Auto-lose: active users who didn't bet on a finished fixture ─────────
+  // ── No-bet: active users who didn't bet on a finished fixture ────────────
   let autoAdded = 0;
-  if (auto_lose_no_bet) {
+  if (POINTS.NO_BET < 0) {
     const users = load('users');
     if (users) {
-      const activeUsers     = users.filter(u => u.status === 'active');
+      const activeUsers      = users.filter(u => u.status === 'active');
       const finishedFixtures = fixtures.filter(f => f.is_finished);
 
       for (const fixture of finishedFixtures) {
-        // Set of user_ids who actually placed a bet on this fixture
         const betters = new Set(
           enriched
             .filter(b => b.fixture_id === fixture.fixture_id)
@@ -88,15 +88,15 @@ function main() {
               user_id:    user.id,
               fixture_id: fixture.fixture_id,
               pick_type:  null,
-              result:     'LOSE',
-              points:     POINTS.LOSE ?? 0,
-              _auto_lose: true,
+              result:     'NO_BET',
+              points:     POINTS.NO_BET ?? 0,
+              _no_bet:    true,
             });
             autoAdded++;
           }
         }
       }
-      if (autoAdded) console.log(`calculate-results: auto-lose added ${autoAdded} entries`);
+      if (autoAdded) console.log(`calculate-results: no-bet added ${autoAdded} entries`);
     }
   }
 

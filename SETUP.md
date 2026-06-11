@@ -261,7 +261,7 @@ BETS_GID=987654321
 
 # Luật chơi (tùy chọn — bỏ trống = dùng giá trị mặc định)
 BET_LOCK_MINUTES=60    # khoá dự đoán N phút trước giờ đá (mặc định: 60)
-AUTO_LOSE_NO_BET=false # tự tính thua khi bỏ qua trận (mặc định: false)
+# NO_BET: không có env var — đổi points.NO_BET trong src/_data/siteConfig.js
 PUBLIC_MODE=true       # false → ẩn link "Dữ liệu gốc" ở fixtures + leaderboard (mặc định: true)
 ```
 
@@ -369,7 +369,7 @@ GitHub repo → **Settings → Secrets and variables → Actions → New reposit
 | Secret | Mô tả | Mặc định |
 |---|---|---|
 | `BET_LOCK_MINUTES` | Phút trước kickoff để khoá dự đoán | `60` |
-| `AUTO_LOSE_NO_BET` | `true` → active user bỏ trận finished tự động bị tính LOSE | `false` |
+| `points.NO_BET` | Xem mục NO_BET bên dưới — bật/tắt bằng cách đổi giá trị trong `siteConfig.js` | `-1` |
 | `PUBLIC_MODE` | `false` → ẩn link "Dữ liệu gốc" đến Sheet ở fixtures + leaderboard | `true` |
 
 > Các giá trị này cũng có thể set trong `.env.local` để test local.
@@ -425,7 +425,7 @@ Các biến này được đọc tại **build time** (trong `siteConfig.js` và
 | Variable | Mô tả | Mặc định |
 |---|---|---|
 | `BET_LOCK_MINUTES` | Phút trước kickoff để khoá form dự đoán | `60` |
-| `AUTO_LOSE_NO_BET` | `true` → active user không dự đoán trận finished → tự động LOSE | `false` |
+| `points.NO_BET` | Xem mục NO_BET bên dưới — bật/tắt bằng cách đổi giá trị trong `siteConfig.js` | `-1` |
 | `PUBLIC_MODE` | `false` → ẩn link "Dữ liệu gốc" đến Sheet ở fixtures + leaderboard | `true` |
 | `DEMO_MODE` | `true` → hiện banner lịch demo ở cuối mọi trang | `false` |
 | `DEMO_UPDATE_TIME` | Giờ ICT cập nhật kết quả, phân cách dấu phẩy — khớp Apps Script triggers | `08:00,12:00,20:00` |
@@ -464,37 +464,31 @@ Khi thời điểm hiện tại ≥ `kickoff_at − BET_LOCK_MINUTES`, form dự
 
 ---
 
-### AUTO_LOSE_NO_BET — Tự động tính thua khi bỏ trận
+### NO_BET — Ghi nhận riêng khi bỏ trận
 
-**Mặc định: `false` — không phạt khi không gửi dự đoán.**
+Không dùng env var — bật/tắt bằng cách đổi giá trị `points.NO_BET` trong `src/_data/siteConfig.js`:
 
-Khi `AUTO_LOSE_NO_BET=true`: mỗi active user bỏ qua trận đã kết thúc (`status: finished`) sẽ nhận entry `LOSE` tự động trong bảng điểm.
+```js
+points: {
+  WIN:    1,
+  PUSH:   2,
+  LOSE:  -1,
+  NO_BET: -1,   // < 0 → bật; >= 0 → tắt (không tạo entry, không hiện cột "Bỏ qua")
+},
+```
 
 **So sánh hành vi:**
 
-| | `false` (mặc định) | `true` |
+| | `NO_BET >= 0` (tắt) | `NO_BET < 0` (bật) |
 |---|---|---|
-| User bỏ trận | Không xuất hiện trong leaderboard trận đó | `played++`, `losses++`, `+POINTS.LOSE điểm` |
-| My Bets | Không thấy trận đó | Hiện "— Không dự đoán · Thua" |
-| Tác động điểm | Không ảnh hưởng | `POINTS.LOSE` điểm (hiện là `0`, có thể set `-1`) |
-
-**Kết hợp với `POINTS.LOSE`:**
-
-Để tạo penalty thực sự, cần đổi cả hai trong `src/_data/siteConfig.js`:
-```js
-points: {
-  WIN:  3,
-  PUSH: 0,
-  LOSE: -1,   // ← trừ 1 điểm khi thua (kể cả auto-lose)
-},
-// và set AUTO_LOSE_NO_BET=true
-```
+| User bỏ trận | Không xuất hiện trong leaderboard trận đó | `played++`, `no_bets++`, `+POINTS.NO_BET điểm` |
+| My Bets | Không thấy trận đó | Hiện "— Không dự đoán · Bỏ qua" |
+| Cột "Bỏ qua" | Ẩn | Hiện (desktop) |
 
 **Cách bật:**
 
-1. Netlify Build env vars → Add: `AUTO_LOSE_NO_BET` = `true`
-2. GitHub Actions Secrets → Add: `AUTO_LOSE_NO_BET` = `true`
-3. Trigger redeploy — áp dụng ngay cho toàn bộ lịch sử trận đã kết thúc
+1. Đổi `NO_BET: -1` (hoặc giá trị âm khác) trong `src/_data/siteConfig.js`
+2. Commit → push → Netlify tự deploy
 
 > **Lưu ý:** Chỉ áp dụng cho user có `status: active`. User `inactive` không bị ảnh hưởng.
 
