@@ -1,5 +1,5 @@
 // Load .env.local / .env trước khi Eleventy đọc _data/*.js
-// Cần thiết để sheetConfig.js build đúng users_url / bets_url khi dev local
+// Cần thiết để sheetConfig.js build đúng users_url / picks_url khi dev local
 require('dotenv').config({ path: '.env.local' });
 require('dotenv').config({ path: '.env' });  // fallback
 

@@ -2,10 +2,10 @@
 
 const _STORAGE        = window.STORAGE_PREFIX || 'vuila9';
 const _KEY            = _STORAGE + '_user';
-const _PENDING_KEY    = _STORAGE + '_pending_bets';
-const _LIVE_CACHE_KEY = _STORAGE + '_live_bets';
+const _PENDING_KEY    = _STORAGE + '_pending_picks';
+const _LIVE_CACHE_KEY = _STORAGE + '_live_picks';
 const _USERS_CACHE_KEY = _STORAGE + '_live_users';
-const _LIVE_BETS_TTL  =  5 * 60 * 1000;  //  5 min — community picks refresh cadence
+const _LIVE_PICKS_TTL  =  5 * 60 * 1000;  //  5 min — community picks refresh cadence
 const _LIVE_USERS_TTL = 15 * 60 * 1000;  // 15 min — authenticate() luôn force-fresh nên TTL này chỉ dùng cho background calls
 
 async function sha256(message) {
@@ -14,7 +14,7 @@ async function sha256(message) {
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// ── Live bets helpers ─────────────────────────────────────────────────
+// ── Live picks helpers ─────────────────────────────────────────────────
 
 function parseCSVRow(line) {
   const cols = []; let cur = '', inQ = false;
@@ -38,13 +38,13 @@ function parseCSV(text) {
 
 let _liveBetsFlight = null;  // dedup concurrent fetches from N fixture cards
 
-async function fetchLiveBets() {
+async function fetchLivePicks() {
   try {
     const cached = JSON.parse(localStorage.getItem(_LIVE_CACHE_KEY) || 'null');
-    if (cached && Date.now() - cached.fetched_at < _LIVE_BETS_TTL) return cached.data;
+    if (cached && Date.now() - cached.fetched_at < _LIVE_PICKS_TTL) return cached.data;
   } catch {}
 
-  const url = window.__SHEET_BETS_URL__;
+  const url = window.__SHEET_PICKS_URL__;
   if (!url) return null;
 
   // Return in-flight promise if one is already running (prevents N concurrent CSV fetches)
@@ -151,11 +151,11 @@ function aggregatePicks(allBets, fixtureId) {
   };
 }
 
-function savePendingBet(fixtureId, pickType, betId) {
+function savePendingPick(fixtureId, pickType, pickId) {
   try {
     const pending = JSON.parse(localStorage.getItem(_PENDING_KEY) || '[]');
     const idx     = pending.findIndex(b => b.fixture_id === fixtureId);
-    const entry   = { fixture_id: fixtureId, pick_type: pickType, bet_id: betId, created_at: new Date().toISOString(), _pending: true };
+    const entry   = { fixture_id: fixtureId, pick_type: pickType, pick_id: pickId, created_at: new Date().toISOString(), _pending: true };
     if (idx >= 0) pending[idx] = entry;
     else pending.push(entry);
     localStorage.setItem(_PENDING_KEY, JSON.stringify(pending));
@@ -164,10 +164,10 @@ function savePendingBet(fixtureId, pickType, betId) {
   } catch {}
 }
 
-// Sync own bets: remove _PENDING_KEY entries confirmed in CSV, keep fresh ones (Bug 1)
-async function syncOwnBets(session) {
+// Sync own picks: remove _PENDING_KEY entries confirmed in CSV, keep fresh ones (Bug 1)
+async function syncOwnPicks(session) {
   if (!session) return;
-  const all = await fetchLiveBets();
+  const all = await fetchLivePicks();
   if (!all) return;
   try {
     const confirmedFixtures = new Set(
@@ -252,7 +252,7 @@ function appState() {
       try {
         localStorage.removeItem(_LIVE_CACHE_KEY);
         localStorage.removeItem(_USERS_CACHE_KEY);
-        const all = await fetchLiveBets();
+        const all = await fetchLivePicks();
         if (all) window.dispatchEvent(new CustomEvent('funnybet:refresh', { detail: all }));
       } catch {} finally {
         clearInterval(this._dotsInterval);
@@ -322,7 +322,7 @@ function leaderboardPage(staticRows) {
   return {
     rows: staticRows,
     async init() {
-      const [liveUsers, liveBets] = await Promise.all([fetchLiveUsers(), fetchLiveBets()]);
+      const [liveUsers, liveBets] = await Promise.all([fetchLiveUsers(), fetchLivePicks()]);
       if (!liveUsers) return;
       const enriched = staticRows.map(u => ({
         ...u,
@@ -332,18 +332,18 @@ function leaderboardPage(staticRows) {
       const fresh = liveUsers
         .filter(u => u.status === 'active' && !knownIds.has(u.id))
         .map(u => {
-          const bets   = liveBets ? liveBets.filter(b => b.user_id === u.id) : [];
-          const scored = bets.filter(b => b.result);
+          const userPicks = liveBets ? liveBets.filter(b => b.user_id === u.id) : [];
+          const scored = userPicks.filter(b => b.result);
           return {
             user_id:         u.id,
             username:        u.username,
             display_name:    u.display_name,
             played:          scored.length,
-            total_submitted: bets.length,
+            total_submitted: userPicks.length,
             wins:    scored.filter(b => b.result === 'WIN').length,
             draws:   scored.filter(b => b.result === 'PUSH').length,
             losses:  scored.filter(b => b.result === 'LOSE').length,
-            no_bets: scored.filter(b => b.result === 'NO_BET').length,
+            no_picks: scored.filter(b => b.result === 'NO_PICK').length,
             points:  scored.reduce((s, b) => s + (parseFloat(b.points) || 0), 0),
             _new: true,
           };
@@ -353,22 +353,22 @@ function leaderboardPage(staticRows) {
   };
 }
 
-function myBetsPage(buildBetsData, fixturesData) {
+function myPicksPage(buildPicksData, fixturesData) {
   return {
     user: null,
-    bets: [],
+    picks: [],
     fixtures: {},
     init() {
       try { this.user = JSON.parse(localStorage.getItem(_KEY) || 'null'); }
       catch { this.user = null; }
       if (!this.user) return;
       for (const f of fixturesData) this.fixtures[f.fixture_id] = f;
-      this._loadBets(buildBetsData);
+      this._loadPicks(buildPicksData);
       // Sync from live Sheet then reload
-      syncOwnBets(this.user).then(() => this._loadBets(buildBetsData));
+      syncOwnPicks(this.user).then(() => this._loadPicks(buildPicksData));
     },
-    _loadBets(buildBetsData) {
-      const buildBets = buildBetsData.filter(b => b.user_id === this.user.user_id);
+    _loadPicks(buildPicksData) {
+      const buildPicks = buildPicksData.filter(b => b.user_id === this.user.user_id);
 
       let pending = [];
       try { pending = JSON.parse(localStorage.getItem(_PENDING_KEY) || '[]'); } catch {}
@@ -377,7 +377,7 @@ function myBetsPage(buildBetsData, fixturesData) {
       const map      = new Map(pending.map(b => [b.fixture_id, { ...b, _pending: true }]));
       const finished = new Set();
 
-      buildBets.forEach(b => {
+      buildPicks.forEach(b => {
         if (b.result != null) {
           // Finished: build is authoritative (has result + points) — always wins
           map.set(b.fixture_id, b);
@@ -403,7 +403,7 @@ function myBetsPage(buildBetsData, fixturesData) {
         } catch {}
       }
 
-      this.bets = Array.from(map.values())
+      this.picks = Array.from(map.values())
         .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     },
     formatDate(iso) {
@@ -414,30 +414,30 @@ function myBetsPage(buildBetsData, fixturesData) {
         timeZone: window.SITE_TIMEZONE || 'Asia/Ho_Chi_Minh',
       });
     },
-    pickLabel(bet) {
-      if (bet._no_bet) return '— Không dự đoán';
-      const f = this.fixtures[bet.fixture_id];
+    pickLabel(pick) {
+      if (pick._no_pick) return '— Không dự đoán';
+      const f = this.fixtures[pick.fixture_id];
       return {
         home: f ? `${f.home_team} thắng` : 'Đội nhà thắng',
         draw: 'Hòa chấp',
         away: f ? `${f.away_team} thắng` : 'Đội khách thắng',
-      }[bet.pick_type] || bet.pick_type;
+      }[pick.pick_type] || pick.pick_type;
     },
     resultLabel(r) {
-      return { WIN: 'Thắng', PUSH: 'Hòa chấp', LOSE: 'Thua', NO_BET: 'Bỏ qua' }[r] || r;
+      return { WIN: 'Thắng', PUSH: 'Hòa chấp', LOSE: 'Thua', NO_PICK: 'Bỏ qua' }[r] || r;
     },
     resultClass(r) {
       if (r === 'WIN')    return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300';
       if (r === 'LOSE')   return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
-      if (r === 'NO_BET') return 'bg-pink-100 text-pink-600 dark:bg-pink-900 dark:text-pink-300';
+      if (r === 'NO_PICK') return 'bg-pink-100 text-pink-600 dark:bg-pink-900 dark:text-pink-300';
       return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300';
     },
     ptDisplay(pts) {
       if (pts == null) return '—';
       return (pts > 0 ? '+' : '') + pts;
     },
-    get totalPoints() { return this.bets.reduce((s, b) => s + (b.points ?? 0), 0); },
-    get resolvedCount() { return this.bets.filter(b => b.result != null).length; },
+    get totalPoints() { return this.picks.reduce((s, b) => s + (b.points ?? 0), 0); },
+    get resolvedCount() { return this.picks.filter(b => b.result != null).length; },
     doLogout() {
       localStorage.removeItem(_KEY);
       window.location.href = '/';

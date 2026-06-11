@@ -5,7 +5,7 @@ const path = require('path');
 const GEN  = 'data/generated';
 const DEST = 'src/_data';
 
-const TABS = ['users', 'fixtures', 'bets', 'leaderboard'];
+const TABS = ['users', 'fixtures', 'picks', 'leaderboard'];
 const generatedAt = new Date().toISOString();
 
 fs.mkdirSync(DEST, { recursive: true });

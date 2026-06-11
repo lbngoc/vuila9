@@ -13,24 +13,24 @@ function round4(n) { return Math.round(n * 10000) / 10000; }
 
 function main() {
   const users = load('users');
-  const bets  = load('bets');
-  if (!users || !bets) { console.log('build-leaderboard: missing data, skipping.'); return; }
+  const picks = load('picks');
+  if (!users || !picks) { console.log('build-leaderboard: missing data, skipping.'); return; }
 
   const userMap = Object.fromEntries(users.map(u => [u.id, u]));
 
   const stats = {};
-  for (const bet of bets) {
-    if (bet.result === null) continue;
-    if (!stats[bet.user_id]) {
-      stats[bet.user_id] = { played: 0, wins: 0, pushes: 0, losses: 0, no_bets: 0, points: 0 };
+  for (const pick of picks) {
+    if (pick.result === null) continue;
+    if (!stats[pick.user_id]) {
+      stats[pick.user_id] = { played: 0, wins: 0, pushes: 0, losses: 0, no_picks: 0, points: 0 };
     }
-    const s = stats[bet.user_id];
+    const s = stats[pick.user_id];
     s.played++;
-    s.points += bet.points;
-    if (bet.result === 'WIN')       s.wins++;
-    else if (bet.result === 'PUSH') s.pushes++;
-    else if (bet.result === 'LOSE') s.losses++;
-    else if (bet.result === 'NO_BET') s.no_bets++;
+    s.points += pick.points;
+    if (pick.result === 'WIN')        s.wins++;
+    else if (pick.result === 'PUSH')  s.pushes++;
+    else if (pick.result === 'LOSE')  s.losses++;
+    else if (pick.result === 'NO_PICK') s.no_picks++;
   }
 
   const leaderboard = Object.entries(stats).map(([user_id, s]) => {
@@ -44,7 +44,7 @@ function main() {
       wins:         s.wins,
       draws:        s.pushes,
       losses:       s.losses,
-      no_bets:      s.no_bets,
+      no_picks:      s.no_picks,
       points:       s.points,
       win_rate,
     };

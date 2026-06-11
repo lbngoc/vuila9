@@ -5,7 +5,7 @@ permalink: /fixtures/
 ---
 
 <script>
-  window.__BUILD_BETS__ = {{ bets.data | dump | safe }};
+  window.__BUILD_PICKS__ = {{ picks.data | dump | safe }};
   // window.__USERS_DATA__ injected globally by base.njk
 </script>
 
@@ -13,7 +13,7 @@ permalink: /fixtures/
 {% macro fixtureCard(fixture) %}
 <div id="fixture-{{ fixture.fixture_id }}"
      class="bg-white dark:bg-gray-900 rounded-xl p-5"
-     x-data="betForm('{{ fixture.fixture_id }}','{{ fixture.kickoff_at }}','{{ fixture.handicap or "" }}','{{ fixture.home_team }}','{{ fixture.away_team }}')">
+     x-data="pickForm('{{ fixture.fixture_id }}','{{ fixture.kickoff_at }}','{{ fixture.handicap or "" }}','{{ fixture.home_team }}','{{ fixture.away_team }}')">
 
   <!-- Match header -->
   <div class="flex justify-between items-start mb-5">
@@ -28,7 +28,7 @@ permalink: /fixtures/
     </div>
     <div class="flex-shrink-0 ml-3 text-right">
       <span class="text-xs" :class="countdownClass" x-text="isLocked ? '🔒 Đã đóng' : countdown"></span>
-      <p x-show="betCount > 0" x-cloak x-text="`👥 ${betCount} dự đoán`" class="text-xs text-gray-400 dark:text-gray-600 mt-1"></p>
+      <p x-show="pickCount > 0" x-cloak x-text="`👥 ${pickCount} dự đoán`" class="text-xs text-gray-400 dark:text-gray-600 mt-1"></p>
     </div>
   </div>
 
@@ -129,7 +129,7 @@ permalink: /fixtures/
               class="px-4 py-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-gray-800 rounded-lg transition flex-shrink-0">
         ← Đổi
       </button>
-      <button @click="submitBet()" :disabled="loading || isLocked"
+      <button @click="submitPick()" :disabled="loading || isLocked"
               class="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:bg-gray-200 dark:disabled:bg-gray-700 disabled:text-gray-400 dark:disabled:text-gray-500 text-white font-semibold py-2 rounded-lg transition text-sm"
               x-text="loading ? 'Đang xử lý...' : (isLoggedIn ? 'Xác nhận' : 'Đăng nhập & Dự đoán')">
       </button>
@@ -365,7 +365,7 @@ permalink: /fixtures/
 </div>
 
 <script>
-function betForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
+function pickForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
   return {
     fixtureId, handicap, homeTeam, awayTeam,
     kickoffAt: new Date(kickoffAt),
@@ -395,23 +395,23 @@ function betForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
         if (!this.username) this.username = e.detail.username;
       });
 
-      const buildBet   = (window.__BUILD_BETS__ || []).find(b => b.fixture_id === fixtureId && b.user_id === u?.user_id);
+      const buildBet   = (window.__BUILD_PICKS__ || []).find(b => b.fixture_id === fixtureId && b.user_id === u?.user_id);
       const pendingBet = (() => {
         try { return JSON.parse(localStorage.getItem(_PENDING_KEY) || '[]').find(b => b.fixture_id === fixtureId); }
         catch { return null; }
       })();
       this.selected = pendingBet?.pick_type || buildBet?.pick_type || '';
 
-      // Cache build-snapshot bet count for betCount getter (computed once, never changes)
-      this._buildBetCount = aggregatePicks(window.__BUILD_BETS__ || [], fixtureId).total;
+      // Cache build-snapshot pick count for pickCount getter (computed once, never changes)
+      this._buildBetCount = aggregatePicks(window.__BUILD_PICKS__ || [], fixtureId).total;
 
-      // Show community picks immediately from build snapshot if user already has a bet
+      // Show community picks immediately from build snapshot if user already has a pick
       if (this.selected) {
-        this.communityPicks = { ...aggregatePicks(window.__BUILD_BETS__ || [], fixtureId) };
+        this.communityPicks = { ...aggregatePicks(window.__BUILD_PICKS__ || [], fixtureId) };
       }
 
       // Update from fresh CSV: cross-device sync + up-to-date counts
-      if (u) syncOwnBets(u).then(() => fetchLiveBets()).then(all => {
+      if (u) syncOwnPicks(u).then(() => fetchLivePicks()).then(all => {
         if (!all) return;
         const csvBet = all.find(b => b.fixture_id === fixtureId && b.user_id === u.user_id);
         if (csvBet) this.selected = csvBet.pick_type;
@@ -432,11 +432,11 @@ function betForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
 
     get currentUser() { return this._user; },
     get isLoggedIn()  { return !!this._user; },
-    get isLocked()    { return this._now >= this.kickoffAt.getTime() - (window.BET_LOCK_MINUTES || 60) * 60 * 1000; },
+    get isLocked()    { return this._now >= this.kickoffAt.getTime() - (window.PICK_LOCK_MINUTES || 60) * 60 * 1000; },
     // Thời gian còn lại để dự đoán (ms). Âm khi đã khoá → dùng chung cho countdownClass và countdown.
-    get timeToLock()  { return this.kickoffAt.getTime() - this._now - (window.BET_LOCK_MINUTES || 60) * 60000; },
+    get timeToLock()  { return this.kickoffAt.getTime() - this._now - (window.PICK_LOCK_MINUTES || 60) * 60000; },
     // Số dự đoán đã gửi: dùng live count nếu đã load, fallback về build snapshot (tính 1 lần trong init)
-    get betCount()    { return this.communityPicks ? this.communityPicks.total : this._buildBetCount; },
+    get pickCount()    { return this.communityPicks ? this.communityPicks.total : this._buildBetCount; },
     get countdownClass() {
       if (this.isLocked) return 'px-2.5 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
       const ttl = this.timeToLock;  // thời gian còn lại để dự đoán (luôn > 0 khi !isLocked)
@@ -507,7 +507,7 @@ function betForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
       this.error = '';
     },
 
-    async submitBet() {
+    async submitPick() {
       if (this.isLocked || this.loading) return;
       if (this.website) return;
       this.error = '';
@@ -555,13 +555,13 @@ function betForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
         });
         const data = await res.json();
         if (res.ok) {
-          savePendingBet(this.fixtureId, this.pick, data.bet_id);
+          savePendingPick(this.fixtureId, this.pick, data.pick_id);
           this.selected = this.pick;
           this.message  = data.updated ? '✅ Đã cập nhật dự đoán!' : '✅ Gửi dự đoán thành công!';
           this.isError  = false;
           this.pick     = '';
           localStorage.removeItem(_LIVE_CACHE_KEY);
-          fetchLiveBets().then(all => { if (all) this.communityPicks = aggregatePicks(all, this.fixtureId); });
+          fetchLivePicks().then(all => { if (all) this.communityPicks = aggregatePicks(all, this.fixtureId); });
         } else {
           this.error   = data.error || 'Lỗi không xác định.';
           this.isError = true;

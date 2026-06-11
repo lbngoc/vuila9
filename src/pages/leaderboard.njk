@@ -13,9 +13,9 @@ permalink: /leaderboard/
     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">🏆 Bảng xếp hạng</h1>
     <p class="text-xs text-gray-500 dark:text-gray-600 sm:text-right sm:flex-shrink-0">
       {% if leaderboard.generated_at %}Cập nhật: {{ leaderboard.generated_at | dateDisplay }}{% endif %}
-      {% if sheetConfig.bets_tab_url and siteConfig.public_mode %}
+      {% if sheetConfig.picks_tab_url and siteConfig.public_mode %}
         {% if leaderboard.generated_at %} · {% endif %}
-        <a href="{{ sheetConfig.bets_tab_url }}" target="_blank" rel="noopener noreferrer"
+        <a href="{{ sheetConfig.picks_tab_url }}" target="_blank" rel="noopener noreferrer"
            class="hover:text-gray-700 dark:hover:text-gray-400 transition">📊 Dữ liệu gốc ↗</a>
       {% endif %}
     </p>
@@ -38,7 +38,7 @@ permalink: /leaderboard/
           <th class="text-left px-2 py-2.5 sm:px-4 sm:py-3 w-8 sm:w-auto">#</th>
           <th class="text-left px-2 py-2.5 sm:px-4 sm:py-3">Người chơi</th>
           <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3 hidden sm:table-cell">Đã gửi</th>
-          {% if siteConfig.points.NO_BET < 0 %}
+          {% if siteConfig.points.NO_PICK < 0 %}
           <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3 hidden sm:table-cell">Bỏ qua</th>
           {% endif %}
           <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3">
@@ -68,9 +68,9 @@ permalink: /leaderboard/
             </td>
             <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right text-gray-500 hidden sm:table-cell"
                 x-text="user.total_submitted != null ? user.total_submitted : user.played"></td>
-            {% if siteConfig.points.NO_BET < 0 %}
+            {% if siteConfig.points.NO_PICK < 0 %}
             <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right text-pink-400 dark:text-pink-500 hidden sm:table-cell"
-                x-text="user.no_bets ?? 0"></td>
+                x-text="user.no_picks ?? 0"></td>
             {% endif %}
             <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right text-gray-500 text-xs whitespace-nowrap">
               <span class="text-emerald-500 dark:text-emerald-400" x-text="user.wins"></span>
@@ -105,9 +105,9 @@ permalink: /leaderboard/
     <p>❌ Đoán sai →
       <span class="{% if siteConfig.points.LOSE < 0 %}text-red-500 dark:text-red-400{% else %}text-gray-500{% endif %} font-semibold">{% if siteConfig.points.LOSE > 0 %}+{% endif %}{{ siteConfig.points.LOSE }} điểm</span>
     </p>
-    {% if siteConfig.points.NO_BET < 0 %}
+    {% if siteConfig.points.NO_PICK < 0 %}
     <p>📭 Không dự đoán →
-      <span class="text-pink-500 dark:text-pink-400 font-semibold">{% if siteConfig.points.NO_BET > 0 %}+{% endif %}{{ siteConfig.points.NO_BET }} điểm</span>
+      <span class="text-pink-500 dark:text-pink-400 font-semibold">{% if siteConfig.points.NO_PICK > 0 %}+{% endif %}{{ siteConfig.points.NO_PICK }} điểm</span>
     </p>
     {% endif %}
   </div>

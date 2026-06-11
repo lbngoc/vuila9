@@ -33,7 +33,7 @@ exports.handler = async (event) => {
   try { body = JSON.parse(event.body || '{}'); }
   catch { return err(400, 'Request không hợp lệ.', 'BAD_REQUEST'); }
 
-  if (body.website) return ok({ success: true, bet_id: 'ignored' });
+  if (body.website) return ok({ success: true, pick_id: 'ignored' });
 
   const { fixture_id, pick_type, username, _session_hash } = body;
 
@@ -73,7 +73,7 @@ exports.handler = async (event) => {
     if (!data.success) {
       return err(data.status || 400, data.error || 'Lỗi không xác định.', data.code || 'SCRIPT_ERROR');
     }
-    return ok({ success: true, bet_id: data.bet_id, updated: data.updated || false });
+    return ok({ success: true, pick_id: data.pick_id, updated: data.updated || false });
 
   } catch (e) {
     console.error('Apps Script error:', e.message);

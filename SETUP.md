@@ -51,9 +51,9 @@ BRA-MAR,Bảng C,2026-06-13T22:00:00.000Z,Brazil,Ma Rốc,-2,finished,3,0,dữ l
 QAT-SUI,Bảng B,2026-06-13T19:00:00.000Z,Qatar,Thụy Sĩ,+0.5,finished,1,2,dữ liệu test
 ```
 
-**`bets.csv`** (rút gọn — 27 bets, xem đầy đủ tại `data/sample/bets.csv`)
+**`picks.csv`** (rút gọn — 27 picks, xem đầy đủ tại `data/sample/picks.csv`)
 ```
-bet_id,created_at,user_id,fixture_id,pick_type
+pick_id,created_at,user_id,fixture_id,pick_type
 bet_001,2026-06-10T08:00:00.000Z,u_000,MEX-RSA,home
 bet_002,2026-06-10T08:05:00.000Z,u_001,MEX-RSA,draw
 bet_003,2026-06-10T08:10:00.000Z,u_002,MEX-RSA,home
@@ -133,7 +133,7 @@ curl -X POST http://localhost:8888/.netlify/functions/register \
 2. Tạo 3 tabs (click dấu `+` góc dưới trái):
    - `users`
    - `fixtures`
-   - `bets`
+   - `picks`
 
 ### Tab `users` — header row (row 1):
 ```
@@ -148,9 +148,9 @@ id | username | display_name | passcode | passcode_hash | created_at | status
 fixture_id | league | kickoff_at | home_team | away_team | handicap | status | result_home | result_away
 ```
 
-### Tab `bets` — header row:
+### Tab `picks` — header row:
 ```
-bet_id | created_at | user_id | fixture_id | pick_type
+pick_id | created_at | user_id | fixture_id | pick_type
 ```
 
 ---
@@ -216,11 +216,11 @@ curl -X POST "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" \
   }'
 ```
 
-→ Kết quả mong đợi: `{"success":true,"bet_id":"bet_20260523_..."}`
+→ Kết quả mong đợi: `{"success":true,"pick_id":"bet_20260523_..."}`
 
-**Test upsert (đổi dự đoán):** Gửi lại request trên với `"existing_bet_id": "bet_..."` → cập nhật row thay vì tạo mới.
+**Test upsert (đổi dự đoán):** Gửi lại request trên với `"existing_pick_id": "bet_..."` → cập nhật row thay vì tạo mới.
 
-→ Kết quả mong đợi: `{"success":true,"bet_id":"bet_...","updated":true}`
+→ Kết quả mong đợi: `{"success":true,"pick_id":"bet_...","updated":true}`
 
 **Test đăng ký user mới:**
 ```bash
@@ -257,11 +257,11 @@ APP_SECRET=your-random-secret-string
 GOOGLE_SHEET_ID=your-sheet-id
 USERS_GID=0
 FIXTURES_GID=123456789
-BETS_GID=987654321
+PICKS_GID=987654321
 
 # Luật chơi (tùy chọn — bỏ trống = dùng giá trị mặc định)
-BET_LOCK_MINUTES=60    # khoá dự đoán N phút trước giờ đá (mặc định: 60)
-# NO_BET: không có env var — đổi points.NO_BET trong src/_data/siteConfig.js
+PICK_LOCK_MINUTES=60    # khoá dự đoán N phút trước giờ đá (mặc định: 60)
+# NO_PICK: không có env var — đổi points.NO_PICK trong src/_data/siteConfig.js
 PUBLIC_MODE=true       # false → ẩn link "Dữ liệu gốc" ở fixtures + leaderboard (mặc định: true)
 ```
 
@@ -362,14 +362,14 @@ GitHub repo → **Settings → Secrets and variables → Actions → New reposit
 | `GOOGLE_SHEET_ID` | URL Google Sheet (`/d/{ID}/edit`) |
 | `USERS_GID` | GID tab `users` (xem URL khi click vào tab) |
 | `FIXTURES_GID` | GID tab `fixtures` |
-| `BETS_GID` | GID tab `bets` |
+| `PICKS_GID` | GID tab `picks` |
 
 **Tùy chọn — luật chơi** (bỏ qua = dùng mặc định):
 
 | Secret | Mô tả | Mặc định |
 |---|---|---|
-| `BET_LOCK_MINUTES` | Phút trước kickoff để khoá dự đoán | `60` |
-| `points.NO_BET` | Xem mục NO_BET bên dưới — bật/tắt bằng cách đổi giá trị trong `siteConfig.js` | `-1` |
+| `PICK_LOCK_MINUTES` | Phút trước kickoff để khoá dự đoán | `60` |
+| `points.NO_PICK` | Xem mục NO_PICK bên dưới — bật/tắt bằng cách đổi giá trị trong `siteConfig.js` | `-1` |
 | `PUBLIC_MODE` | `false` → ẩn link "Dữ liệu gốc" đến Sheet ở fixtures + leaderboard | `true` |
 
 > Các giá trị này cũng có thể set trong `.env.local` để test local.
@@ -424,8 +424,8 @@ Các biến này được đọc tại **build time** (trong `siteConfig.js` và
 
 | Variable | Mô tả | Mặc định |
 |---|---|---|
-| `BET_LOCK_MINUTES` | Phút trước kickoff để khoá form dự đoán | `60` |
-| `points.NO_BET` | Xem mục NO_BET bên dưới — bật/tắt bằng cách đổi giá trị trong `siteConfig.js` | `-1` |
+| `PICK_LOCK_MINUTES` | Phút trước kickoff để khoá form dự đoán | `60` |
+| `points.NO_PICK` | Xem mục NO_PICK bên dưới — bật/tắt bằng cách đổi giá trị trong `siteConfig.js` | `-1` |
 | `PUBLIC_MODE` | `false` → ẩn link "Dữ liệu gốc" đến Sheet ở fixtures + leaderboard | `true` |
 | `DEMO_MODE` | `true` → hiện banner lịch demo ở cuối mọi trang | `false` |
 | `DEMO_UPDATE_TIME` | Giờ ICT cập nhật kết quả, phân cách dấu phẩy — khớp Apps Script triggers | `08:00,12:00,20:00` |
@@ -441,11 +441,11 @@ Hai tham số điều chỉnh luật chơi, set qua **env vars** tại cả 3 n�
 
 ---
 
-### BET_LOCK_MINUTES — Thời gian khoá dự đoán
+### PICK_LOCK_MINUTES — Thời gian khoá dự đoán
 
 **Mặc định: `60` phút trước giờ đá.**
 
-Khi thời điểm hiện tại ≥ `kickoff_at − BET_LOCK_MINUTES`, form dự đoán bị khoá (hiện badge "🔒 Đã đóng").
+Khi thời điểm hiện tại ≥ `kickoff_at − PICK_LOCK_MINUTES`, form dự đoán bị khoá (hiện badge "🔒 Đã đóng").
 
 | Giá trị | Ý nghĩa |
 |---|---|
@@ -456,38 +456,38 @@ Khi thời điểm hiện tại ≥ `kickoff_at − BET_LOCK_MINUTES`, form dự
 
 **Cách thay đổi:**
 
-1. Set `BET_LOCK_MINUTES=<giá trị>` trong GitHub Actions Secrets **và** Netlify Build env vars
+1. Set `PICK_LOCK_MINUTES=<giá trị>` trong GitHub Actions Secrets **và** Netlify Build env vars
 2. Trigger redeploy (push commit hoặc Netlify Build Hook)
 3. Text hướng dẫn trên trang chủ tự cập nhật theo giá trị mới
 
-> Ảnh hưởng: `normalize.js` (`is_locked` field trong fixtures), `betForm.isLocked` (frontend), và text `how_to_play[1]` trên trang chủ.
+> Ảnh hưởng: `normalize.js` (`is_locked` field trong fixtures), `pickForm.isLocked` (frontend), và text `how_to_play[1]` trên trang chủ.
 
 ---
 
-### NO_BET — Ghi nhận riêng khi bỏ trận
+### NO_PICK — Ghi nhận riêng khi bỏ trận
 
-Không dùng env var — bật/tắt bằng cách đổi giá trị `points.NO_BET` trong `src/_data/siteConfig.js`:
+Không dùng env var — bật/tắt bằng cách đổi giá trị `points.NO_PICK` trong `src/_data/siteConfig.js`:
 
 ```js
 points: {
   WIN:    1,
   PUSH:   2,
   LOSE:  -1,
-  NO_BET: -1,   // < 0 → bật; >= 0 → tắt (không tạo entry, không hiện cột "Bỏ qua")
+  NO_PICK: -1,   // < 0 → bật; >= 0 → tắt (không tạo entry, không hiện cột "Bỏ qua")
 },
 ```
 
 **So sánh hành vi:**
 
-| | `NO_BET >= 0` (tắt) | `NO_BET < 0` (bật) |
+| | `NO_PICK >= 0` (tắt) | `NO_PICK < 0` (bật) |
 |---|---|---|
-| User bỏ trận | Không xuất hiện trong leaderboard trận đó | `played++`, `no_bets++`, `+POINTS.NO_BET điểm` |
+| User bỏ trận | Không xuất hiện trong leaderboard trận đó | `played++`, `no_picks++`, `+POINTS.NO_PICK điểm` |
 | My Bets | Không thấy trận đó | Hiện "— Không dự đoán · Bỏ qua" |
 | Cột "Bỏ qua" | Ẩn | Hiện (desktop) |
 
 **Cách bật:**
 
-1. Đổi `NO_BET: -1` (hoặc giá trị âm khác) trong `src/_data/siteConfig.js`
+1. Đổi `NO_PICK: -1` (hoặc giá trị âm khác) trong `src/_data/siteConfig.js`
 2. Commit → push → Netlify tự deploy
 
 > **Lưu ý:** Chỉ áp dụng cho user có `status: active`. User `inactive` không bị ảnh hưởng.
@@ -595,7 +595,7 @@ Google Sheets (admin cập nhật kết quả)
         ↓
   Site live (leaderboard cập nhật)
 
-Browser xem live bets / community picks:
+Browser xem live picks / community predictions:
   Browser → fetch CSV trực tiếp từ Google Sheets (public)
           → cache localStorage (TTL 5–15 phút)
 
@@ -611,7 +611,7 @@ User gửi dự đoán / đăng ký:
 | Layer | Làm gì |
 |---|---|
 | **Netlify Function** | Validate format đầu vào · Forward sang Apps Script |
-| **Apps Script** | Verify auth (`_session_hash`) · Check fixture status/lock · Upsert bet · Write Sheet |
+| **Apps Script** | Verify auth (`_session_hash`) · Check fixture status/lock · Upsert pick · Write Sheet |
 | **Browser** | Fetch CSV trực tiếp từ Sheet (display only) · localStorage cache |
 
 Functions **không đọc** `src/_data/*.json` và **không có** business logic.

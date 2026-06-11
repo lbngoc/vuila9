@@ -7,7 +7,7 @@ const SHEET_ID = process.env.GOOGLE_SHEET_ID;
 const TABS = {
   users:    process.env.USERS_GID    || '0',
   fixtures: process.env.FIXTURES_GID || null,
-  bets:     process.env.BETS_GID     || null,
+  picks:    process.env.PICKS_GID     || null,
 };
 
 async function fetchCsvWithRetry(sheetId, gid, retries = 1) {
