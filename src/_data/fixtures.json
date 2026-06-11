@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-11T10:07:43.824Z",
+  "generated_at": "2026-06-11T14:48:25.402Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -281,10 +281,10 @@
       "home_team": "Anh",
       "away_team": "Croatia",
       "handicap": "-1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 3,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -294,10 +294,10 @@
       "home_team": "Ghana",
       "away_team": "Panama",
       "handicap": "-0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 2,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -307,10 +307,10 @@
       "home_team": "Uzbekistan",
       "away_team": "Colombia",
       "handicap": "0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -320,10 +320,10 @@
       "home_team": "Séc",
       "away_team": "Nam Phi",
       "handicap": "-0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 2,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -333,10 +333,10 @@
       "home_team": "Thụy Sĩ",
       "away_team": "Bosnia",
       "handicap": "-0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 2,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
