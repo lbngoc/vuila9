@@ -28,7 +28,7 @@ Google Sheets (admin cập nhật kết quả & fixtures)
         │
         │  Browser fetch CSV trực tiếp (public, cache localStorage)
         ↓
-  Community picks, live bets, cross-device sync
+  Community picks, live predictions, cross-device sync
 
 User gửi dự đoán / đăng ký:
   Browser → Netlify Function (format validation)
@@ -56,8 +56,8 @@ User gửi dự đoán / đăng ký:
 ### fixtures
 `fixture_id · league · kickoff_at · home_team · away_team · handicap · status(upcoming/finished) · result_home · result_away`
 
-### bets
-`bet_id · created_at · user_id · fixture_id · pick_type(home/draw/away)`
+### picks
+`pick_id · created_at · user_id · fixture_id · pick_type(home/draw/away)`
 
 Same user + fixture → upsert (cập nhật dự đoán cũ, không tạo mới).
 
@@ -124,7 +124,7 @@ USERS_GID=           # GID tab users
 ### 3. GitHub Actions — Daily Sync
 Thêm secrets vào GitHub repo (Settings → Secrets → Actions):
 ```
-GOOGLE_SHEET_ID · USERS_GID · FIXTURES_GID · BETS_GID
+GOOGLE_SHEET_ID · USERS_GID · FIXTURES_GID · PICKS_GID
 ```
 
 > **Lưu ý:** GitHub Actions cron thường trễ 3–4 tiếng so với lịch đặt. Nên dùng external trigger (cron-job.org) để đảm bảo sync đúng giờ — đặc biệt lần sync tối (21:00 ICT) tránh chạy trễ qua nửa đêm.
