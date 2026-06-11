@@ -33,7 +33,9 @@ permalink: /
           <tr class="text-gray-500 text-xs border-b border-gray-200 dark:border-gray-800">
             <th class="text-left px-4 py-3">#</th>
             <th class="text-left px-4 py-3">Người chơi</th>
-            <th class="text-right px-4 py-3 hidden sm:table-cell">Trận</th>
+            <th class="text-right px-4 py-3 hidden sm:table-cell">
+              Đúng{% if siteConfig.points.PUSH != siteConfig.points.LOSE %} / Hòa{% endif %} / Sai{% if siteConfig.points.NO_BET < 0 %} / Bỏ qua{% endif %}
+            </th>
             <th class="text-right px-4 py-3">Điểm</th>
           </tr>
         </thead>
@@ -44,7 +46,16 @@ permalink: /
               {% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% elif loop.index == 3 %}🥉{% else %}{{ loop.index }}{% endif %}
             </td>
             <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">{{ user.display_name }}</td>
-            <td class="px-4 py-3 text-right text-gray-500 text-xs hidden sm:table-cell">{{ user.played }}</td>
+            <td class="px-4 py-3 text-right text-gray-500 text-xs hidden sm:table-cell whitespace-nowrap">
+              <span class="text-emerald-500 dark:text-emerald-400">{{ user.wins }}</span>
+              {% if siteConfig.points.PUSH != siteConfig.points.LOSE %}
+              / <span class="text-yellow-500 dark:text-yellow-400">{{ user.draws }}</span>
+              {% endif %}
+              / <span class="text-red-500 dark:text-red-400">{{ user.losses }}</span>
+              {% if siteConfig.points.NO_BET < 0 %}
+              / <span class="text-pink-400 dark:text-pink-500">{{ user.no_bets or 0 }}</span>
+              {% endif %}
+            </td>
             <td class="px-4 py-3 text-right font-bold text-lg
                        {% if user.points > 0 %}text-emerald-500 dark:text-emerald-400{% elif user.points < 0 %}text-red-500 dark:text-red-400{% else %}text-gray-400{% endif %}">
               {% if user.points > 0 %}+{% endif %}{{ user.points }}
@@ -123,12 +134,7 @@ permalink: /
     {% endif %}
 
     <div class="border-t border-gray-200 dark:border-gray-800 pt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm">
-      <span class="text-gray-500 font-semibold">Điểm:</span>
-      <span>✅ Đoán đúng → <span class="text-emerald-500 dark:text-emerald-400 font-bold">{% if siteConfig.points.WIN > 0 %}+{% endif %}{{ siteConfig.points.WIN }} điểm</span></span>
-      {% if siteConfig.points.PUSH != siteConfig.points.LOSE %}
-      <span>🤝 Hòa chấp → <span class="text-yellow-500 dark:text-yellow-400 font-bold">{% if siteConfig.points.PUSH > 0 %}+{% endif %}{{ siteConfig.points.PUSH }} điểm</span></span>
-      {% endif %}
-      <span>❌ Đoán sai → <span class="{% if siteConfig.points.LOSE < 0 %}text-red-500 dark:text-red-400{% else %}text-gray-500{% endif %} font-bold">{% if siteConfig.points.LOSE > 0 %}+{% endif %}{{ siteConfig.points.LOSE }} điểm</span></span>
+      {% include "scoring-legend.njk" %}
     </div>
   </section>
 

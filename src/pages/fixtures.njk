@@ -169,6 +169,8 @@ permalink: /fixtures/
 {% endmacro %}
 
 {# ─── Main layout ─────────────────────────────────────────────────────────── #}
+{% set upcoming = fixtures.data | where("status", "upcoming") %}
+{% set finished = fixtures.data | where("status", "finished") %}
 <div class="space-y-8">
   <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">📅 Lịch thi đấu</h1>
@@ -182,11 +184,15 @@ permalink: /fixtures/
     </p>
   </div>
 
+  <div class="text-xs text-gray-500 dark:text-gray-600 flex gap-4">
+    {% if upcoming | length %}<span>📈 Sắp diễn ra: <strong class="text-gray-700 dark:text-gray-400">{{ upcoming | length }}</strong></span>{% endif %}
+    {% if finished | length %}<span>✅ Đã kết thúc: <strong class="text-gray-700 dark:text-gray-400">{{ finished | length }}</strong></span>{% endif %}
+  </div>
+
   <!-- Upcoming -->
   <section>
-    <h2 class="text-lg font-semibold text-emerald-600 dark:text-emerald-400 mb-4">Sắp diễn ra — gửi dự đoán ngay</h2>
+    <h2 class="text-lg font-semibold text-emerald-600 dark:text-emerald-400 mb-4">Sắp diễn ra ({{ upcoming | length }}) — gửi dự đoán ngay</h2>
 
-    {% set upcoming = fixtures.data | where("status", "upcoming") %}
     {% set upcomingGroups = upcoming | groupByDateKey %}
 
     {% if upcomingGroups | length %}
@@ -278,23 +284,78 @@ permalink: /fixtures/
 
   <!-- Finished -->
   <section>
-    <h2 class="text-lg font-semibold text-gray-500 dark:text-gray-400 mb-4">Đã kết thúc</h2>
-    {% set finished = fixtures.data | where("status", "finished") %}
+    <h2 class="text-lg font-semibold text-gray-500 dark:text-gray-400 mb-4">Đã kết thúc ({{ finished | length }})</h2>
     {% if finished | length %}
-    <div class="grid gap-3">
-      {% for fixture in finished %}
-      <div class="bg-white dark:bg-gray-900 rounded-xl p-4 flex items-center justify-between">
-        <div>
-          <p class="font-medium text-gray-900 dark:text-white">
-            {{ fixture.home_team }}
-            <span class="font-bold mx-2">{{ fixture.result_home }} – {{ fixture.result_away }}</span>
-            {{ fixture.away_team }}
-          </p>
-          <p class="text-xs text-gray-500 mt-1">{{ fixture.league }} · {{ fixture.kickoff_at | dateDisplay }}</p>
+    {% set finished_rev = finished | reverse %}
+    <div x-data="{ showAll: false }" class="space-y-3">
+      <div class="grid gap-3">
+        {% for fixture in finished_rev %}
+        {% if loop.index <= 10 %}
+        <div class="bg-white dark:bg-gray-900 rounded-xl p-4 flex items-center justify-between">
+          <div>
+            <p class="font-medium text-gray-900 dark:text-white">
+              {{ fixture.home_team }}
+              <span class="font-bold mx-2">{{ fixture.result_home }} – {{ fixture.result_away }}</span>
+              {{ fixture.away_team }}
+            </p>
+            <p class="text-xs text-gray-500 mt-1">{{ fixture.league }} · {{ fixture.kickoff_at | dateDisplay }}</p>
+          </div>
+          <span class="text-xs text-gray-400 dark:text-gray-600">FT</span>
         </div>
-        <span class="text-xs text-gray-400 dark:text-gray-600">FT</span>
+        {% endif %}
+        {% endfor %}
       </div>
-      {% endfor %}
+
+      {% if finished | length > 10 %}
+      <div x-show="showAll"
+           x-cloak
+           x-transition:enter="transition-all ease-out duration-400"
+           x-transition:enter-start="opacity-0 -translate-y-3"
+           x-transition:enter-end="opacity-100 translate-y-0"
+           x-transition:leave="transition-all ease-in duration-200"
+           x-transition:leave-start="opacity-100 translate-y-0"
+           x-transition:leave-end="opacity-0 -translate-y-3"
+           class="grid gap-3">
+        {% for fixture in finished_rev %}
+        {% if loop.index > 10 %}
+        <div class="bg-white dark:bg-gray-900 rounded-xl p-4 flex items-center justify-between">
+          <div>
+            <p class="font-medium text-gray-900 dark:text-white">
+              {{ fixture.home_team }}
+              <span class="font-bold mx-2">{{ fixture.result_home }} – {{ fixture.result_away }}</span>
+              {{ fixture.away_team }}
+            </p>
+            <p class="text-xs text-gray-500 mt-1">{{ fixture.league }} · {{ fixture.kickoff_at | dateDisplay }}</p>
+          </div>
+          <span class="text-xs text-gray-400 dark:text-gray-600">FT</span>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="flex justify-center pt-1">
+        <button @click="showAll = !showAll"
+                class="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-medium
+                       bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300
+                       hover:bg-gray-200 dark:hover:bg-gray-700
+                       border border-gray-200 dark:border-gray-700
+                       transition-colors duration-150">
+          <span x-show="!showAll">
+            Xem thêm
+            <span class="text-xs text-gray-400 dark:text-gray-500 font-normal">({{ finished | length - 10 }} trận)</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 inline ml-0.5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
+            </svg>
+          </span>
+          <span x-show="showAll" x-cloak>
+            Thu gọn
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 inline ml-0.5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M14.78 11.78a.75.75 0 0 1-1.06 0L10 8.06l-3.72 3.72a.75.75 0 0 1-1.06-1.06l4.25-4.25a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06Z" clip-rule="evenodd"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+      {% endif %}
     </div>
     {% else %}
     <div class="bg-white dark:bg-gray-900 rounded-xl p-8 text-center text-gray-500">Chưa có trận nào kết thúc.</div>
