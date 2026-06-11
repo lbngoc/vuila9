@@ -34,7 +34,7 @@ permalink: /
             <th class="text-left px-4 py-3">#</th>
             <th class="text-left px-4 py-3">Người chơi</th>
             <th class="text-right px-4 py-3 hidden sm:table-cell">
-              Đúng{% if siteConfig.points.PUSH != siteConfig.points.LOSE %} / Hòa{% endif %} / Sai{% if siteConfig.points.NO_BET < 0 %} / Bỏ qua{% endif %}
+              Đúng{% if siteConfig.points.PUSH != siteConfig.points.LOSE %} / Hòa{% endif %} / Sai{% if siteConfig.points.NO_PICK < 0 %} / Bỏ qua{% endif %}
             </th>
             <th class="text-right px-4 py-3">Điểm</th>
           </tr>
@@ -52,8 +52,8 @@ permalink: /
               / <span class="text-yellow-500 dark:text-yellow-400">{{ user.draws }}</span>
               {% endif %}
               / <span class="text-red-500 dark:text-red-400">{{ user.losses }}</span>
-              {% if siteConfig.points.NO_BET < 0 %}
-              / <span class="text-pink-400 dark:text-pink-500">{{ user.no_bets or 0 }}</span>
+              {% if siteConfig.points.NO_PICK < 0 %}
+              / <span class="text-pink-400 dark:text-pink-500">{{ user.no_picks or 0 }}</span>
               {% endif %}
             </td>
             <td class="px-4 py-3 text-right font-bold text-lg

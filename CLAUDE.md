@@ -26,7 +26,7 @@ Build target: <30 seconds. Publish directory: `dist`. Functions directory: `netl
 /.github/workflows  # daily-sync.yml — fetch + calculate + commit src/_data/
 /data/raw           # fetched CSVs — gitignored, regenerated each sync
 /data/generated     # intermediate JSON — gitignored, temp workspace
-/data/sample        # sample CSVs cho local dev (users, fixtures, bets)
+/data/sample        # sample CSVs cho local dev (users, fixtures, picks)
 /scripts            # fetch-sheet, normalize, calculate-results, build-leaderboard, export-json
                     # create-user.js — admin utility (không thuộc pipeline)
 /netlify/functions  # submit-pick.js, register.js
@@ -34,7 +34,7 @@ Build target: <30 seconds. Publish directory: `dist`. Functions directory: `netl
   /_data            # siteConfig.js (central config) + sheetConfig.js (CSV URLs) + committed JSON snapshot
   /_includes        # base.njk layout
   /pages            # Nunjucks page templates
-  /assets/js        # app.js — Alpine.js components (appState, loginForm, myBetsPage)
+  /assets/js        # app.js — Alpine.js components (appState, loginForm, myPicksPage)
   /assets/css       # TailwindCSS
 /SETUP.md           # full setup & deploy guide
 /TESTING.md         # QA regression checklist
@@ -50,9 +50,9 @@ Google Sheets (admin cập nhật)
   ↓ triggers Netlify auto-deploy
   Netlify builds static site from committed JSON
 
-User xem dữ liệu live (bets, community picks):
+User xem dữ liệu live (picks, community predictions):
   Browser → fetch CSV trực tiếp từ Google Sheets (public) → cache localStorage
-  (URLs inject qua sheetConfig.js → window.__SHEET_BETS_URL__, __SHEET_USERS_URL__)
+  (URLs inject qua sheetConfig.js → window.__SHEET_PICKS_URL__, __SHEET_USERS_URL__)
 
 User gửi dự đoán / đăng ký:
   Browser → Netlify Function (format validation only)
@@ -69,7 +69,7 @@ Ba lớp với trách nhiệm tách biệt — không được trộn lẫn:
 | Layer | Đọc dữ liệu | Ghi dữ liệu | Business logic |
 |---|---|---|---|
 | **Static build** | `src/_data/*.json` (committed snapshot) | `src/_data/*.json` via pipeline | Scoring, leaderboard |
-| **Browser** | Fetch CSV trực tiếp từ Google Sheets public URL + cache localStorage | Không | Hiển thị, merge bets |
+| **Browser** | Fetch CSV trực tiếp từ Google Sheets public URL + cache localStorage | Không | Hiển thị, merge picks |
 | **Netlify Function** | Không đọc data nào | Forward sang Apps Script | Format validation only |
 | **Apps Script** | Google Sheet (authoritative) | Google Sheet | Auth, fixture check, upsert |
 
@@ -79,7 +79,7 @@ Ba lớp với trách nhiệm tách biệt — không được trộn lẫn:
 - Netlify Functions chỉ validate format (required fields, regex, enum) rồi forward sang Apps Script.
 - Auth (`_session_hash` vs `passcode_hash`), fixture lock check, và upsert lookup đều do **Apps Script** thực hiện — nơi có data thực tế.
 - Để pre-check duplicate username ở `register.js`, fetch CSV `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/export?format=csv&gid=${USERS_GID}` với timeout 3s. Đây là fast-fail; Apps Script vẫn làm authoritative check.
-- Browser fetch CSV từ Sheet (đã public Viewer) để hiển thị community picks và live bets, cache localStorage với TTL 5–15 phút.
+- Browser fetch CSV từ Sheet (đã public Viewer) để hiển thị community picks và live picks, cache localStorage với TTL 5–15 phút.
 
 ## Data Flow
 
@@ -103,16 +103,16 @@ points: { WIN: 3, PUSH: 0, LOSE: 0 }  // change here to adjust scoring
 
 ## Sheet Config: `src/_data/sheetConfig.js`
 
-Injects Google Sheets CSV URLs for client-side live data fetch. Populated only when `GOOGLE_SHEET_ID` + GID env vars are present. Falls back to empty strings (templates guard with `{% if sheetConfig.bets_url %}`).
+Injects Google Sheets CSV URLs for client-side live data fetch. Populated only when `GOOGLE_SHEET_ID` + GID env vars are present. Falls back to empty strings (templates guard with `{% if sheetConfig.picks_url %}`).
 
 ```js
-bets_url:          // CSV export URL cho tab bets
+picks_url:          // CSV export URL cho tab picks
 users_url:         // CSV export URL cho tab users
 fixtures_tab_url:  // link trực tiếp vào tab Fixtures (dùng trong header trang fixtures)
-bets_tab_url:      // link trực tiếp vào tab Bets (dùng trong header trang leaderboard)
+picks_tab_url:      // link trực tiếp vào tab Bets (dùng trong header trang leaderboard)
 ```
 
-Templates inject URLs vào `window.__SHEET_BETS_URL__` và `window.__SHEET_USERS_URL__` cho Alpine.js `fetchLiveBets()` / `fetchLiveUsers()`.
+Templates inject URLs vào `window.__SHEET_PICKS_URL__` và `window.__SHEET_USERS_URL__` cho Alpine.js `fetchLivePicks()` / `fetchLiveUsers()`.
 
 ## Admin Utility: `scripts/create-user.js`
 
@@ -140,23 +140,23 @@ Output là 1 dòng CSV với `passcode_hash` đã hash — paste vào tab users,
 
 Draw pick: WIN if `adj === 0`, LOSE otherwise — never PUSH.
 
-### Bet lock (BET_LOCK_MINUTES)
+### Bet lock (PICK_LOCK_MINUTES)
 
-Dự đoán bị khoá `BET_LOCK_MINUTES` phút trước `kickoff_at` (default: 60).
+Dự đoán bị khoá `PICK_LOCK_MINUTES` phút trước `kickoff_at` (default: 60).
 Áp dụng ở 2 nơi:
 - **normalize.js** — tính `is_locked` field trong `fixtures.json` (dùng tại build time)
-- **betForm.isLocked** (frontend) — đọc `window.BET_LOCK_MINUTES` được inject từ `siteConfig.bet_lock_minutes`
+- **pickForm.isLocked** (frontend) — đọc `window.PICK_LOCK_MINUTES` được inject từ `siteConfig.pick_lock_minutes`
 
-Thay đổi giá trị: set env var `BET_LOCK_MINUTES` trong GitHub Actions **và** Netlify Build, sau đó redeploy.
+Thay đổi giá trị: set env var `PICK_LOCK_MINUTES` trong GitHub Actions **và** Netlify Build, sau đó redeploy.
 
-### No-bet point (points.NO_BET)
+### No-pick point (points.NO_PICK)
 
-Khi `points.NO_BET < 0`, `calculate-results.js` thêm entry synthetic cho mỗi active user bỏ qua trận finished:
-- `pick_type: null`, `result: 'NO_BET'`, `points: POINTS.NO_BET`, `_no_bet: true`
-- Entry này xuất hiện trong `bets.json` → ảnh hưởng leaderboard (cột "Bỏ qua") và trang My Bets (hiện "— Không dự đoán · Bỏ qua")
-- Giá trị điểm hardcoded tại `siteConfig.points.NO_BET` trong `src/_data/siteConfig.js`
+Khi `points.NO_PICK < 0`, `calculate-results.js` thêm entry synthetic cho mỗi active user bỏ qua trận finished:
+- `pick_type: null`, `result: 'NO_PICK'`, `points: POINTS.NO_PICK`, `_no_pick: true`
+- Entry này xuất hiện trong `picks.json` → ảnh hưởng leaderboard (cột "Bỏ qua") và trang My Picks (hiện "— Không dự đoán · Bỏ qua")
+- Giá trị điểm hardcoded tại `siteConfig.points.NO_PICK` trong `src/_data/siteConfig.js`
 - Chỉ áp dụng user có `status: 'active'`
-- Bật/tắt: `NO_BET < 0` → bật; `NO_BET >= 0` → tắt (không tạo entry, không hiện cột)
+- Bật/tắt: `NO_PICK < 0` → bật; `NO_PICK >= 0` → tắt (không tạo entry, không hiện cột)
 
 ## Auth Flow
 
@@ -173,7 +173,7 @@ Khi `points.NO_BET < 0`, `calculate-results.js` thêm entry synthetic cho mỗi 
 | `/fixtures/` | fixtures.njk | Bet form: countdown timer, hover colors, contextual tips |
 | `/leaderboard/` | leaderboard.njk | Full rankings, scoring legend from siteConfig.points |
 | `/login/` | login.njk | Client-side auth, checks status=active |
-| `/my-picks/` | my-picks.njk | Personal bet history (localStorage session) |
+| `/my-picks/` | my-picks.njk | Personal pick history (localStorage session) |
 | `/register/` | register.njk | New account → Netlify function → Apps Script → status per `REGISTER_STATUS` (default: `active`) |
 
 ## Netlify Functions
@@ -184,13 +184,13 @@ Khi `points.NO_BET < 0`, `calculate-results.js` thêm entry synthetic cho mỗi 
 ## Key Implementation Details
 
 - **Fixture ID format**: `xxx-yyy` (team codes, e.g., `ARG-AUT`) — không dùng numeric ID
-- **Countdown**: `_now: Date.now()` + `setInterval(60s)` per `betForm` Alpine instance
+- **Countdown**: `_now: Date.now()` + `setInterval(60s)` per `pickForm` Alpine instance
 - **Pick hover colors**: home=red, draw=yellow, away=blue via Tailwind `group-hover`
 - **Draw disabled**: `!Number.isInteger(Math.abs(parseFloat(handicap)))` — PUSH impossible for half-ball
 - **Tip text**: `tip` getter explains when each pick wins using `minWin`, `maxHome`, `pushAt`
-- **Upsert**: Apps Script tự tìm existing bet theo `(user_id, fixture_id)` — không cần `existing_bet_id` từ client
+- **Upsert**: Apps Script tự tìm existing pick theo `(user_id, fixture_id)` — không cần `existing_pick_id` từ client
 - **Handicap display**: `| replace("-", "") | replace(".0", "")` strips sign and trailing decimal
-- **Live data**: `fetchLiveBets()` + `fetchLiveUsers()` — cache localStorage TTL 5/15 phút; fallback graceful nếu không có `sheetConfig` URLs
+- **Live data**: `fetchLivePicks()` + `fetchLiveUsers()` — cache localStorage TTL 5/15 phút; fallback graceful nếu không có `sheetConfig` URLs
 
 ## Environment Variables
 
@@ -205,12 +205,12 @@ USERS_GID=           # GID tab users
 GOOGLE_SHEET_ID=
 USERS_GID=
 FIXTURES_GID=
-BETS_GID=
+PICKS_GID=
 
 # Game rules (GitHub Actions + Netlify Build — đọc tại build time):
-BET_LOCK_MINUTES=    # phút trước kickoff thì khoá dự đoán (default: 60)
-                     # Ảnh hưởng: normalize.js (is_locked field), frontend betForm.isLocked
-# NO_BET: không có env var — set points.NO_BET < 0 trong siteConfig.js để bật feature
+PICK_LOCK_MINUTES=    # phút trước kickoff thì khoá dự đoán (default: 60)
+                     # Ảnh hưởng: normalize.js (is_locked field), frontend pickForm.isLocked
+# NO_PICK: không có env var — set points.NO_PICK < 0 trong siteConfig.js để bật feature
 
 # Demo mode (Netlify Build env):
 DEMO_MODE=           # 'true' → hiện banner demo ở cuối mọi trang: lịch cập nhật kết quả

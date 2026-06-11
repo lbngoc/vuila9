@@ -1,13 +1,13 @@
 'use strict';
 
 // ── Configurable constants (read early so they can be used in arrays below) ──
-const bet_lock_minutes = parseInt(process.env.BET_LOCK_MINUTES)  || 60;    // default 60 phút
+const pick_lock_minutes = parseInt(process.env.PICK_LOCK_MINUTES)  || 60;    // default 60 phút
 const demo_mode        = (process.env.DEMO_MODE        || 'false') === 'true'; // default false
 const public_mode      = (process.env.PUBLIC_MODE      || 'true' ) === 'true'; // default true — hiện link Dữ liệu gốc
 
-// NO_BET: đặt trực tiếp tại đây — mọi thay đổi có git history
-// Bật/tắt: NO_BET < 0 → feature bật; NO_BET >= 0 → feature tắt
-const no_bet_point = -1;
+// NO_PICK: đặt trực tiếp tại đây — mọi thay đổi có git history
+// Bật/tắt: NO_PICK < 0 → feature bật; NO_PICK >= 0 → feature tắt
+const no_pick_point = -1;
 
 module.exports = {
   site_name:      'Vui Là Chính',
@@ -17,8 +17,8 @@ module.exports = {
 
   // ── Bet lock ────────────────────────────────────────────────────────────
   // Số phút trước giờ đá mà dự đoán bị khoá.
-  // Thay đổi qua env var BET_LOCK_MINUTES (hoặc trực tiếp đổi số 60 ở trên).
-  bet_lock_minutes,   // default: 60
+  // Thay đổi qua env var PICK_LOCK_MINUTES (hoặc trực tiếp đổi số 60 ở trên).
+  pick_lock_minutes,   // default: 60
 
   // ── Demo mode ───────────────────────────────────────────────────────────
   // Nếu true: hiện banner thông báo lịch cập nhật dữ liệu và reset demo.
@@ -41,31 +41,31 @@ module.exports = {
   })(),
 
   // ── Scoring config ──────────────────────────────────────────────────────
-  // Thay đổi WIN/LOSE/NO_BET trực tiếp tại đây — mọi chỉnh sửa có git history.
+  // Thay đổi WIN/LOSE/NO_PICK trực tiếp tại đây — mọi chỉnh sửa có git history.
   //
   // Ví dụ:
-  //   WIN: 3, LOSE:  0, NO_BET:  0   → thắng +3, thua/bỏ giữ nguyên (NO_BET tắt)
-  //   WIN: 3, LOSE: -1, NO_BET:  0   → thắng +3, thua -1, bỏ qua không tính (NO_BET tắt)
-  //   WIN: 3, LOSE: -1, NO_BET: -1   → thắng +3, thua/bỏ đều -1 (NO_BET bật)
+  //   WIN: 3, LOSE:  0, NO_PICK:  0   → thắng +3, thua/bỏ giữ nguyên (NO_PICK tắt)
+  //   WIN: 3, LOSE: -1, NO_PICK:  0   → thắng +3, thua -1, bỏ qua không tính (NO_PICK tắt)
+  //   WIN: 3, LOSE: -1, NO_PICK: -1   → thắng +3, thua/bỏ đều -1 (NO_PICK bật)
   //
   // PUSH: xảy ra khi home/away pick trúng đúng ranh giới chấp (chấp nguyên bàn).
   //       Khác với 'draw' pick — draw pick trúng ranh giới cho WIN (+3).
   //
-  // NO_BET: < 0 → feature bật (ghi nhận trận bỏ qua + trừ điểm); >= 0 → feature tắt.
+  // NO_PICK: < 0 → feature bật (ghi nhận trận bỏ qua + trừ điểm); >= 0 → feature tắt.
   points: {
     WIN:    1,   // chọn đúng (đội thắng/thua theo điểm chấp)
     PUSH:   2,   // hòa chấp chính xác — chấp nguyên bàn, home/away pick đúng ranh giới
     LOSE:  -1,   // chọn sai
-    NO_BET: no_bet_point,   // không gửi dự đoán; < 0 để bật feature
+    NO_PICK: no_pick_point,   // không gửi dự đoán; < 0 để bật feature
   },
 
   // ── Hướng dẫn chơi ─────────────────────────────────────────────────────
   how_to_play: [
     'Vào Lịch thi đấu, chọn đội bạn dự đoán thắng cho mỗi trận (đã tính điểm chấp).',
-    `Mỗi trận chỉ được gửi 1 dự đoán — có thể đổi lựa chọn bất kỳ lúc nào trước ${bet_lock_minutes} phút khi bóng lăn.`,
+    `Mỗi trận chỉ được gửi 1 dự đoán — có thể đổi lựa chọn bất kỳ lúc nào trước ${pick_lock_minutes} phút khi bóng lăn.`,
     'Sau trận, điểm được tính theo kết quả thực tế có điểm chấp (không phải tỉ số trực tiếp).',
     'Người có tổng điểm cao nhất trên bảng xếp hạng là người thắng cuộc!',
-    ...(no_bet_point < 0
+    ...(no_pick_point < 0
       ? ['Trận đã kết thúc mà bạn không gửi dự đoán sẽ bị ghi nhận riêng là Bỏ qua.']
       : []),
   ],

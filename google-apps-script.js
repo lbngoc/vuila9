@@ -7,8 +7,8 @@
  * 3. Project Settings → Script Properties → thêm:
  *    APP_SECRET        = (cùng giá trị với APP_SECRET trong Netlify env vars)
  *    NETLIFY_BUILD_HOOK = URL từ Netlify Build Hooks
- *    BET_LOCK_MINUTES  = số phút trước kickoff để khoá dự đoán (mặc định: 60)
- *                        ← phải khớp với giá trị BET_LOCK_MINUTES trong Netlify Build env
+ *    PICK_LOCK_MINUTES  = số phút trước kickoff để khoá dự đoán (mặc định: 60)
+ *                        ← phải khớp với giá trị PICK_LOCK_MINUTES trong Netlify Build env
  *    REGISTER_STATUS   = trạng thái user sau khi đăng ký: 'active' hoặc 'inactive'
  *                        (mặc định: 'active') — đặt 'inactive' nếu muốn admin duyệt thủ công
  * 4. Deploy → New deployment → Web app:
@@ -29,7 +29,7 @@ function doPost(e) {
     if (payload.action === 'register')         return handleRegister(payload);
     if (payload.action === 'update_display_name') return handleUpdateDisplayName(payload);
     if (payload.action === 'copy_predictions')    return handleCopyPredictions(payload);
-    return handleBet(payload);
+    return handlePick(payload);
 
   } catch (err) {
     console.error(err);
@@ -88,9 +88,9 @@ function findFixture(ss, fixture_id) {
   return null;
 }
 
-// ── Bet submission ─────────────────────────────────────────────────────
+// ── Pick submission ────────────────────────────────────────────────────
 
-function handleBet(payload) {
+function handlePick(payload) {
   if (!payload.username || !payload.fixture_id || !payload.pick_type || !payload._session_hash) {
     return jsonResponse({ error: 'Thiếu thông tin bắt buộc.', code: 'MISSING_FIELDS', status: 400 });
   }
@@ -117,34 +117,34 @@ function handleBet(payload) {
   if (fixture.status === 'finished') {
     return jsonResponse({ error: 'Trận đấu đã kết thúc.', code: 'MATCH_FINISHED', status: 400 });
   }
-  const lockMinutes = parseInt(PropertiesService.getScriptProperties().getProperty('BET_LOCK_MINUTES')) || 60;
+  const lockMinutes = parseInt(PropertiesService.getScriptProperties().getProperty('PICK_LOCK_MINUTES')) || 60;
   const kickoffMs   = new Date(fixture.kickoff_at).getTime();
   if (Date.now() >= kickoffMs - lockMinutes * 60 * 1000) {
     return jsonResponse({ error: `Đã đóng nhận dự đoán (khoá trước ${lockMinutes} phút khi đá).`, code: 'LOCKED', status: 400 });
   }
 
-  // 3. Upsert — find existing bet by (user_id, fixture_id)
-  const betsSheet = ss.getSheetByName('bets');
-  if (!betsSheet) return jsonResponse({ error: 'Sheet "bets" not found', code: 'INTERNAL_ERROR', status: 500 });
+  // 3. Upsert — find existing pick by (user_id, fixture_id)
+  const picksSheet = ss.getSheetByName('picks');
+  if (!picksSheet) return jsonResponse({ error: 'Sheet "picks" not found', code: 'INTERNAL_ERROR', status: 500 });
 
-  const betsData = betsSheet.getDataRange().getValues();
-  // columns: bet_id(0) created_at(1) user_id(2) fixture_id(3) pick_type(4)
-  for (let i = 1; i < betsData.length; i++) {
-    if (String(betsData[i][2]) === user.user_id && String(betsData[i][3]) === payload.fixture_id) {
-      const existingId = String(betsData[i][0]);
-      betsSheet.getRange(i + 1, 2).setValue(payload.created_at);
-      betsSheet.getRange(i + 1, 5).setValue(payload.pick_type);
-      return jsonResponse({ success: true, bet_id: existingId, updated: true });
+  const picksData = picksSheet.getDataRange().getValues();
+  // columns: pick_id(0) created_at(1) user_id(2) fixture_id(3) pick_type(4)
+  for (let i = 1; i < picksData.length; i++) {
+    if (String(picksData[i][2]) === user.user_id && String(picksData[i][3]) === payload.fixture_id) {
+      const existingId = String(picksData[i][0]);
+      picksSheet.getRange(i + 1, 2).setValue(payload.created_at);
+      picksSheet.getRange(i + 1, 5).setValue(payload.pick_type);
+      return jsonResponse({ success: true, pick_id: existingId, updated: true });
     }
   }
 
-  // 4. Append new bet
+  // 4. Append new pick
   const stamp  = Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'yyyyMMdd_HHmmss');
   const rand   = Math.random().toString(36).slice(2, 6);
-  const bet_id = `bet_${stamp}_${rand}`;
+  const pick_id = `pick_${stamp}_${rand}`;
 
-  betsSheet.appendRow([bet_id, payload.created_at, user.user_id, payload.fixture_id, payload.pick_type]);
-  return jsonResponse({ success: true, bet_id });
+  picksSheet.appendRow([pick_id, payload.created_at, user.user_id, payload.fixture_id, payload.pick_type]);
+  return jsonResponse({ success: true, pick_id });
 }
 
 // ── Update display name ────────────────────────────────────────────────
@@ -220,7 +220,7 @@ function handleCopyPredictions(payload) {
   const fixturesSheet = ss.getSheetByName('fixtures');
   if (!fixturesSheet) return jsonResponse({ error: 'Sheet "fixtures" not found', code: 'INTERNAL_ERROR', status: 500 });
   const fixturesData = fixturesSheet.getDataRange().getValues();
-  const lockMinutes = parseInt(PropertiesService.getScriptProperties().getProperty('BET_LOCK_MINUTES')) || 60;
+  const lockMinutes = parseInt(PropertiesService.getScriptProperties().getProperty('PICK_LOCK_MINUTES')) || 60;
   const now = Date.now();
 
   const eligibleFixtures = {};
@@ -235,47 +235,47 @@ function handleCopyPredictions(payload) {
     }
   }
 
-  // 4. Find all bets by target user for eligible fixtures
-  const betsSheet = ss.getSheetByName('bets');
-  if (!betsSheet) return jsonResponse({ error: 'Sheet "bets" not found', code: 'INTERNAL_ERROR', status: 500 });
-  const betsData = betsSheet.getDataRange().getValues();
+  // 4. Find all picks by target user for eligible fixtures
+  const picksSheet = ss.getSheetByName('picks');
+  if (!picksSheet) return jsonResponse({ error: 'Sheet "picks" not found', code: 'INTERNAL_ERROR', status: 500 });
+  const picksData = picksSheet.getDataRange().getValues();
 
-  const targetBets = {};
-  for (let i = 1; i < betsData.length; i++) {
-    const uid = String(betsData[i][2]);
-    const fid = String(betsData[i][3]);
-    const pick = String(betsData[i][4]);
+  const targetPicks = {};
+  for (let i = 1; i < picksData.length; i++) {
+    const uid = String(picksData[i][2]);
+    const fid = String(picksData[i][3]);
+    const pick = String(picksData[i][4]);
     if (uid === payload.target_user_id && eligibleFixtures[fid] && pick) {
-      targetBets[fid] = pick;
+      targetPicks[fid] = pick;
     }
   }
 
-  // 5. Gather logged-in user's existing bets to decide update vs append
-  const userBetRowIndex = {};
-  for (let i = 1; i < betsData.length; i++) {
-    const uid = String(betsData[i][2]);
-    const fid = String(betsData[i][3]);
+  // 5. Gather logged-in user's existing picks to decide update vs append
+  const userPickRowIndex = {};
+  for (let i = 1; i < picksData.length; i++) {
+    const uid = String(picksData[i][2]);
+    const fid = String(picksData[i][3]);
     if (uid === user.user_id) {
-      userBetRowIndex[fid] = i + 1;
+      userPickRowIndex[fid] = i + 1;
     }
   }
 
-  // 6. Copy bets
+  // 6. Copy picks
   const created_at = new Date().toISOString();
   let copiedCount = 0;
   const copiedFixtureIds = [];
 
-  for (const fid in targetBets) {
-    const pick = targetBets[fid];
-    if (userBetRowIndex[fid]) {
-      const rowIdx = userBetRowIndex[fid];
-      betsSheet.getRange(rowIdx, 2).setValue(created_at);
-      betsSheet.getRange(rowIdx, 5).setValue(pick);
+  for (const fid in targetPicks) {
+    const pick = targetPicks[fid];
+    if (userPickRowIndex[fid]) {
+      const rowIdx = userPickRowIndex[fid];
+      picksSheet.getRange(rowIdx, 2).setValue(created_at);
+      picksSheet.getRange(rowIdx, 5).setValue(pick);
     } else {
       const stamp  = Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'yyyyMMdd_HHmmss');
       const rand   = Math.random().toString(36).slice(2, 6);
-      const bet_id = `bet_${stamp}_${rand}`;
-      betsSheet.appendRow([bet_id, created_at, user.user_id, fid, pick]);
+      const pick_id = `pick_${stamp}_${rand}`;
+      picksSheet.appendRow([pick_id, created_at, user.user_id, fid, pick]);
     }
     copiedCount++;
     copiedFixtureIds.push(fid);
@@ -454,7 +454,7 @@ function runDemoUpdate() {
 //
 // Cấu hình (Script Properties):
 //   SEED_BRANCH = main               → branch chứa sample data (default: main)
-//   RESET_TABS  = users,bets,fixtures → danh sách tab cần reset (default: tất cả 3)
+//   RESET_TABS  = users,picks,fixtures → danh sách tab cần reset (default: tất cả 3)
 //
 // Cách dùng:
 //   A. Thủ công : Apps Script editor → chọn resetDemoData → Run
@@ -465,7 +465,7 @@ function resetDemoData() {
   const props  = PropertiesService.getScriptProperties();
   const repo = props.getProperty('GITHUB_REPO') || 'lbngoc/vuila9';
   const branch = props.getProperty('SEED_BRANCH') || 'main';
-  const tabs   = (props.getProperty('RESET_TABS') || 'users,bets,fixtures').split(',').map(s => s.trim());
+  const tabs   = (props.getProperty('RESET_TABS') || 'users,picks,fixtures').split(',').map(s => s.trim());
 
   const BASE_URL = `https://raw.githubusercontent.com/${repo}/${branch}/data/sample`;
   const log = [];

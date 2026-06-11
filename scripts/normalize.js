@@ -59,7 +59,7 @@ if (rawUsers) {
 const rawFixtures = readCsv('fixtures');
 if (rawFixtures) {
   const now         = Date.now();
-  const lockMinutes = parseInt(process.env.BET_LOCK_MINUTES) || 60;
+  const lockMinutes = parseInt(process.env.PICK_LOCK_MINUTES) || 60;
   const fixtures = rawFixtures.map(r => {
     const kickoffIso = toIso(r.kickoff_at);
     const kickoffMs  = kickoffIso ? new Date(kickoffIso).getTime() : 0;
@@ -83,20 +83,20 @@ if (rawFixtures) {
   console.log(`normalize: fixtures → ${fixtures.length} total, ${fixtures.filter(f => f.is_finished).length} finished`);
 }
 
-// ── Bets ───────────────────────────────────────────────────────────────
-const rawBets = readCsv('bets');
-if (rawBets) {
-  const bets = rawBets
-    .filter(r => r.bet_id?.trim() && r.user_id?.trim() && r.fixture_id?.trim())
+// ── Picks ──────────────────────────────────────────────────────────────
+const rawPicks = readCsv('picks');
+if (rawPicks) {
+  const picks = rawPicks
+    .filter(r => r.pick_id?.trim() && r.user_id?.trim() && r.fixture_id?.trim())
     .map(r => ({
-      bet_id:     r.bet_id.trim(),
+      pick_id:    r.pick_id.trim(),
       created_at: toIso(r.created_at),
       user_id:    r.user_id.trim(),
       fixture_id: r.fixture_id.trim(),
       pick_type:  r.pick_type.trim(),
     }));
-  fs.writeFileSync(`${GEN}/bets.json`, JSON.stringify(bets, null, 2), 'utf8');
-  console.log(`normalize: bets → ${bets.length} total`);
+  fs.writeFileSync(`${GEN}/picks.json`, JSON.stringify(picks, null, 2), 'utf8');
+  console.log(`normalize: picks → ${picks.length} total`);
 }
 
 console.log('normalize: done');

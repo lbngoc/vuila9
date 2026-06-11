@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-11T03:20:47.209Z",
+  "generated_at": "2026-06-11T03:55:55.830Z",
   "data": [
     {
-      "bet_id": "bet_001",
+      "pick_id": "pick_001",
       "created_at": "2026-06-10T08:00:00.000Z",
       "user_id": "u_000",
       "fixture_id": "MEX-RSA",
@@ -11,7 +11,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_002",
+      "pick_id": "pick_002",
       "created_at": "2026-06-10T08:05:00.000Z",
       "user_id": "u_001",
       "fixture_id": "MEX-RSA",
@@ -20,7 +20,7 @@
       "points": -1
     },
     {
-      "bet_id": "bet_003",
+      "pick_id": "pick_003",
       "created_at": "2026-06-10T08:10:00.000Z",
       "user_id": "u_002",
       "fixture_id": "MEX-RSA",
@@ -29,7 +29,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_004",
+      "pick_id": "pick_004",
       "created_at": "2026-06-10T08:15:00.000Z",
       "user_id": "u_003",
       "fixture_id": "MEX-RSA",
@@ -38,7 +38,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_005",
+      "pick_id": "pick_005",
       "created_at": "2026-06-10T09:00:00.000Z",
       "user_id": "u_000",
       "fixture_id": "KOR-CZE",
@@ -47,7 +47,7 @@
       "points": 2
     },
     {
-      "bet_id": "bet_006",
+      "pick_id": "pick_006",
       "created_at": "2026-06-10T09:05:00.000Z",
       "user_id": "u_001",
       "fixture_id": "KOR-CZE",
@@ -56,7 +56,7 @@
       "points": 2
     },
     {
-      "bet_id": "bet_007",
+      "pick_id": "pick_007",
       "created_at": "2026-06-10T09:10:00.000Z",
       "user_id": "u_002",
       "fixture_id": "KOR-CZE",
@@ -65,7 +65,7 @@
       "points": 2
     },
     {
-      "bet_id": "bet_008",
+      "pick_id": "pick_008",
       "created_at": "2026-06-10T09:15:00.000Z",
       "user_id": "u_003",
       "fixture_id": "KOR-CZE",
@@ -74,7 +74,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_009",
+      "pick_id": "pick_009",
       "created_at": "2026-06-10T09:20:00.000Z",
       "user_id": "u_004",
       "fixture_id": "KOR-CZE",
@@ -83,7 +83,7 @@
       "points": 2
     },
     {
-      "bet_id": "bet_010",
+      "pick_id": "pick_010",
       "created_at": "2026-06-10T10:00:00.000Z",
       "user_id": "u_000",
       "fixture_id": "CAN-BIH",
@@ -92,7 +92,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_011",
+      "pick_id": "pick_011",
       "created_at": "2026-06-10T10:05:00.000Z",
       "user_id": "u_001",
       "fixture_id": "CAN-BIH",
@@ -101,7 +101,7 @@
       "points": -1
     },
     {
-      "bet_id": "bet_012",
+      "pick_id": "pick_012",
       "created_at": "2026-06-10T10:10:00.000Z",
       "user_id": "u_002",
       "fixture_id": "CAN-BIH",
@@ -110,7 +110,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_013",
+      "pick_id": "pick_013",
       "created_at": "2026-06-10T10:15:00.000Z",
       "user_id": "u_003",
       "fixture_id": "CAN-BIH",
@@ -119,7 +119,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_014",
+      "pick_id": "pick_014",
       "created_at": "2026-06-10T10:20:00.000Z",
       "user_id": "u_004",
       "fixture_id": "CAN-BIH",
@@ -128,7 +128,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_015",
+      "pick_id": "pick_015",
       "created_at": "2026-06-10T11:00:00.000Z",
       "user_id": "u_000",
       "fixture_id": "USA-PAR",
@@ -137,7 +137,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_016",
+      "pick_id": "pick_016",
       "created_at": "2026-06-10T11:05:00.000Z",
       "user_id": "u_001",
       "fixture_id": "USA-PAR",
@@ -146,7 +146,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_017",
+      "pick_id": "pick_017",
       "created_at": "2026-06-10T11:10:00.000Z",
       "user_id": "u_003",
       "fixture_id": "USA-PAR",
@@ -155,7 +155,7 @@
       "points": -1
     },
     {
-      "bet_id": "bet_018",
+      "pick_id": "pick_018",
       "created_at": "2026-06-10T11:15:00.000Z",
       "user_id": "u_004",
       "fixture_id": "USA-PAR",
@@ -164,7 +164,7 @@
       "points": -1
     },
     {
-      "bet_id": "bet_019",
+      "pick_id": "pick_019",
       "created_at": "2026-06-10T12:00:00.000Z",
       "user_id": "u_000",
       "fixture_id": "BRA-MAR",
@@ -173,7 +173,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_020",
+      "pick_id": "pick_020",
       "created_at": "2026-06-10T12:05:00.000Z",
       "user_id": "u_001",
       "fixture_id": "BRA-MAR",
@@ -182,7 +182,7 @@
       "points": -1
     },
     {
-      "bet_id": "bet_021",
+      "pick_id": "pick_021",
       "created_at": "2026-06-10T12:10:00.000Z",
       "user_id": "u_002",
       "fixture_id": "BRA-MAR",
@@ -191,7 +191,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_022",
+      "pick_id": "pick_022",
       "created_at": "2026-06-10T12:15:00.000Z",
       "user_id": "u_003",
       "fixture_id": "BRA-MAR",
@@ -200,7 +200,7 @@
       "points": -1
     },
     {
-      "bet_id": "bet_023",
+      "pick_id": "pick_023",
       "created_at": "2026-06-10T12:20:00.000Z",
       "user_id": "u_004",
       "fixture_id": "BRA-MAR",
@@ -209,7 +209,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_024",
+      "pick_id": "pick_024",
       "created_at": "2026-06-10T13:00:00.000Z",
       "user_id": "u_000",
       "fixture_id": "QAT-SUI",
@@ -218,7 +218,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_025",
+      "pick_id": "pick_025",
       "created_at": "2026-06-10T13:05:00.000Z",
       "user_id": "u_001",
       "fixture_id": "QAT-SUI",
@@ -227,7 +227,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_026",
+      "pick_id": "pick_026",
       "created_at": "2026-06-10T13:10:00.000Z",
       "user_id": "u_002",
       "fixture_id": "QAT-SUI",
@@ -236,7 +236,7 @@
       "points": 1
     },
     {
-      "bet_id": "bet_027",
+      "pick_id": "pick_027",
       "created_at": "2026-06-10T13:15:00.000Z",
       "user_id": "u_003",
       "fixture_id": "QAT-SUI",
@@ -245,7 +245,7 @@
       "points": -1
     },
     {
-      "bet_id": "bet_028",
+      "pick_id": "pick_028",
       "created_at": "2026-06-13T08:00:00.000Z",
       "user_id": "u_000",
       "fixture_id": "HAI-SCO",
@@ -255,7 +255,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_029",
+      "pick_id": "pick_029",
       "created_at": "2026-06-13T08:05:00.000Z",
       "user_id": "u_001",
       "fixture_id": "HAI-SCO",
@@ -265,7 +265,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_030",
+      "pick_id": "pick_030",
       "created_at": "2026-06-13T08:10:00.000Z",
       "user_id": "u_002",
       "fixture_id": "HAI-SCO",
@@ -275,7 +275,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_031",
+      "pick_id": "pick_031",
       "created_at": "2026-06-13T08:15:00.000Z",
       "user_id": "u_003",
       "fixture_id": "HAI-SCO",
@@ -285,7 +285,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_032",
+      "pick_id": "pick_032",
       "created_at": "2026-06-13T09:00:00.000Z",
       "user_id": "u_000",
       "fixture_id": "AUS-TUR",
@@ -295,7 +295,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_033",
+      "pick_id": "pick_033",
       "created_at": "2026-06-13T09:05:00.000Z",
       "user_id": "u_001",
       "fixture_id": "AUS-TUR",
@@ -305,7 +305,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_034",
+      "pick_id": "pick_034",
       "created_at": "2026-06-13T09:10:00.000Z",
       "user_id": "u_002",
       "fixture_id": "AUS-TUR",
@@ -315,7 +315,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_035",
+      "pick_id": "pick_035",
       "created_at": "2026-06-13T09:15:00.000Z",
       "user_id": "u_003",
       "fixture_id": "AUS-TUR",
@@ -325,7 +325,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_036",
+      "pick_id": "pick_036",
       "created_at": "2026-06-13T09:20:00.000Z",
       "user_id": "u_004",
       "fixture_id": "AUS-TUR",
@@ -335,7 +335,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_037",
+      "pick_id": "pick_037",
       "created_at": "2026-06-13T10:00:00.000Z",
       "user_id": "u_001",
       "fixture_id": "GER-CUR",
@@ -345,7 +345,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_038",
+      "pick_id": "pick_038",
       "created_at": "2026-06-13T10:05:00.000Z",
       "user_id": "u_002",
       "fixture_id": "GER-CUR",
@@ -355,7 +355,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_039",
+      "pick_id": "pick_039",
       "created_at": "2026-06-13T10:10:00.000Z",
       "user_id": "u_003",
       "fixture_id": "GER-CUR",
@@ -365,7 +365,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_040",
+      "pick_id": "pick_040",
       "created_at": "2026-06-13T10:15:00.000Z",
       "user_id": "u_004",
       "fixture_id": "GER-CUR",
@@ -375,7 +375,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_041",
+      "pick_id": "pick_041",
       "created_at": "2026-06-13T11:00:00.000Z",
       "user_id": "u_000",
       "fixture_id": "NED-JPN",
@@ -385,7 +385,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_042",
+      "pick_id": "pick_042",
       "created_at": "2026-06-13T11:05:00.000Z",
       "user_id": "u_001",
       "fixture_id": "NED-JPN",
@@ -395,7 +395,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_043",
+      "pick_id": "pick_043",
       "created_at": "2026-06-13T11:10:00.000Z",
       "user_id": "u_002",
       "fixture_id": "NED-JPN",
@@ -405,7 +405,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_044",
+      "pick_id": "pick_044",
       "created_at": "2026-06-13T11:15:00.000Z",
       "user_id": "u_003",
       "fixture_id": "NED-JPN",
@@ -415,7 +415,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_045",
+      "pick_id": "pick_045",
       "created_at": "2026-06-13T11:20:00.000Z",
       "user_id": "u_004",
       "fixture_id": "NED-JPN",
@@ -425,7 +425,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_046",
+      "pick_id": "pick_046",
       "created_at": "2026-06-13T12:00:00.000Z",
       "user_id": "u_000",
       "fixture_id": "CIV-ECU",
@@ -435,7 +435,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_047",
+      "pick_id": "pick_047",
       "created_at": "2026-06-13T12:05:00.000Z",
       "user_id": "u_001",
       "fixture_id": "CIV-ECU",
@@ -445,7 +445,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_048",
+      "pick_id": "pick_048",
       "created_at": "2026-06-13T12:10:00.000Z",
       "user_id": "u_002",
       "fixture_id": "CIV-ECU",
@@ -455,7 +455,7 @@
       "profit": null
     },
     {
-      "bet_id": "bet_049",
+      "pick_id": "pick_049",
       "created_at": "2026-06-13T12:15:00.000Z",
       "user_id": "u_003",
       "fixture_id": "CIV-ECU",
@@ -465,34 +465,34 @@
       "profit": null
     },
     {
-      "bet_id": "auto_u_004_MEX-RSA",
+      "pick_id": "auto_u_004_MEX-RSA",
       "created_at": "2026-06-11T19:00:00.000Z",
       "user_id": "u_004",
       "fixture_id": "MEX-RSA",
       "pick_type": null,
-      "result": "NO_BET",
+      "result": "NO_PICK",
       "points": -1,
-      "_no_bet": true
+      "_no_pick": true
     },
     {
-      "bet_id": "auto_u_002_USA-PAR",
+      "pick_id": "auto_u_002_USA-PAR",
       "created_at": "2026-06-13T01:00:00.000Z",
       "user_id": "u_002",
       "fixture_id": "USA-PAR",
       "pick_type": null,
-      "result": "NO_BET",
+      "result": "NO_PICK",
       "points": -1,
-      "_no_bet": true
+      "_no_pick": true
     },
     {
-      "bet_id": "auto_u_004_QAT-SUI",
+      "pick_id": "auto_u_004_QAT-SUI",
       "created_at": "2026-06-13T19:00:00.000Z",
       "user_id": "u_004",
       "fixture_id": "QAT-SUI",
       "pick_type": null,
-      "result": "NO_BET",
+      "result": "NO_PICK",
       "points": -1,
-      "_no_bet": true
+      "_no_pick": true
     }
   ]
 }

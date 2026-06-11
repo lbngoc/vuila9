@@ -47,28 +47,28 @@ function resolveByPick(pickType, fixture) {
 // ── Main ───────────────────────────────────────────────────────────────
 function main() {
   const fixtures = load('fixtures');
-  const bets     = load('bets');
-  if (!fixtures || !bets) { console.log('calculate-results: missing data, skipping.'); return; }
+  const picks    = load('picks');
+  if (!fixtures || !picks) { console.log('calculate-results: missing data, skipping.'); return; }
 
   const fixtureMap = Object.fromEntries(fixtures.map(f => [f.fixture_id, f]));
 
   let resolved = 0;
-  const enriched = bets.map(bet => {
-    const fixture = fixtureMap[bet.fixture_id];
+  const enriched = picks.map(pick => {
+    const fixture = fixtureMap[pick.fixture_id];
     if (!fixture || !fixture.is_finished) {
-      return { ...bet, result: null, points: null, profit: null };
+      return { ...pick, result: null, points: null, profit: null };
     }
 
-    const result = resolveByPick(bet.pick_type, fixture);
-    if (!result) return { ...bet, result: null, points: null, profit: null };
+    const result = resolveByPick(pick.pick_type, fixture);
+    if (!result) return { ...pick, result: null, points: null, profit: null };
 
     resolved++;
-    return { ...bet, result, points: POINTS[result] ?? 0 };
+    return { ...pick, result, points: POINTS[result] ?? 0 };
   });
 
-  // ── No-bet: active users who didn't bet on a finished fixture ────────────
+  // ── No-pick: active users who didn't pick on a finished fixture ──────────
   let autoAdded = 0;
-  if (POINTS.NO_BET < 0) {
+  if (POINTS.NO_PICK < 0) {
     const users = load('users');
     if (users) {
       const activeUsers      = users.filter(u => u.status === 'active');
@@ -83,25 +83,25 @@ function main() {
         for (const user of activeUsers) {
           if (!betters.has(user.id)) {
             enriched.push({
-              bet_id:     `auto_${user.id}_${fixture.fixture_id}`,
+              pick_id:     `auto_${user.id}_${fixture.fixture_id}`,
               created_at: fixture.kickoff_at,
               user_id:    user.id,
               fixture_id: fixture.fixture_id,
               pick_type:  null,
-              result:     'NO_BET',
-              points:     POINTS.NO_BET ?? 0,
-              _no_bet:    true,
+              result:     'NO_PICK',
+              points:     POINTS.NO_PICK ?? 0,
+              _no_pick:    true,
             });
             autoAdded++;
           }
         }
       }
-      if (autoAdded) console.log(`calculate-results: no-bet added ${autoAdded} entries`);
+      if (autoAdded) console.log(`calculate-results: no-pick added ${autoAdded} entries`);
     }
   }
 
-  fs.writeFileSync(`${GEN}/bets.json`, JSON.stringify(enriched, null, 2), 'utf8');
-  console.log(`calculate-results: resolved ${resolved}/${bets.length} bets`);
+  fs.writeFileSync(`${GEN}/picks.json`, JSON.stringify(enriched, null, 2), 'utf8');
+  console.log(`calculate-results: resolved ${resolved}/${picks.length} picks`);
   console.log('calculate-results: done');
 }
 

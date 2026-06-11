@@ -5,11 +5,11 @@ permalink: /my-picks/
 ---
 
 <script>
-  const MY_BETS_DATA     = {{ bets.data | dump | safe }};
+  const MY_BETS_DATA     = {{ picks.data | dump | safe }};
   const MY_FIXTURE_DATA  = {{ fixtures.data | dump | safe }};
 </script>
 
-<div x-data="myBetsPage(MY_BETS_DATA, MY_FIXTURE_DATA)" x-init="init()">
+<div x-data="myPicksPage(MY_BETS_DATA, MY_FIXTURE_DATA)" x-init="init()">
 
   <!-- Not logged in -->
   <div x-show="!user" x-cloak class="text-center py-16 space-y-4">
@@ -30,7 +30,7 @@ permalink: /my-picks/
           Dự đoán của <span x-text="user?.display_name"></span>
         </h1>
         <p class="text-sm text-gray-500 mt-1">
-          <span x-text="resolvedCount"></span>/<span x-text="bets.length"></span> đã kết thúc
+          <span x-text="resolvedCount"></span>/<span x-text="picks.length"></span> đã kết thúc
           &nbsp;·&nbsp;
           Tổng điểm:
           <span class="font-bold"
@@ -49,7 +49,7 @@ permalink: /my-picks/
     </div>
 
     <!-- Empty state -->
-    <template x-if="bets.length === 0">
+    <template x-if="picks.length === 0">
       <div class="bg-white dark:bg-gray-900 rounded-xl p-12 text-center text-gray-500">
         <p class="text-3xl mb-3">🎯</p>
         <p>Bạn chưa có dự đoán nào.</p>
@@ -60,57 +60,57 @@ permalink: /my-picks/
     <!-- Bets list -->
     <div x-data="{ showAll: false }" class="space-y-3">
       <div class="space-y-3">
-        <template x-for="bet in (showAll ? bets : bets.slice(0, 10))" :key="bet.bet_id">
+        <template x-for="pick in (showAll ? picks : picks.slice(0, 10))" :key="pick.pick_id">
           <div class="bg-white dark:bg-gray-900 rounded-xl p-4">
 
             <!-- Row 1: match + result badge -->
             <div class="flex items-start justify-between gap-3">
               <div class="flex-1 min-w-0">
                 <p class="text-gray-900 dark:text-white font-medium text-sm leading-snug"
-                   x-text="(fixtures[bet.fixture_id]?.home_team ?? '?') + ' vs ' + (fixtures[bet.fixture_id]?.away_team ?? '?')">
+                   x-text="(fixtures[pick.fixture_id]?.home_team ?? '?') + ' vs ' + (fixtures[pick.fixture_id]?.away_team ?? '?')">
                 </p>
-                <p class="text-gray-500 text-xs mt-0.5" x-text="formatDate(bet.created_at)"></p>
+                <p class="text-gray-500 text-xs mt-0.5" x-text="formatDate(pick.created_at)"></p>
               </div>
 
               <!-- Result badge -->
-              <span x-show="bet.result"
-                    :class="resultClass(bet.result)"
+              <span x-show="pick.result"
+                    :class="resultClass(pick.result)"
                     class="text-xs font-semibold px-2 py-0.5 rounded flex-shrink-0"
-                    x-text="resultLabel(bet.result)">
+                    x-text="resultLabel(pick.result)">
               </span>
-              <template x-if="!bet.result">
+              <template x-if="!pick.result">
                 <span class="flex-shrink-0">
-                  <span x-show="bet._pending" x-cloak class="text-xs text-yellow-600 dark:text-yellow-500/80">(chưa sync)</span>
-                  <span x-show="!bet._pending" class="text-xs text-gray-400 dark:text-gray-700">Chưa KT</span>
+                  <span x-show="pick._pending" x-cloak class="text-xs text-yellow-600 dark:text-yellow-500/80">(chưa sync)</span>
+                  <span x-show="!pick._pending" class="text-xs text-gray-400 dark:text-gray-700">Chưa KT</span>
                 </span>
               </template>
             </div>
 
             <!-- Row 2: pick + score + points -->
             <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-3 text-sm">
-              <span class="text-gray-600 dark:text-gray-400" x-text="pickLabel(bet)"></span>
+              <span class="text-gray-600 dark:text-gray-400" x-text="pickLabel(pick)"></span>
 
-              <template x-if="fixtures[bet.fixture_id]?.handicap">
+              <template x-if="fixtures[pick.fixture_id]?.handicap">
                 <span class="text-gray-500 text-xs">
                   (điểm chấp
-                  <span x-text="Math.abs(parseFloat(fixtures[bet.fixture_id].handicap))"></span>
+                  <span x-text="Math.abs(parseFloat(fixtures[pick.fixture_id].handicap))"></span>
                   bàn)
                 </span>
               </template>
 
-              <template x-if="fixtures[bet.fixture_id]?.is_finished">
+              <template x-if="fixtures[pick.fixture_id]?.is_finished">
                 <span class="text-gray-500 text-xs">
                   KQ:
                   <span class="text-gray-900 dark:text-white"
-                        x-text="fixtures[bet.fixture_id].result_home + '–' + fixtures[bet.fixture_id].result_away">
+                        x-text="fixtures[pick.fixture_id].result_home + '–' + fixtures[pick.fixture_id].result_away">
                   </span>
                 </span>
               </template>
 
-              <span x-show="bet.points != null"
+              <span x-show="pick.points != null"
                     class="ml-auto font-bold"
-                    :class="bet.points > 0 ? 'text-emerald-500 dark:text-emerald-400' : bet.points < 0 ? 'text-red-500 dark:text-red-400' : 'text-gray-500'"
-                    x-text="ptDisplay(bet.points) + ' điểm'">
+                    :class="pick.points > 0 ? 'text-emerald-500 dark:text-emerald-400' : pick.points < 0 ? 'text-red-500 dark:text-red-400' : 'text-gray-500'"
+                    x-text="ptDisplay(pick.points) + ' điểm'">
               </span>
             </div>
 
@@ -118,7 +118,7 @@ permalink: /my-picks/
         </template>
       </div>
 
-      <template x-if="bets.length > 10">
+      <template x-if="picks.length > 10">
         <div class="flex justify-center pt-1">
           <button @click="showAll = !showAll"
                   class="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-medium
@@ -128,7 +128,7 @@ permalink: /my-picks/
                          transition-colors duration-150">
             <span x-show="!showAll">
               Xem thêm
-              <span class="text-xs text-gray-400 dark:text-gray-500 font-normal" x-text="'(' + (bets.length - 10) + ' trận)'"></span>
+              <span class="text-xs text-gray-400 dark:text-gray-500 font-normal" x-text="'(' + (picks.length - 10) + ' trận)'"></span>
               <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 inline ml-0.5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
               </svg>
