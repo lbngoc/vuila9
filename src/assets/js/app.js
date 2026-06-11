@@ -189,6 +189,10 @@ function appState() {
     refreshing: false,
     _dots: '.',
     _dotsInterval: null,
+    renameModal: false,
+    renameValue: '',
+    renameError: '',
+    renameLoading: false,
     init() {
       try { this._user = JSON.parse(localStorage.getItem(_KEY) || 'null'); }
       catch { this._user = null; }
@@ -208,6 +212,35 @@ function appState() {
       localStorage.removeItem(_KEY);
       this._user = null;
       window.location.href = '/';
+    },
+    openRenameModal() {
+      this.renameValue   = this._user?.display_name || '';
+      this.renameError   = '';
+      this.renameLoading = false;
+      this.renameModal   = true;
+    },
+    async submitRename() {
+      const name = this.renameValue.trim();
+      if (!name)          { this.renameError = 'Tên hiển thị không được để trống.'; return; }
+      if (name.length > 50) { this.renameError = 'Tên hiển thị tối đa 50 ký tự.'; return; }
+      this.renameLoading = true;
+      this.renameError   = '';
+      try {
+        const res  = await fetch('/.netlify/functions/update-display-name', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ username: this._user.username, _session_hash: this._user._ph, display_name: name }),
+        });
+        const data = await res.json();
+        if (!data.success) { this.renameError = data.error || 'Có lỗi xảy ra.'; return; }
+        this._user = { ...this._user, display_name: name };
+        localStorage.setItem(_KEY, JSON.stringify(this._user));
+        this.renameModal = false;
+      } catch {
+        this.renameError = 'Không thể kết nối. Vui lòng thử lại.';
+      } finally {
+        this.renameLoading = false;
+      }
     },
     async refreshCache() {
       if (this.refreshing) return;
@@ -307,10 +340,11 @@ function leaderboardPage(staticRows) {
             display_name:    u.display_name,
             played:          scored.length,
             total_submitted: bets.length,
-            wins:   scored.filter(b => b.result === 'WIN').length,
-            draws:  scored.filter(b => b.result === 'PUSH').length,
-            losses: scored.filter(b => b.result === 'LOSE').length,
-            points: scored.reduce((s, b) => s + (parseFloat(b.points) || 0), 0),
+            wins:    scored.filter(b => b.result === 'WIN').length,
+            draws:   scored.filter(b => b.result === 'PUSH').length,
+            losses:  scored.filter(b => b.result === 'LOSE').length,
+            no_bets: scored.filter(b => b.result === 'NO_BET').length,
+            points:  scored.reduce((s, b) => s + (parseFloat(b.points) || 0), 0),
             _new: true,
           };
         });
@@ -381,7 +415,7 @@ function myBetsPage(buildBetsData, fixturesData) {
       });
     },
     pickLabel(bet) {
-      if (bet._auto_lose) return '— Không dự đoán';
+      if (bet._no_bet) return '— Không dự đoán';
       const f = this.fixtures[bet.fixture_id];
       return {
         home: f ? `${f.home_team} thắng` : 'Đội nhà thắng',
@@ -390,11 +424,12 @@ function myBetsPage(buildBetsData, fixturesData) {
       }[bet.pick_type] || bet.pick_type;
     },
     resultLabel(r) {
-      return { WIN: 'Thắng', PUSH: 'Hòa chấp', LOSE: 'Thua' }[r] || r;
+      return { WIN: 'Thắng', PUSH: 'Hòa chấp', LOSE: 'Thua', NO_BET: 'Bỏ qua' }[r] || r;
     },
     resultClass(r) {
-      if (r === 'WIN') return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300';
-      if (r === 'LOSE') return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
+      if (r === 'WIN')    return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300';
+      if (r === 'LOSE')   return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
+      if (r === 'NO_BET') return 'bg-pink-100 text-pink-600 dark:bg-pink-900 dark:text-pink-300';
       return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300';
     },
     ptDisplay(pts) {

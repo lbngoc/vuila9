@@ -26,7 +26,8 @@ function doPost(e) {
       return jsonResponse({ error: 'Unauthorized', code: 'UNAUTHORIZED', status: 401 });
     }
 
-    if (payload.action === 'register') return handleRegister(payload);
+    if (payload.action === 'register')         return handleRegister(payload);
+    if (payload.action === 'update_display_name') return handleUpdateDisplayName(payload);
     return handleBet(payload);
 
   } catch (err) {
@@ -143,6 +144,34 @@ function handleBet(payload) {
 
   betsSheet.appendRow([bet_id, payload.created_at, user.user_id, payload.fixture_id, payload.pick_type]);
   return jsonResponse({ success: true, bet_id });
+}
+
+// ── Update display name ────────────────────────────────────────────────
+
+function handleUpdateDisplayName(payload) {
+  if (!payload.username || !payload._session_hash || !payload.display_name) {
+    return jsonResponse({ error: 'Thiếu thông tin bắt buộc.', code: 'MISSING_FIELDS', status: 400 });
+  }
+
+  const ss   = SpreadsheetApp.getActiveSpreadsheet();
+  const user = findUser(ss, payload.username);
+  if (!user)
+    return jsonResponse({ error: 'Username không tồn tại.', code: 'USER_NOT_FOUND', status: 401 });
+  if (user.status !== 'active')
+    return jsonResponse({ error: 'Tài khoản chưa được kích hoạt.', code: 'INACTIVE_USER', status: 403 });
+  if (user.passcode_hash !== payload._session_hash)
+    return jsonResponse({ error: 'Phiên đăng nhập không hợp lệ.', code: 'INVALID_SESSION', status: 401 });
+
+  const sheet = ss.getSheetByName('users');
+  const data  = sheet.getDataRange().getValues();
+  // columns: id(0) username(1) display_name(2) ...
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][0]) === user.user_id) {
+      sheet.getRange(i + 1, 3).setValue(payload.display_name);
+      return jsonResponse({ success: true });
+    }
+  }
+  return jsonResponse({ error: 'Không tìm thấy người dùng.', code: 'USER_NOT_FOUND', status: 404 });
 }
 
 // ── User registration ──────────────────────────────────────────────────
