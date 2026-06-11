@@ -321,6 +321,11 @@ document.addEventListener('alpine:init', () => {
 function leaderboardPage(staticRows) {
   return {
     rows: staticRows,
+    showCopyModal: false,
+    copyTarget: null,
+    copyLoading: false,
+    copyMessage: '',
+    isCopyError: false,
     async init() {
       const [liveUsers, liveBets] = await Promise.all([fetchLiveUsers(), fetchLiveBets()]);
       if (!liveUsers) return;
@@ -349,6 +354,87 @@ function leaderboardPage(staticRows) {
           };
         });
       this.rows = [...enriched, ...fresh];
+
+      // Listen for cache refresh to update submitted counts dynamically
+      window.addEventListener('funnybet:refresh', (e) => {
+        const freshBets = e.detail;
+        this.rows = this.rows.map(u => ({
+          ...u,
+          total_submitted: freshBets ? freshBets.filter(b => b.user_id === u.user_id).length : null,
+        }));
+      });
+    },
+    openCopyModal(targetUser) {
+      this.copyTarget = targetUser;
+      this.copyMessage = '';
+      this.isCopyError = false;
+      this.showCopyModal = true;
+    },
+    async confirmCopy() {
+      if (!this.copyTarget || this.copyLoading) return;
+      const u = (() => { try { return JSON.parse(localStorage.getItem(_KEY) || 'null'); } catch { return null; } })();
+      if (!u) {
+        this.copyMessage = 'Bạn cần đăng nhập để thực hiện tính năng này.';
+        this.isCopyError = true;
+        return;
+      }
+
+      this.copyLoading = true;
+      this.copyMessage = '';
+      this.isCopyError = false;
+
+      try {
+        const res = await fetch('/.netlify/functions/copy-picks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: u.username,
+            _session_hash: u._ph,
+            target_user_id: this.copyTarget.user_id,
+          }),
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          if (data.copiedCount > 0) {
+            // Clear pending bets for these copied fixtures if any to prevent UI override
+            if (data.copiedFixtureIds && data.copiedFixtureIds.length > 0) {
+              try {
+                const pending = JSON.parse(localStorage.getItem(_PENDING_KEY) || '[]');
+                const filtered = pending.filter(b => !data.copiedFixtureIds.includes(b.fixture_id));
+                localStorage.setItem(_PENDING_KEY, JSON.stringify(filtered));
+              } catch {}
+            }
+
+            // Invalidate cache and trigger reload
+            localStorage.removeItem(_LIVE_CACHE_KEY);
+            const freshBets = await fetchLiveBets();
+            if (freshBets) {
+              window.dispatchEvent(new CustomEvent('funnybet:refresh', { detail: freshBets }));
+            }
+
+            this.copyMessage = `✅ Đã sao chép thành công ${data.copiedCount} dự đoán của ${this.copyTarget.display_name}!`;
+            this.isCopyError = false;
+
+            setTimeout(() => {
+              this.showCopyModal = false;
+              this.copyTarget = null;
+              this.copyMessage = '';
+            }, 2000);
+          } else {
+            this.copyMessage = '⚠️ Người chơi này không có dự đoán nào chưa đóng để sao chép.';
+            this.isCopyError = true;
+          }
+        } else {
+          this.copyMessage = `❌ ${data.error || 'Lỗi không xác định.'}`;
+          this.isCopyError = true;
+        }
+      } catch (err) {
+        this.copyMessage = '❌ Lỗi kết nối. Vui lòng thử lại.';
+        this.isCopyError = true;
+      } finally {
+        this.copyLoading = false;
+      }
     },
   };
 }

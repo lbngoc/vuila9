@@ -16,7 +16,7 @@ function readCsv(name) {
   const src = `${RAW}/${name}.csv`;
   if (!fs.existsSync(src)) { console.warn(`normalize: ${name}.csv not found, skipping.`); return null; }
   const content = fs.readFileSync(src, 'utf8');
-  return parse(content, { columns: true, skip_empty_lines: true, trim: true });
+  return parse(content, { columns: true, skip_empty_lines: true, trim: true, relax_column_count: true });
 }
 
 function toIso(str) {

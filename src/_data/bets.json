@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-11T01:54:26.447Z",
+  "generated_at": "2026-06-11T03:20:47.209Z",
   "data": [
     {
       "bet_id": "bet_001",
@@ -44,7 +44,7 @@
       "fixture_id": "KOR-CZE",
       "pick_type": "away",
       "result": "PUSH",
-      "points": 3
+      "points": 2
     },
     {
       "bet_id": "bet_006",
@@ -53,7 +53,7 @@
       "fixture_id": "KOR-CZE",
       "pick_type": "home",
       "result": "PUSH",
-      "points": 3
+      "points": 2
     },
     {
       "bet_id": "bet_007",
@@ -62,7 +62,7 @@
       "fixture_id": "KOR-CZE",
       "pick_type": "home",
       "result": "PUSH",
-      "points": 3
+      "points": 2
     },
     {
       "bet_id": "bet_008",
@@ -80,7 +80,7 @@
       "fixture_id": "KOR-CZE",
       "pick_type": "away",
       "result": "PUSH",
-      "points": 3
+      "points": 2
     },
     {
       "bet_id": "bet_010",
@@ -250,8 +250,9 @@
       "user_id": "u_000",
       "fixture_id": "HAI-SCO",
       "pick_type": "away",
-      "result": "LOSE",
-      "points": -1
+      "result": null,
+      "points": null,
+      "profit": null
     },
     {
       "bet_id": "bet_029",
@@ -259,8 +260,9 @@
       "user_id": "u_001",
       "fixture_id": "HAI-SCO",
       "pick_type": "home",
-      "result": "WIN",
-      "points": 1
+      "result": null,
+      "points": null,
+      "profit": null
     },
     {
       "bet_id": "bet_030",
@@ -268,8 +270,9 @@
       "user_id": "u_002",
       "fixture_id": "HAI-SCO",
       "pick_type": "away",
-      "result": "LOSE",
-      "points": -1
+      "result": null,
+      "points": null,
+      "profit": null
     },
     {
       "bet_id": "bet_031",
@@ -277,8 +280,9 @@
       "user_id": "u_003",
       "fixture_id": "HAI-SCO",
       "pick_type": "home",
-      "result": "WIN",
-      "points": 1
+      "result": null,
+      "points": null,
+      "profit": null
     },
     {
       "bet_id": "bet_032",
@@ -286,8 +290,9 @@
       "user_id": "u_000",
       "fixture_id": "AUS-TUR",
       "pick_type": "draw",
-      "result": "LOSE",
-      "points": -1
+      "result": null,
+      "points": null,
+      "profit": null
     },
     {
       "bet_id": "bet_033",
@@ -295,8 +300,9 @@
       "user_id": "u_001",
       "fixture_id": "AUS-TUR",
       "pick_type": "home",
-      "result": "WIN",
-      "points": 1
+      "result": null,
+      "points": null,
+      "profit": null
     },
     {
       "bet_id": "bet_034",
@@ -304,8 +310,9 @@
       "user_id": "u_002",
       "fixture_id": "AUS-TUR",
       "pick_type": "away",
-      "result": "LOSE",
-      "points": -1
+      "result": null,
+      "points": null,
+      "profit": null
     },
     {
       "bet_id": "bet_035",
@@ -313,8 +320,9 @@
       "user_id": "u_003",
       "fixture_id": "AUS-TUR",
       "pick_type": "draw",
-      "result": "LOSE",
-      "points": -1
+      "result": null,
+      "points": null,
+      "profit": null
     },
     {
       "bet_id": "bet_036",
@@ -322,8 +330,9 @@
       "user_id": "u_004",
       "fixture_id": "AUS-TUR",
       "pick_type": "home",
-      "result": "WIN",
-      "points": 1
+      "result": null,
+      "points": null,
+      "profit": null
     },
     {
       "bet_id": "bet_037",
@@ -331,8 +340,9 @@
       "user_id": "u_001",
       "fixture_id": "GER-CUR",
       "pick_type": "home",
-      "result": "LOSE",
-      "points": -1
+      "result": null,
+      "points": null,
+      "profit": null
     },
     {
       "bet_id": "bet_038",
@@ -340,8 +350,9 @@
       "user_id": "u_002",
       "fixture_id": "GER-CUR",
       "pick_type": "home",
-      "result": "LOSE",
-      "points": -1
+      "result": null,
+      "points": null,
+      "profit": null
     },
     {
       "bet_id": "bet_039",
@@ -349,8 +360,9 @@
       "user_id": "u_003",
       "fixture_id": "GER-CUR",
       "pick_type": "away",
-      "result": "WIN",
-      "points": 1
+      "result": null,
+      "points": null,
+      "profit": null
     },
     {
       "bet_id": "bet_040",
@@ -358,8 +370,9 @@
       "user_id": "u_004",
       "fixture_id": "GER-CUR",
       "pick_type": "home",
-      "result": "LOSE",
-      "points": -1
+      "result": null,
+      "points": null,
+      "profit": null
     },
     {
       "bet_id": "bet_041",
@@ -450,6 +463,36 @@
       "result": null,
       "points": null,
       "profit": null
+    },
+    {
+      "bet_id": "auto_u_004_MEX-RSA",
+      "created_at": "2026-06-11T19:00:00.000Z",
+      "user_id": "u_004",
+      "fixture_id": "MEX-RSA",
+      "pick_type": null,
+      "result": "NO_BET",
+      "points": -1,
+      "_no_bet": true
+    },
+    {
+      "bet_id": "auto_u_002_USA-PAR",
+      "created_at": "2026-06-13T01:00:00.000Z",
+      "user_id": "u_002",
+      "fixture_id": "USA-PAR",
+      "pick_type": null,
+      "result": "NO_BET",
+      "points": -1,
+      "_no_bet": true
+    },
+    {
+      "bet_id": "auto_u_004_QAT-SUI",
+      "created_at": "2026-06-13T19:00:00.000Z",
+      "user_id": "u_004",
+      "fixture_id": "QAT-SUI",
+      "pick_type": null,
+      "result": "NO_BET",
+      "points": -1,
+      "_no_bet": true
     }
   ]
 }
