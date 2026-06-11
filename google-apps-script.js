@@ -28,6 +28,7 @@ function doPost(e) {
 
     if (payload.action === 'register')         return handleRegister(payload);
     if (payload.action === 'update_display_name') return handleUpdateDisplayName(payload);
+    if (payload.action === 'copy_predictions')    return handleCopyPredictions(payload);
     return handlePick(payload);
 
   } catch (err) {
@@ -172,6 +173,115 @@ function handleUpdateDisplayName(payload) {
     }
   }
   return jsonResponse({ error: 'Không tìm thấy người dùng.', code: 'USER_NOT_FOUND', status: 404 });
+}
+
+// ── Copy predictions ───────────────────────────────────────────────────
+
+function handleCopyPredictions(payload) {
+  if (!payload.username || !payload._session_hash || !payload.target_user_id) {
+    return jsonResponse({ error: 'Thiếu thông tin bắt buộc.', code: 'MISSING_FIELDS', status: 400 });
+  }
+
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  // 1. Auth — lookup logged-in user, verify session hash, check active
+  const user = findUser(ss, payload.username);
+  if (!user) {
+    return jsonResponse({ error: 'Username không tồn tại.', code: 'USER_NOT_FOUND', status: 401 });
+  }
+  if (user.status !== 'active') {
+    return jsonResponse({ error: 'Tài khoản chưa được kích hoạt. Liên hệ admin.', code: 'INACTIVE_USER', status: 403 });
+  }
+  if (user.passcode_hash !== payload._session_hash) {
+    return jsonResponse({ error: 'Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.', code: 'INVALID_SESSION', status: 401 });
+  }
+
+  // Prevent copying from self
+  if (user.user_id === payload.target_user_id) {
+    return jsonResponse({ error: 'Không thể tự sao chép chính mình.', code: 'CANNOT_COPY_SELF', status: 400 });
+  }
+
+  // 2. Verify target user exists
+  const usersSheet = ss.getSheetByName('users');
+  if (!usersSheet) return jsonResponse({ error: 'Sheet "users" not found', code: 'INTERNAL_ERROR', status: 500 });
+  const usersData = usersSheet.getDataRange().getValues();
+  let targetUserExists = false;
+  for (let i = 1; i < usersData.length; i++) {
+    if (String(usersData[i][0]) === payload.target_user_id) {
+      targetUserExists = true;
+      break;
+    }
+  }
+  if (!targetUserExists) {
+    return jsonResponse({ error: 'Người dùng mục tiêu không tồn tại.', code: 'TARGET_USER_NOT_FOUND', status: 404 });
+  }
+
+  // 3. Find eligible fixtures (upcoming, not locked)
+  const fixturesSheet = ss.getSheetByName('fixtures');
+  if (!fixturesSheet) return jsonResponse({ error: 'Sheet "fixtures" not found', code: 'INTERNAL_ERROR', status: 500 });
+  const fixturesData = fixturesSheet.getDataRange().getValues();
+  const lockMinutes = parseInt(PropertiesService.getScriptProperties().getProperty('PICK_LOCK_MINUTES')) || 60;
+  const now = Date.now();
+
+  const eligibleFixtures = {};
+  for (let i = 1; i < fixturesData.length; i++) {
+    const fid = String(fixturesData[i][0]);
+    const status = String(fixturesData[i][6]);
+    const kickoffAt = String(fixturesData[i][2]);
+    const kickoffMs = new Date(kickoffAt).getTime();
+    const isLocked = now >= kickoffMs - lockMinutes * 60 * 1000 || status === 'finished';
+    if (!isLocked) {
+      eligibleFixtures[fid] = true;
+    }
+  }
+
+  // 4. Find all picks by target user for eligible fixtures
+  const picksSheet = ss.getSheetByName('picks');
+  if (!picksSheet) return jsonResponse({ error: 'Sheet "picks" not found', code: 'INTERNAL_ERROR', status: 500 });
+  const picksData = picksSheet.getDataRange().getValues();
+
+  const targetPicks = {};
+  for (let i = 1; i < picksData.length; i++) {
+    const uid = String(picksData[i][2]);
+    const fid = String(picksData[i][3]);
+    const pick = String(picksData[i][4]);
+    if (uid === payload.target_user_id && eligibleFixtures[fid] && pick) {
+      targetPicks[fid] = pick;
+    }
+  }
+
+  // 5. Gather logged-in user's existing picks to decide update vs append
+  const userPickRowIndex = {};
+  for (let i = 1; i < picksData.length; i++) {
+    const uid = String(picksData[i][2]);
+    const fid = String(picksData[i][3]);
+    if (uid === user.user_id) {
+      userPickRowIndex[fid] = i + 1;
+    }
+  }
+
+  // 6. Copy picks
+  const created_at = new Date().toISOString();
+  let copiedCount = 0;
+  const copiedFixtureIds = [];
+
+  for (const fid in targetPicks) {
+    const pick = targetPicks[fid];
+    if (userPickRowIndex[fid]) {
+      const rowIdx = userPickRowIndex[fid];
+      picksSheet.getRange(rowIdx, 2).setValue(created_at);
+      picksSheet.getRange(rowIdx, 5).setValue(pick);
+    } else {
+      const stamp  = Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'yyyyMMdd_HHmmss');
+      const rand   = Math.random().toString(36).slice(2, 6);
+      const pick_id = `pick_${stamp}_${rand}`;
+      picksSheet.appendRow([pick_id, created_at, user.user_id, fid, pick]);
+    }
+    copiedCount++;
+    copiedFixtureIds.push(fid);
+  }
+
+  return jsonResponse({ success: true, copiedCount, copiedFixtureIds });
 }
 
 // ── User registration ──────────────────────────────────────────────────
