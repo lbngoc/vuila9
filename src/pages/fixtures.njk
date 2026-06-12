@@ -22,8 +22,13 @@ permalink: /fixtures/
       <p class="text-xs text-gray-500 mt-1">{{ fixture.league }} · {{ fixture.kickoff_at | dateDisplay }} (giờ VN)
         <span x-show="selected" x-cloak class="text-emerald-600 dark:text-emerald-500 font-semibold">● Đã dự đoán</span>
       </p>
-      {% if fixture.handicap %}
-      <p class="text-xs text-amber-600 mt-1">Điểm chấp: {{ fixture.home_team }} chấp {{ fixture.handicap | replace("-", "") | replace(".0", "") }} bàn</p>
+      {% set h = (fixture.handicap or 0) | float %}
+      {% if h == 0 %}
+      <p class="text-xs text-amber-600 mt-1">Thực lực bằng nhau (không chấp)</p>
+      {% elif h > 0 %}
+      <p class="text-xs text-amber-600 mt-1">Điểm chấp: {{ fixture.away_team }} chấp {{ fixture.home_team }} {{ fixture.handicap | string | replace(".0", "") }} bàn</p>
+      {% else %}
+      <p class="text-xs text-amber-600 mt-1">Điểm chấp: {{ fixture.home_team }} chấp {{ fixture.away_team }} {{ fixture.handicap | string | replace("-", "") | replace(".0", "") }} bàn</p>
       {% endif %}
     </div>
     <div class="flex-shrink-0 ml-3 text-right">
