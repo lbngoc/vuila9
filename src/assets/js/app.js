@@ -46,17 +46,14 @@ async function fetchLivePicks() {
     if (cached && Date.now() - cached.fetched_at < _LIVE_PICKS_TTL) return cached.data;
   } catch {}
 
-  const url = window.__SHEET_PICKS_URL__;
-  if (!url) return null;
-
-  // Return in-flight promise if one is already running (prevents N concurrent CSV fetches)
+  // Return in-flight promise if one is already running (prevents N concurrent fetches)
   if (_livePicksFlight) return _livePicksFlight;
 
   _livePicksFlight = (async () => {
     try {
-      const res  = await fetch(url);
-      const text = await res.text();
-      const data = parseCSV(text);
+      const res  = await fetch('/.netlify/functions/live-picks');
+      if (!res.ok) return JSON.parse(localStorage.getItem(_LIVE_CACHE_KEY) || 'null')?.data || null;
+      const { data } = await res.json();
       localStorage.setItem(_LIVE_CACHE_KEY, JSON.stringify({ fetched_at: Date.now(), data }));
       return data;
     } catch {
@@ -71,7 +68,6 @@ async function fetchLivePicks() {
 
 // ── Live users helpers ────────────────────────────────────────────────
 
-// force=true: bỏ qua cache, luôn fetch mới (dùng khi login để kiểm tra status thực tế)
 async function fetchLiveUsers(force = false) {
   if (!force) {
     try {
@@ -80,17 +76,13 @@ async function fetchLiveUsers(force = false) {
     } catch {}
   }
 
-  const url = window.__SHEET_USERS_URL__;
-  if (!url) return null;
-
   try {
-    const res  = await fetch(url);
-    const text = await res.text();
-    const data = parseCSV(text);
+    const res  = await fetch('/.netlify/functions/live-users');
+    if (!res.ok) return JSON.parse(localStorage.getItem(_USERS_CACHE_KEY) || 'null')?.data || null;
+    const { data } = await res.json();
     localStorage.setItem(_USERS_CACHE_KEY, JSON.stringify({ fetched_at: Date.now(), data }));
     return data;
   } catch {
-    // Network error: trả về cached cũ nếu có
     try { return JSON.parse(localStorage.getItem(_USERS_CACHE_KEY) || 'null')?.data || null; }
     catch { return null; }
   }

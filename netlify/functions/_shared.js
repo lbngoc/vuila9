@@ -65,4 +65,27 @@ async function callScript(payload) {
   catch { throw new Error('Invalid JSON from Apps Script: ' + text.slice(0, 100)); }
 }
 
-module.exports = { ok, err, makeRateLimiter, setup, callScript };
+// ── CSV parser ────────────────────────────────────────────────────────
+// RFC 4180-compliant: handles quoted fields with embedded commas/newlines.
+
+function parseCSVRow(line) {
+  const cols = []; let cur = '', inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') { inQ = !inQ; }
+    else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+    else cur += c;
+  }
+  cols.push(cur.trim());
+  return cols;
+}
+
+function parseCSV(text) {
+  const [header, ...rows] = text.trim().split('\n');
+  const keys = parseCSVRow(header);
+  return rows
+    .filter(r => r.trim())
+    .map(row => Object.fromEntries(parseCSVRow(row).map((v, i) => [keys[i], v || ''])));
+}
+
+module.exports = { ok, err, makeRateLimiter, setup, callScript, parseCSV };

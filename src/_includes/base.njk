@@ -21,8 +21,6 @@
     window.PICK_LOCK_MINUTES = {{ siteConfig.pick_lock_minutes }};
     window.SITE_PUSH_POINTS = {{ siteConfig.points.PUSH }};
   </script>
-  {% if sheetConfig.picks_url %}<script>window.__SHEET_PICKS_URL__   = '{{ sheetConfig.picks_url   | safe }}';</script>{% endif %}
-  {% if sheetConfig.users_url %}<script>window.__SHEET_USERS_URL__ = '{{ sheetConfig.users_url | safe }}';</script>{% endif %}
   <script src="/assets/js/app.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
