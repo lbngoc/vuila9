@@ -4,17 +4,13 @@ title: Đăng nhập
 permalink: /login/
 ---
 
-<script>
-  const USERS_AUTH = {{ users.data | dump | safe }};
-</script>
-
 <div class="max-w-sm mx-auto mt-8">
   <div class="flex items-baseline justify-between mb-6">
     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Đăng nhập</h1>
     <a href="/#how-to-play" class="text-xs text-gray-500 dark:text-gray-600 hover:text-emerald-600 dark:hover:text-emerald-400 transition">❓ Hướng dẫn chơi</a>
   </div>
 
-  <div x-data="loginForm(USERS_AUTH)" class="bg-white dark:bg-gray-900 rounded-xl p-6 space-y-4">
+  <div x-data="loginForm()" class="bg-white dark:bg-gray-900 rounded-xl p-6 space-y-4">
 
     <div>
       <label class="block text-xs text-gray-500 mb-1.5">Username</label>

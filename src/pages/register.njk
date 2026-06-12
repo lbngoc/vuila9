@@ -5,7 +5,7 @@ permalink: /register/
 ---
 
 <script>
-  const REGISTER_USERS = {{ users.data | dump | safe }};
+  const REGISTER_USERNAMES = [{% for u in users.data %}"{{ u.username }}"{% if not loop.last %},{% endif %}{% endfor %}];
 </script>
 
 <div class="max-w-sm mx-auto py-4 space-y-6">
@@ -16,7 +16,7 @@ permalink: /register/
     <a href="/#how-to-play" class="inline-block mt-2 text-xs text-gray-500 dark:text-gray-600 hover:text-emerald-600 dark:hover:text-emerald-400 transition">❓ Hướng dẫn chơi</a>
   </div>
 
-  <div x-data="registerForm(REGISTER_USERS)" class="bg-white dark:bg-gray-900 rounded-xl p-6 space-y-4">
+  <div x-data="registerForm(REGISTER_USERNAMES)" class="bg-white dark:bg-gray-900 rounded-xl p-6 space-y-4">
 
     <!-- Success state -->
     <template x-if="done">
@@ -111,8 +111,8 @@ permalink: /register/
 </div>
 
 <script>
-function registerForm(usersData) {
-  const existingUsernames = usersData.map(u => u.username.toLowerCase());
+function registerForm(existingUsernames) {
+  // existingUsernames: array of usernames (already lowercase from build pipeline)
   return {
     username: '',
     display_name: '',

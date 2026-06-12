@@ -26,7 +26,8 @@ function doPost(e) {
       return jsonResponse({ error: 'Unauthorized', code: 'UNAUTHORIZED', status: 401 });
     }
 
-    if (payload.action === 'register')         return handleRegister(payload);
+    if (payload.action === 'login')               return handleLogin(payload);
+    if (payload.action === 'register')            return handleRegister(payload);
     if (payload.action === 'update_display_name') return handleUpdateDisplayName(payload);
     if (payload.action === 'copy_predictions')    return handleCopyPredictions(payload);
     return handlePick(payload);
@@ -53,10 +54,11 @@ function findUser(ss, username) {
       // raw passcode (supports admin-created users who have passcode but no passcode_hash column)
       const passcode_hash = storedHash || computeSHA256(uname + rawPasscode);
       return {
-        user_id:  String(data[i][0]),
-        username: String(data[i][1]),
+        user_id:      String(data[i][0]),
+        username:     String(data[i][1]),
+        display_name: String(data[i][2]),
         passcode_hash,
-        status:   String(data[i][6]),
+        status:       String(data[i][6]),
       };
     }
   }
@@ -86,6 +88,34 @@ function findFixture(ss, fixture_id) {
     }
   }
   return null;
+}
+
+// ── Login ─────────────────────────────────────────────────────────────
+
+function handleLogin(payload) {
+  if (!payload.username || !payload.passcode_hash) {
+    return jsonResponse({ error: 'Thiếu thông tin bắt buộc.', code: 'MISSING_FIELDS', status: 400 });
+  }
+
+  const ss   = SpreadsheetApp.getActiveSpreadsheet();
+  const user = findUser(ss, payload.username);
+
+  if (!user)
+    return jsonResponse({ error: 'Username hoặc passcode không đúng.', code: 'NOT_FOUND', status: 401 });
+
+  if (user.passcode_hash !== payload.passcode_hash)
+    return jsonResponse({ error: 'Username hoặc passcode không đúng.', code: 'WRONG_PASSWORD', status: 401 });
+
+  if (user.status !== 'active')
+    return jsonResponse({ error: 'Tài khoản chưa được kích hoạt. Liên hệ admin để được hỗ trợ.', code: 'INACTIVE', status: 403 });
+
+  return jsonResponse({
+    success:      true,
+    user_id:      user.user_id,
+    username:     user.username,
+    display_name: user.display_name,
+    _ph:          payload.passcode_hash,
+  });
 }
 
 // ── Pick submission ────────────────────────────────────────────────────
@@ -509,7 +539,7 @@ function restoreTabFromCsv(tabName, csvUrl) {
 
 // ── Test (chạy thủ công trong Apps Script editor) ──────────────────────
 
-function testSubmitBet() {
+function testSubmitPick() {
   const mockEvent = {
     postData: {
       contents: JSON.stringify({

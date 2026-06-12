@@ -6,7 +6,9 @@ const _PENDING_KEY    = _STORAGE + '_pending_picks';
 const _LIVE_CACHE_KEY = _STORAGE + '_live_picks';
 const _USERS_CACHE_KEY = _STORAGE + '_live_users';
 const _LIVE_PICKS_TTL  =  5 * 60 * 1000;  //  5 min — community picks refresh cadence
-const _LIVE_USERS_TTL = 15 * 60 * 1000;  // 15 min — authenticate() luôn force-fresh nên TTL này chỉ dùng cho background calls
+const _LIVE_USERS_TTL = 15 * 60 * 1000;  // 15 min — dùng cho leaderboard background refresh
+const _EVT_LOGIN   = _STORAGE + ':login';
+const _EVT_REFRESH = _STORAGE + ':refresh';
 
 async function sha256(message) {
   const data = new TextEncoder().encode(message);
@@ -36,7 +38,7 @@ function parseCSV(text) {
     .map(row => Object.fromEntries(parseCSVRow(row).map((v, i) => [keys[i], v || ''])));
 }
 
-let _liveBetsFlight = null;  // dedup concurrent fetches from N fixture cards
+let _livePicksFlight = null;  // dedup concurrent fetches from N fixture cards
 
 async function fetchLivePicks() {
   try {
@@ -48,9 +50,9 @@ async function fetchLivePicks() {
   if (!url) return null;
 
   // Return in-flight promise if one is already running (prevents N concurrent CSV fetches)
-  if (_liveBetsFlight) return _liveBetsFlight;
+  if (_livePicksFlight) return _livePicksFlight;
 
-  _liveBetsFlight = (async () => {
+  _livePicksFlight = (async () => {
     try {
       const res  = await fetch(url);
       const text = await res.text();
@@ -61,10 +63,10 @@ async function fetchLivePicks() {
       try { return JSON.parse(localStorage.getItem(_LIVE_CACHE_KEY) || 'null')?.data || null; }
       catch { return null; }
     } finally {
-      _liveBetsFlight = null;
+      _livePicksFlight = null;
     }
   })();
-  return _liveBetsFlight;
+  return _livePicksFlight;
 }
 
 // ── Live users helpers ────────────────────────────────────────────────
@@ -102,47 +104,44 @@ function invalidateUsersCache() {
 // ── Shared authentication helper ─────────────────────────────────────
 //
 // Trả về session { user_id, username, display_name, _ph } hoặc throw { code }
-//   code: 'NOT_FOUND' | 'WRONG_PASSWORD' | 'INACTIVE' | 'ERROR'
+//   code: 'WRONG_PASSWORD' | 'INACTIVE' | 'RATE_LIMITED' | 'ERROR'
 //
-// Chiến lược:
-//   - passcode hash: ưu tiên static build (đáng tin hơn — normalize.js xử lý cả admin-created users)
-//   - status:        luôn lấy từ live CSV (force-fresh) để kích hoạt admin có hiệu lực ngay
-//   - fallback:      nếu live fetch lỗi → dùng static status
+// Xác thực hoàn toàn server-side qua /.netlify/functions/login —
+// không tải danh sách user về client.
 //
 async function authenticate(username, passcode) {
-  const hash      = await sha256(username + passcode);
-  const buildData = window.__USERS_DATA__ || [];
-  const buildUser = buildData.find(u => u.username === username) || null;
+  const hash = await sha256(username + passcode);
 
-  // Fetch live CSV (force fresh) — vừa để check status, vừa hỗ trợ user mới đăng ký chưa rebuild
-  const liveUsers = await fetchLiveUsers(true);
-  const liveUser  = liveUsers ? liveUsers.find(u => u.username === username) || null : null;
+  let res, data;
+  try {
+    res  = await fetch('/.netlify/functions/login', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ username, passcode_hash: hash }),
+    });
+    data = await res.json();
+  } catch {
+    throw { code: 'ERROR' };
+  }
 
-  // Không tồn tại ở cả hai nguồn
-  if (!buildUser && !liveUser) throw { code: 'NOT_FOUND' };
+  if (res.ok && data.success) {
+    return {
+      user_id:      data.user_id,
+      username:     data.username,
+      display_name: data.display_name,
+      _ph:          data._ph,
+    };
+  }
 
-  // Kiểm tra passcode:
-  //   buildUser.passcode_hash: đã normalize, đáng tin (kể cả admin tạo bằng raw passcode)
-  //   liveUser.passcode_hash:  dùng khi user mới đăng ký qua web (Apps Script lưu hash trực tiếp)
-  const expectedHash = buildUser?.passcode_hash || liveUser?.passcode_hash || '';
-  if (!expectedHash || expectedHash !== hash) throw { code: 'WRONG_PASSWORD' };
-
-  // Kiểm tra status — live CSV ưu tiên (phản ánh admin kích hoạt mới nhất)
-  const status = liveUser?.status || buildUser?.status || 'inactive';
-  if (status !== 'active') throw { code: 'INACTIVE' };
-
-  // Trả về session (buildUser ưu tiên — display_name đã normalize)
-  const src = buildUser || liveUser;
-  return {
-    user_id:      src.id,
-    username:     src.username,
-    display_name: src.display_name,
-    _ph:          hash,
-  };
+  const code = data?.code || 'ERROR';
+  if (code === 'NOT_FOUND' || code === 'WRONG_PASSWORD') throw { code: 'WRONG_PASSWORD' };
+  if (code === 'INACTIVE')     throw { code: 'INACTIVE' };
+  if (code === 'RATE_LIMITED') throw { code: 'RATE_LIMITED' };
+  throw { code: 'ERROR' };
 }
 
-function aggregatePicks(allBets, fixtureId) {
-  const rows = allBets.filter(b => b.fixture_id === fixtureId);
+function aggregatePicks(allPicks, fixtureId) {
+  const rows = allPicks.filter(b => b.fixture_id === fixtureId);
   return {
     home:  rows.filter(b => b.pick_type === 'home').length,
     draw:  rows.filter(b => b.pick_type === 'draw').length,
@@ -196,7 +195,7 @@ function appState() {
     init() {
       try { this._user = JSON.parse(localStorage.getItem(_KEY) || 'null'); }
       catch { this._user = null; }
-      window.addEventListener('funnybet:login', (e) => { this._user = e.detail; });
+      window.addEventListener(_EVT_LOGIN, (e) => { this._user = e.detail; });
 
       // Ctrl+Shift+R (Windows/Linux) hoặc Cmd+Shift+R (macOS) → làm mới cache
       // preventDefault() để chặn browser hard-reload thay bằng soft-refresh của app
@@ -253,7 +252,7 @@ function appState() {
         localStorage.removeItem(_LIVE_CACHE_KEY);
         localStorage.removeItem(_USERS_CACHE_KEY);
         const all = await fetchLivePicks();
-        if (all) window.dispatchEvent(new CustomEvent('funnybet:refresh', { detail: all }));
+        if (all) window.dispatchEvent(new CustomEvent(_EVT_REFRESH, { detail: all }));
       } catch {} finally {
         clearInterval(this._dotsInterval);
         this._dotsInterval = null;
@@ -263,7 +262,7 @@ function appState() {
   };
 }
 
-function loginForm(_usersData) { // _usersData kept for backward compat, not used (authenticate() reads window.__USERS_DATA__)
+function loginForm() {
   return {
     username: '',
     passcode: '',
@@ -281,10 +280,12 @@ function loginForm(_usersData) { // _usersData kept for backward compat, not use
         localStorage.setItem(_KEY, JSON.stringify(session));
         window.location.href = '/my-picks/';
       } catch (err) {
-        if (err.code === 'NOT_FOUND' || err.code === 'WRONG_PASSWORD')
+        if (err.code === 'WRONG_PASSWORD')
           this.error = 'Username hoặc passcode không đúng.';
         else if (err.code === 'INACTIVE')
           this.error = 'Tài khoản chưa được kích hoạt. Liên hệ admin để được hỗ trợ.';
+        else if (err.code === 'RATE_LIMITED')
+          this.error = 'Quá nhiều lần thử. Vui lòng thử lại sau.';
         else
           this.error = 'Lỗi kết nối. Vui lòng thử lại.';
       } finally {
@@ -327,17 +328,17 @@ function leaderboardPage(staticRows) {
     copyMessage: '',
     isCopyError: false,
     async init() {
-      const [liveUsers, liveBets] = await Promise.all([fetchLiveUsers(), fetchLivePicks()]);
+      const [liveUsers, livePicks] = await Promise.all([fetchLiveUsers(), fetchLivePicks()]);
       if (!liveUsers) return;
       const enriched = staticRows.map(u => ({
         ...u,
-        total_submitted: liveBets ? liveBets.filter(b => b.user_id === u.user_id).length : null,
+        total_submitted: livePicks ? livePicks.filter(b => b.user_id === u.user_id).length : null,
       }));
       const knownIds = new Set(staticRows.map(u => u.user_id));
       const fresh = liveUsers
         .filter(u => u.status === 'active' && !knownIds.has(u.id))
         .map(u => {
-          const userPicks = liveBets ? liveBets.filter(b => b.user_id === u.id) : [];
+          const userPicks = livePicks ? livePicks.filter(b => b.user_id === u.id) : [];
           const scored = userPicks.filter(b => b.result);
           return {
             user_id:         u.id,
@@ -356,7 +357,7 @@ function leaderboardPage(staticRows) {
       this.rows = [...enriched, ...fresh];
 
       // Listen for cache refresh to update submitted counts dynamically
-      window.addEventListener('funnybet:refresh', (e) => {
+      window.addEventListener(_EVT_REFRESH, (e) => {
         const freshPicks = e.detail;
         this.rows = this.rows.map(u => ({
           ...u,
@@ -410,7 +411,7 @@ function leaderboardPage(staticRows) {
             localStorage.removeItem(_LIVE_CACHE_KEY);
             const freshPicks = await fetchLivePicks();
             if (freshPicks) {
-              window.dispatchEvent(new CustomEvent('funnybet:refresh', { detail: freshPicks }));
+              window.dispatchEvent(new CustomEvent(_EVT_REFRESH, { detail: freshPicks }));
             }
 
             this.copyMessage = `✅ Đã sao chép thành công ${data.copiedCount} dự đoán của ${this.copyTarget.display_name}!`;

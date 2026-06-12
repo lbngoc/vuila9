@@ -6,7 +6,6 @@ permalink: /fixtures/
 
 <script>
   window.__BUILD_PICKS__ = {{ picks.data | dump | safe }};
-  // window.__USERS_DATA__ injected globally by base.njk
 </script>
 
 {# ─── Macro: một thẻ fixture (tái sử dụng ở cả 2 nhóm) ────────────────────── #}
@@ -379,7 +378,7 @@ function pickForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
     pick: '',
     selected: '',
     communityPicks: null,
-    _buildBetCount: 0,
+    _buildPickCount: 0,
     username: '',
     passcode: '',
     website: '',
@@ -395,20 +394,20 @@ function pickForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
       setInterval(() => { this._now = Date.now(); }, 60000);
 
       // Khi card khác đăng nhập → cập nhật trạng thái cho card này
-      window.addEventListener('funnybet:login', (e) => {
+      window.addEventListener(_EVT_LOGIN, (e) => {
         this._user = e.detail;
         if (!this.username) this.username = e.detail.username;
       });
 
-      const buildBet   = (window.__BUILD_PICKS__ || []).find(b => b.fixture_id === fixtureId && b.user_id === u?.user_id);
-      const pendingBet = (() => {
+      const buildPick   = (window.__BUILD_PICKS__ || []).find(b => b.fixture_id === fixtureId && b.user_id === u?.user_id);
+      const pendingPick = (() => {
         try { return JSON.parse(localStorage.getItem(_PENDING_KEY) || '[]').find(b => b.fixture_id === fixtureId); }
         catch { return null; }
       })();
-      this.selected = pendingBet?.pick_type || buildBet?.pick_type || '';
+      this.selected = pendingPick?.pick_type || buildPick?.pick_type || '';
 
       // Cache build-snapshot pick count for pickCount getter (computed once, never changes)
-      this._buildBetCount = aggregatePicks(window.__BUILD_PICKS__ || [], fixtureId).total;
+      this._buildPickCount = aggregatePicks(window.__BUILD_PICKS__ || [], fixtureId).total;
 
       // Show community picks immediately from build snapshot if user already has a pick
       if (this.selected) {
@@ -418,18 +417,18 @@ function pickForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
       // Update from fresh CSV: cross-device sync + up-to-date counts
       if (u) syncOwnPicks(u).then(() => fetchLivePicks()).then(all => {
         if (!all) return;
-        const csvBet = all.find(b => b.fixture_id === fixtureId && b.user_id === u.user_id);
-        if (csvBet) this.selected = csvBet.pick_type;
+        const csvPick = all.find(b => b.fixture_id === fixtureId && b.user_id === u.user_id);
+        if (csvPick) this.selected = csvPick.pick_type;
         if (this.selected) this.communityPicks = aggregatePicks(all, fixtureId);
       });
 
       // "Làm mới" button: re-aggregate from fresh CSV data
-      window.addEventListener('funnybet:refresh', (e) => {
+      window.addEventListener(_EVT_REFRESH, (e) => {
         const all = e.detail;
         const cu = this.currentUser;
         if (cu) {
-          const csvBet = all.find(b => b.fixture_id === fixtureId && b.user_id === cu.user_id);
-          if (csvBet) this.selected = csvBet.pick_type;
+          const csvPick = all.find(b => b.fixture_id === fixtureId && b.user_id === cu.user_id);
+          if (csvPick) this.selected = csvPick.pick_type;
         }
         if (this.selected) this.communityPicks = aggregatePicks(all, fixtureId);
       });
@@ -441,7 +440,7 @@ function pickForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
     // Thời gian còn lại để dự đoán (ms). Âm khi đã khoá → dùng chung cho countdownClass và countdown.
     get timeToLock()  { return this.kickoffAt.getTime() - this._now - (window.PICK_LOCK_MINUTES || 60) * 60000; },
     // Số dự đoán đã gửi: dùng live count nếu đã load, fallback về build snapshot (tính 1 lần trong init)
-    get pickCount()    { return this.communityPicks ? this.communityPicks.total : this._buildBetCount; },
+    get pickCount()    { return this.communityPicks ? this.communityPicks.total : this._buildPickCount; },
     get countdownClass() {
       if (this.isLocked) return 'px-2.5 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
       const ttl = this.timeToLock;  // thời gian còn lại để dự đoán (luôn > 0 khi !isLocked)
@@ -531,7 +530,7 @@ function pickForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
           u = await authenticate(uname, pcode);
           localStorage.setItem(_KEY, JSON.stringify(u));
           this._user = u;
-          window.dispatchEvent(new CustomEvent('funnybet:login', { detail: u }));
+          window.dispatchEvent(new CustomEvent(_EVT_LOGIN, { detail: u }));
         } catch (err) {
           if (err.code === 'NOT_FOUND' || err.code === 'WRONG_PASSWORD')
             this.error = 'Username hoặc passcode không đúng.';
