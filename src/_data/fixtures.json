@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-11T19:06:11.182Z",
+  "generated_at": "2026-06-12T01:54:26.032Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -25,7 +25,7 @@
       "result_home": 1,
       "result_away": 1,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "CAN-BIH",
@@ -86,10 +86,10 @@
       "home_team": "Haiti",
       "away_team": "Scotland",
       "handicap": "1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 0,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -99,10 +99,10 @@
       "home_team": "Úc",
       "away_team": "Thổ Nhĩ Kỳ",
       "handicap": "0",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 0,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -112,10 +112,10 @@
       "home_team": "Đức",
       "away_team": "Curaçao",
       "handicap": "-2",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 2,
+      "result_away": 3,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -125,10 +125,10 @@
       "home_team": "Hà Lan",
       "away_team": "Nhật Bản",
       "handicap": "-0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -138,10 +138,10 @@
       "home_team": "Bờ Biển Ngà",
       "away_team": "Ecuador",
       "handicap": "0",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
