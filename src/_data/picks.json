@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-12T04:03:57.684Z",
+  "generated_at": "2026-06-12T14:48:25.956Z",
   "data": [
     {
       "pick_id": "pick_001",
@@ -133,9 +133,8 @@
       "user_id": "u_000",
       "fixture_id": "USA-PAR",
       "pick_type": "home",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "LOSE",
+      "points": -1
     },
     {
       "pick_id": "pick_016",
@@ -143,9 +142,8 @@
       "user_id": "u_001",
       "fixture_id": "USA-PAR",
       "pick_type": "home",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "LOSE",
+      "points": -1
     },
     {
       "pick_id": "pick_017",
@@ -153,9 +151,8 @@
       "user_id": "u_003",
       "fixture_id": "USA-PAR",
       "pick_type": "away",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "WIN",
+      "points": 1
     },
     {
       "pick_id": "pick_018",
@@ -163,9 +160,8 @@
       "user_id": "u_004",
       "fixture_id": "USA-PAR",
       "pick_type": "draw",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "LOSE",
+      "points": -1
     },
     {
       "pick_id": "pick_019",
@@ -223,9 +219,8 @@
       "user_id": "u_000",
       "fixture_id": "QAT-SUI",
       "pick_type": "away",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "LOSE",
+      "points": -1
     },
     {
       "pick_id": "pick_025",
@@ -233,9 +228,8 @@
       "user_id": "u_001",
       "fixture_id": "QAT-SUI",
       "pick_type": "away",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "LOSE",
+      "points": -1
     },
     {
       "pick_id": "pick_026",
@@ -243,9 +237,8 @@
       "user_id": "u_002",
       "fixture_id": "QAT-SUI",
       "pick_type": "away",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "LOSE",
+      "points": -1
     },
     {
       "pick_id": "pick_027",
@@ -253,9 +246,8 @@
       "user_id": "u_003",
       "fixture_id": "QAT-SUI",
       "pick_type": "home",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "WIN",
+      "points": 1
     },
     {
       "pick_id": "pick_028",
@@ -478,10 +470,89 @@
       "profit": null
     },
     {
+      "pick_id": "pick_20260612_144742_m8vg",
+      "created_at": "2026-06-12T07:47:40.378Z",
+      "user_id": "u3",
+      "fixture_id": "USA-PAR",
+      "pick_type": "draw",
+      "result": "LOSE",
+      "points": -1
+    },
+    {
+      "pick_id": "pick_20260612_144749_6i2c",
+      "created_at": "2026-06-12T07:47:47.752Z",
+      "user_id": "u3",
+      "fixture_id": "BRA-MAR",
+      "pick_type": "home",
+      "result": null,
+      "points": null,
+      "profit": null
+    },
+    {
       "pick_id": "auto_u_004_MEX-RSA",
       "created_at": "2026-06-11T19:00:00.000Z",
       "user_id": "u_004",
       "fixture_id": "MEX-RSA",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u3_MEX-RSA",
+      "created_at": "2026-06-11T19:00:00.000Z",
+      "user_id": "u3",
+      "fixture_id": "MEX-RSA",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u3_KOR-CZE",
+      "created_at": "2026-06-12T02:00:00.000Z",
+      "user_id": "u3",
+      "fixture_id": "KOR-CZE",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u3_CAN-BIH",
+      "created_at": "2026-06-12T19:00:00.000Z",
+      "user_id": "u3",
+      "fixture_id": "CAN-BIH",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_002_USA-PAR",
+      "created_at": "2026-06-13T01:00:00.000Z",
+      "user_id": "u_002",
+      "fixture_id": "USA-PAR",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_004_QAT-SUI",
+      "created_at": "2026-06-13T19:00:00.000Z",
+      "user_id": "u_004",
+      "fixture_id": "QAT-SUI",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u3_QAT-SUI",
+      "created_at": "2026-06-13T19:00:00.000Z",
+      "user_id": "u3",
+      "fixture_id": "QAT-SUI",
       "pick_type": null,
       "result": "NO_PICK",
       "points": -1,

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-12T04:03:57.684Z",
+  "generated_at": "2026-06-12T14:48:25.956Z",
   "data": [
     {
       "id": "u_000",
@@ -38,6 +38,14 @@
       "username": "sao_cung_duoc",
       "display_name": "Sao Cũng Được",
       "passcode_hash": "c4864483a9143dc9f481c029a1e09335d700d5a0bc21082073c266af6a268059",
+      "created_at": "2026-05-26T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "u3",
+      "username": "thuy",
+      "display_name": "Thichs",
+      "passcode_hash": "4562c5520c712ac3d68dfd88c00ad7d25c9ae3f51cf5bb0d3a7719c2dcd82819",
       "created_at": "2026-05-26T00:00:00.000Z",
       "status": "active"
     }
