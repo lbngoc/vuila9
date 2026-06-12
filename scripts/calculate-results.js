@@ -21,7 +21,7 @@ const { points: POINTS } = require('../src/_data/siteConfig');
 //   adj = 0: push       → Home PUSH, Away PUSH, Draw WIN
 //   adj < 0: away covers → Home LOSE, Away WIN
 //
-// 'draw' pick = betting on exact push. WIN if adj===0, else LOSE.
+// 'draw' pick = exact push. WIN if adj===0, else LOSE.
 //
 function resolveByPick(pickType, fixture) {
   const margin = fixture.result_home - fixture.result_away;
@@ -75,13 +75,13 @@ function main() {
       const finishedFixtures = fixtures.filter(f => f.is_finished);
 
       for (const fixture of finishedFixtures) {
-        const betters = new Set(
+        const pickers = new Set(
           enriched
             .filter(b => b.fixture_id === fixture.fixture_id)
             .map(b => b.user_id)
         );
         for (const user of activeUsers) {
-          if (!betters.has(user.id)) {
+          if (!pickers.has(user.id)) {
             enriched.push({
               pick_id:     `auto_${user.id}_${fixture.fixture_id}`,
               created_at: fixture.kickoff_at,

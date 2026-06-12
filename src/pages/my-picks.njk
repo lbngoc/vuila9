@@ -5,11 +5,11 @@ permalink: /my-picks/
 ---
 
 <script>
-  const MY_BETS_DATA     = {{ picks.data | dump | safe }};
+  const MY_PICKS_DATA    = {{ picks.data | dump | safe }};
   const MY_FIXTURE_DATA  = {{ fixtures.data | dump | safe }};
 </script>
 
-<div x-data="myPicksPage(MY_BETS_DATA, MY_FIXTURE_DATA)" x-init="init()">
+<div x-data="myPicksPage(MY_PICKS_DATA, MY_FIXTURE_DATA)" x-init="init()">
 
   <!-- Not logged in -->
   <div x-show="!user" x-cloak class="text-center py-16 space-y-4">
@@ -57,7 +57,7 @@ permalink: /my-picks/
       </div>
     </template>
 
-    <!-- Bets list -->
+    <!-- Picks list -->
     <div x-data="{ showAll: false }" class="space-y-3">
       <div class="space-y-3">
         <template x-for="pick in (showAll ? picks : picks.slice(0, 10))" :key="pick.pick_id">

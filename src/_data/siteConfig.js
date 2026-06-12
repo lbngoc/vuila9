@@ -15,7 +15,7 @@ module.exports = {
   timezone:       process.env.TIMEZONE || 'Asia/Ho_Chi_Minh',
   public_mode,    // default: true — set PUBLIC_MODE=false để ẩn link "Dữ liệu gốc" đến Google Sheet
 
-  // ── Bet lock ────────────────────────────────────────────────────────────
+  // ── Pick lock ───────────────────────────────────────────────────────────
   // Số phút trước giờ đá mà dự đoán bị khoá.
   // Thay đổi qua env var PICK_LOCK_MINUTES (hoặc trực tiếp đổi số 60 ở trên).
   pick_lock_minutes,   // default: 60
