@@ -29,7 +29,8 @@ Build target: <30 seconds. Publish directory: `dist`. Functions directory: `netl
 /data/sample        # sample CSVs cho local dev (users, fixtures, picks)
 /scripts            # fetch-sheet, normalize, calculate-results, build-leaderboard, export-json
                     # create-user.js — admin utility (không thuộc pipeline)
-/netlify/functions  # submit-pick.js, register.js
+/netlify/functions  # _shared.js (shared utils), login.js, submit-pick.js, register.js
+                    # live-picks.js, live-users.js (server-side live data fetch)
 /src
   /_data            # siteConfig.js (central config) + sheetConfig.js (CSV URLs) + committed JSON snapshot
   /_includes        # base.njk layout
@@ -51,8 +52,13 @@ Google Sheets (admin cập nhật)
   Netlify builds static site from committed JSON
 
 User xem dữ liệu live (picks, community predictions):
-  Browser → fetch CSV trực tiếp từ Google Sheets (public) → cache localStorage
-  (URLs inject qua sheetConfig.js → window.__SHEET_PICKS_URL__, __SHEET_USERS_URL__)
+  Browser → /.netlify/functions/live-picks | live-users (GET)
+          → Netlify Function fetch CSV server-side từ Google Sheets
+          → trả JSON đã lọc → cache localStorage (TTL 5/15 phút)
+
+User đăng nhập:
+  Browser → /.netlify/functions/login (POST)
+          → Google Apps Script (verify passcode_hash, trả session)
 
 User gửi dự đoán / đăng ký:
   Browser → Netlify Function (format validation only)
@@ -69,17 +75,19 @@ Ba lớp với trách nhiệm tách biệt — không được trộn lẫn:
 | Layer | Đọc dữ liệu | Ghi dữ liệu | Business logic |
 |---|---|---|---|
 | **Static build** | `src/_data/*.json` (committed snapshot) | `src/_data/*.json` via pipeline | Scoring, leaderboard |
-| **Browser** | Fetch CSV trực tiếp từ Google Sheets public URL + cache localStorage | Không | Hiển thị, merge picks |
-| **Netlify Function** | Không đọc data nào | Forward sang Apps Script | Format validation only |
+| **Browser** | Fetch qua `/.netlify/functions/live-picks` và `live-users` + cache localStorage | Không | Hiển thị, merge picks |
+| **Netlify Function** | `live-picks`/`live-users` fetch CSV từ Google Sheets server-side (GID không lộ ra browser) | Forward sang Apps Script | Format validation; live data proxy |
 | **Apps Script** | Google Sheet (authoritative) | Google Sheet | Auth, fixture check, upsert |
 
 **Quy tắc cụ thể:**
 
 - Netlify Functions **không được** dùng `fs.readFileSync`, `loadData()`, hay bất kỳ cơ chế nào để đọc `src/_data/*.json`. Không có `included_files` trong `netlify.toml`.
-- Netlify Functions chỉ validate format (required fields, regex, enum) rồi forward sang Apps Script.
+- `submit-pick.js`, `register.js` chỉ validate format (required fields, regex, enum) rồi forward sang Apps Script.
 - Auth (`_session_hash` vs `passcode_hash`), fixture lock check, và upsert lookup đều do **Apps Script** thực hiện — nơi có data thực tế.
-- Để pre-check duplicate username ở `register.js`, fetch CSV `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/export?format=csv&gid=${USERS_GID}` với timeout 3s. Đây là fast-fail; Apps Script vẫn làm authoritative check.
-- Browser fetch CSV từ Sheet (đã public Viewer) để hiển thị community picks và live picks, cache localStorage với TTL 5–15 phút.
+- `login.js` validate format rồi gọi Apps Script `action:'login'`; trả về cùng lỗi cho cả `NOT_FOUND` và `WRONG_PASSWORD` (ngăn username enumeration).
+- `live-picks.js` và `live-users.js` fetch CSV từ Google Sheets server-side (dùng `GOOGLE_SHEET_ID` + GID env vars), trả JSON đã lọc field — GID không bao giờ lộ ra browser.
+- `passcode` và `passcode_hash` bị strip trong response của `live-users.js` — không thể đọc từ browser.
+- Browser gọi `/.netlify/functions/live-picks` (GET) và `/.netlify/functions/live-users` (GET) để hiển thị community picks và live picks, cache localStorage với TTL 5/15 phút.
 
 ## Data Flow
 
@@ -103,16 +111,14 @@ points: { WIN: 3, PUSH: 0, LOSE: 0 }  // change here to adjust scoring
 
 ## Sheet Config: `src/_data/sheetConfig.js`
 
-Injects Google Sheets CSV URLs for client-side live data fetch. Populated only when `GOOGLE_SHEET_ID` + GID env vars are present. Falls back to empty strings (templates guard with `{% if sheetConfig.picks_url %}`).
+Chỉ chứa link trực tiếp vào tab Google Sheet để hiển thị "Xem dữ liệu gốc" trong UI. Không inject CSV URL hay GID vào HTML. Populated khi `GOOGLE_SHEET_ID` + GID env vars có mặt; falls back to empty strings (templates guard with `{% if sheetConfig.fixtures_tab_url %}`).
 
 ```js
-picks_url:          // CSV export URL cho tab picks
-users_url:         // CSV export URL cho tab users
 fixtures_tab_url:  // link trực tiếp vào tab Fixtures (dùng trong header trang fixtures)
-picks_tab_url:      // link trực tiếp vào tab Bets (dùng trong header trang leaderboard)
+picks_tab_url:     // link trực tiếp vào tab Picks (dùng trong header trang leaderboard)
 ```
 
-Templates inject URLs vào `window.__SHEET_PICKS_URL__` và `window.__SHEET_USERS_URL__` cho Alpine.js `fetchLivePicks()` / `fetchLiveUsers()`.
+Live data (picks, users) được fetch qua `/.netlify/functions/live-picks` và `/.netlify/functions/live-users` — không dùng `window.__SHEET_PICKS_URL__` hay `window.__SHEET_USERS_URL__`.
 
 ## Admin Utility: `scripts/create-user.js`
 
@@ -140,7 +146,7 @@ Output là 1 dòng CSV với `passcode_hash` đã hash — paste vào tab users,
 
 Draw pick: WIN if `adj === 0`, LOSE otherwise — never PUSH.
 
-### Bet lock (PICK_LOCK_MINUTES)
+### Pick lock (PICK_LOCK_MINUTES)
 
 Dự đoán bị khoá `PICK_LOCK_MINUTES` phút trước `kickoff_at` (default: 60).
 Áp dụng ở 2 nơi:
@@ -161,16 +167,17 @@ Khi `points.NO_PICK < 0`, `calculate-results.js` thêm entry synthetic cho mỗi
 ## Auth Flow
 
 - Passcode stored as `sha256(username + passcode)` — `normalize.js` hashes raw passcode, or uses pre-computed `passcode_hash` column directly
-- Login: client-side SHA-256 via Web Crypto API; checks `status === 'active'`
+- Login: browser hashes passcode client-side (Web Crypto API) → POST to `/.netlify/functions/login` → Apps Script verifies `passcode_hash` and `status === 'active'` → trả session
+- Username enumeration prevention: `NOT_FOUND` và `WRONG_PASSWORD` đều trả cùng error message và HTTP 401
 - Session: `{ user_id, username, display_name, _ph }` in localStorage under `{STORAGE_PREFIX}_user`
-- Bet submission: `_session_hash` sent instead of raw passcode
+- Pick submission: `_session_hash` sent instead of raw passcode
 
 ## Pages
 
 | URL | Template | Notes |
 |---|---|---|
 | `/` | index.njk | Leaderboard preview, upcoming fixtures, how-to-play |
-| `/fixtures/` | fixtures.njk | Bet form: countdown timer, hover colors, contextual tips |
+| `/fixtures/` | fixtures.njk | Pick form: countdown timer, hover colors, contextual tips |
 | `/leaderboard/` | leaderboard.njk | Full rankings, scoring legend from siteConfig.points |
 | `/login/` | login.njk | Client-side auth, checks status=active |
 | `/my-picks/` | my-picks.njk | Personal pick history (localStorage session) |
@@ -178,8 +185,12 @@ Khi `points.NO_PICK < 0`, `calculate-results.js` thêm entry synthetic cho mỗi
 
 ## Netlify Functions
 
+- **`_shared.js`** — shared module: `ok()`, `err()`, `makeRateLimiter()`, `setup()`, `callScript()`, `parseCSV()` — dùng bởi mọi function.
+- **`login.js`** — rate-limit (10/min) · validate format (username regex, passcode_hash 64 hex) · forward `action:'login'` to Apps Script · trả session `{user_id, username, display_name, _ph}`. `NOT_FOUND`/`WRONG_PASSWORD` đều trả cùng lỗi.
 - **`submit-pick.js`** — rate-limit · honeypot · format validation (required fields, pick_type enum) · forward `{username, fixture_id, pick_type, _session_hash}` to Apps Script. Auth và fixture check do Apps Script xử lý.
-- **`register.js`** — rate-limit · honeypot · format validation (username regex, passcode length) · fetch users CSV để pre-check duplicate username · hash passcode · forward `action:'register'` to Apps Script.
+- **`register.js`** — rate-limit · honeypot · format validation (username regex, passcode length) · hash passcode · forward `action:'register'` to Apps Script. Authoritative duplicate check do Apps Script xử lý.
+- **`live-picks.js`** — GET · rate-limit (60/min) · fetch picks CSV từ Google Sheets server-side · trả JSON `{data: [{pick_id, created_at, user_id, fixture_id, pick_type}]}`.
+- **`live-users.js`** — GET · rate-limit (60/min) · fetch users CSV từ Google Sheets server-side · strip `passcode`/`passcode_hash` · trả JSON `{data: [{id, username, display_name, status, created_at}]}`.
 
 ## Key Implementation Details
 
@@ -190,7 +201,7 @@ Khi `points.NO_PICK < 0`, `calculate-results.js` thêm entry synthetic cho mỗi
 - **Tip text**: `tip` getter explains when each pick wins using `minWin`, `maxHome`, `pushAt`
 - **Upsert**: Apps Script tự tìm existing pick theo `(user_id, fixture_id)` — không cần `existing_pick_id` từ client
 - **Handicap display**: `| replace("-", "") | replace(".0", "")` strips sign and trailing decimal
-- **Live data**: `fetchLivePicks()` + `fetchLiveUsers()` — cache localStorage TTL 5/15 phút; fallback graceful nếu không có `sheetConfig` URLs
+- **Live data**: `fetchLivePicks()` + `fetchLiveUsers()` — GET `/.netlify/functions/live-picks` và `live-users`; cache localStorage TTL 5/15 phút; fallback graceful nếu function trả lỗi
 
 ## Environment Variables
 
@@ -198,8 +209,9 @@ Khi `points.NO_PICK < 0`, `calculate-results.js` thêm entry synthetic cho mỗi
 # Netlify (Functions):
 GOOGLE_SCRIPT_URL=   # Apps Script webhook
 APP_SECRET=          # shared secret với Apps Script
-GOOGLE_SHEET_ID=     # để register.js fetch users CSV (pre-check duplicate)
-USERS_GID=           # GID tab users
+GOOGLE_SHEET_ID=     # Sheet ID — dùng bởi live-picks.js, live-users.js, register.js
+USERS_GID=           # GID tab users — dùng bởi live-users.js
+PICKS_GID=           # GID tab picks — dùng bởi live-picks.js
 
 # GitHub Actions secrets (data sync):
 GOOGLE_SHEET_ID=

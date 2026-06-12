@@ -19,14 +19,17 @@ Chạy trên môi trường production (Netlify) hoặc local (`npm run dev`).
 
 ## T2 — Auth
 
+Login gọi `/.netlify/functions/login` (server-side) → Apps Script verify → trả session.
+
 | # | Bước | Expected |
 |---|---|---|
-| 2.1 | Login username/passcode sai | Lỗi "Username hoặc passcode không đúng" |
+| 2.1 | Login username/passcode sai | Lỗi "Username hoặc passcode không đúng" (cùng message cho cả user không tồn tại và sai passcode) |
 | 2.2 | Login tài khoản `status=inactive` | Lỗi "Tài khoản chưa được kích hoạt" |
 | 2.3 | Login đúng | Redirect `/my-picks/`, tên user hiện trên nav |
 | 2.4 | Logout | Redirect `/`, nav về trạng thái chưa đăng nhập |
-| 2.5 | Register — username đã tồn tại | Lỗi "Username đã được sử dụng" (client-side) |
-| 2.6 | Register hợp lệ | "Đăng ký thành công", tài khoản vào Sheet ở trạng thái `inactive` |
+| 2.5 | Login quá 10 lần/phút | Lỗi "Quá nhiều yêu cầu. Vui lòng thử lại sau." |
+| 2.6 | Register — username đã tồn tại | Lỗi "Username đã được sử dụng" (client-side từ snapshot) |
+| 2.7 | Register hợp lệ | "Đăng ký thành công", tài khoản vào Sheet ở trạng thái `inactive` |
 
 ---
 
@@ -45,14 +48,14 @@ Chạy trên môi trường production (Netlify) hoặc local (`npm run dev`).
 
 ---
 
-## T4 — My Bets
+## T4 — My Picks
 
 | # | Bước | Expected |
 |---|---|---|
-| 4.1 | `/my-picks/` chưa đăng nhập | Nút "Đăng nhập", không có bet list |
+| 4.1 | `/my-picks/` chưa đăng nhập | Nút "Đăng nhập", không có pick list |
 | 4.2 | `/my-picks/` đã đăng nhập | Hiện đúng pick, ngày đặt |
-| 4.3 | Bet vừa đặt (chưa qua build) | Badge "(chưa sync)" màu vàng |
-| 4.4 | Bet đã confirmed trong build | Badge mất, hiện kết quả nếu trận đã FT |
+| 4.3 | Pick vừa đặt (chưa qua build) | Badge "(chưa sync)" màu vàng |
+| 4.4 | Pick đã confirmed trong build | Badge mất, hiện kết quả nếu trận đã FT |
 | 4.5 | Tổng điểm | Đúng = sum(points) các trận có kết quả |
 
 ---
@@ -63,7 +66,7 @@ Chạy trên môi trường production (Netlify) hoặc local (`npm run dev`).
 |---|---|---|
 | 5.1 | Gửi dự đoán → reload `/fixtures/` | Pick vẫn highlight |
 | 5.2 | Gửi dự đoán device A → mở device B (cùng tài khoản) | Sau khi load, device B highlight đúng pick qua CSV sync |
-| 5.3 | Netlify build mới sau khi đặt | `/my-picks/` hiện bet từ snapshot, badge "(chưa sync)" biến mất |
+| 5.3 | Netlify build mới sau khi đặt | `/my-picks/` hiện pick từ snapshot, badge "(chưa sync)" biến mất |
 
 ---
 
@@ -94,7 +97,7 @@ Chạy trên môi trường production (Netlify) hoặc local (`npm run dev`).
 [ ] npm run build thành công (< 30s, không có lỗi 11ty)
 [ ] Không có JS error trong console trên homepage
 [ ] Login + logout flow hoạt động
-[ ] Đặt cược 1 trận → verify dòng mới trong Google Sheet
+[ ] Đặt dự đoán 1 trận → verify dòng mới trong Google Sheet
 [ ] Dark/light toggle không flash khi reload
 [ ] Mobile: input không zoom, pick buttons dễ tap
 ```

@@ -84,6 +84,10 @@ netlify --version
 ```env
 GOOGLE_SCRIPT_URL=https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
 APP_SECRET=any-random-string-for-local-testing
+# Cần để test live-picks và live-users (bỏ trống nếu không test live data):
+GOOGLE_SHEET_ID=your-sheet-id
+PICKS_GID=987654321
+USERS_GID=0
 ```
 
 > Nếu chưa có Apps Script thật: dùng giá trị giả. Validation sẽ chạy đúng, chỉ lỗi ở bước cuối khi gọi Apps Script.
@@ -114,6 +118,11 @@ Netlify CLI tự nhận:
 #### Test function local bằng curl
 
 ```bash
+# Test login
+curl -X POST http://localhost:8888/.netlify/functions/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"lam_mau","passcode_hash":"<sha256(username+passcode)>"}'
+
 # Test submit-pick (sau khi đã login lấy _session_hash từ localStorage)
 curl -X POST http://localhost:8888/.netlify/functions/submit-pick \
   -H "Content-Type: application/json" \
@@ -123,6 +132,12 @@ curl -X POST http://localhost:8888/.netlify/functions/submit-pick \
 curl -X POST http://localhost:8888/.netlify/functions/register \
   -H "Content-Type: application/json" \
   -d '{"username":"newuser","display_name":"New User","passcode":"mypassword123"}'
+
+# Test live-picks (GET — cần GOOGLE_SHEET_ID + PICKS_GID trong .env.local)
+curl http://localhost:8888/.netlify/functions/live-picks
+
+# Test live-users (GET — cần GOOGLE_SHEET_ID + USERS_GID trong .env.local)
+curl http://localhost:8888/.netlify/functions/live-users
 ```
 
 ---
@@ -406,17 +421,18 @@ Sau khi có GitHub Actions setup, Netlify **không cần** Sheet credentials cho
 
 **Site configuration → Environment variables → Add variable**
 
-### Netlify Functions (bắt buộc để gửi dự đoán & đăng ký hoạt động)
+### Netlify Functions (bắt buộc để gửi dự đoán, đăng nhập & đăng ký hoạt động)
 
-| Variable | Mô tả |
-|---|---|
-| `GOOGLE_SCRIPT_URL` | Apps Script web app URL (từ Bước 5) |
-| `APP_SECRET` | Cùng giá trị với Apps Script Properties |
-| `GOOGLE_SHEET_ID` | Sheet ID — để `register.js` fetch users CSV pre-check duplicate username |
-| `USERS_GID` | GID tab `users` |
+| Variable | Dùng bởi | Mô tả |
+|---|---|---|
+| `GOOGLE_SCRIPT_URL` | tất cả | Apps Script web app URL (từ Bước 5) |
+| `APP_SECRET` | tất cả | Cùng giá trị với Apps Script Properties |
+| `GOOGLE_SHEET_ID` | `live-picks`, `live-users`, `register` | Sheet ID |
+| `USERS_GID` | `live-users` | GID tab `users` |
+| `PICKS_GID` | `live-picks` | GID tab `picks` |
 
-> Thiếu `GOOGLE_SCRIPT_URL` hoặc `APP_SECRET` thì gửi dự đoán và đăng ký sẽ báo lỗi 503.  
-> `GOOGLE_SHEET_ID` và `USERS_GID` không cần bảo mật tuyệt đối vì Sheet đã public Viewer. Nếu thiếu, `register.js` vẫn hoạt động (bỏ qua pre-check, để Apps Script xử lý authoritative).
+> Thiếu `GOOGLE_SCRIPT_URL` hoặc `APP_SECRET` thì đăng nhập, gửi dự đoán và đăng ký sẽ báo lỗi 503.  
+> Thiếu `GOOGLE_SHEET_ID`/`PICKS_GID`/`USERS_GID` thì `live-picks`/`live-users` trả 503 — trang vẫn hiển thị, chỉ mất community picks và live data.
 
 ### Netlify Build — Luật chơi (tùy chọn)
 
@@ -596,8 +612,9 @@ Google Sheets (admin cập nhật kết quả)
   Site live (leaderboard cập nhật)
 
 Browser xem live picks / community predictions:
-  Browser → fetch CSV trực tiếp từ Google Sheets (public)
-          → cache localStorage (TTL 5–15 phút)
+  Browser → GET /.netlify/functions/live-picks | live-users
+          → Netlify Function fetch CSV server-side từ Google Sheets (GID không lộ ra browser)
+          → cache localStorage (TTL 5/15 phút)
 
 User gửi dự đoán / đăng ký:
   Browser → POST /.netlify/functions/*
@@ -612,6 +629,6 @@ User gửi dự đoán / đăng ký:
 |---|---|
 | **Netlify Function** | Validate format đầu vào · Forward sang Apps Script |
 | **Apps Script** | Verify auth (`_session_hash`) · Check fixture status/lock · Upsert pick · Write Sheet |
-| **Browser** | Fetch CSV trực tiếp từ Sheet (display only) · localStorage cache |
+| **Browser** | Fetch qua Netlify Functions (live-picks, live-users) · localStorage cache |
 
 Functions **không đọc** `src/_data/*.json` và **không có** business logic.
