@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-12T14:48:25.956Z",
+  "generated_at": "2026-06-13T01:54:31.794Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -38,7 +38,7 @@
       "result_home": 0,
       "result_away": 2,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "USA-PAR",
@@ -51,7 +51,7 @@
       "result_home": 0,
       "result_away": 3,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "BRA-MAR",
@@ -60,10 +60,10 @@
       "home_team": "Brazil",
       "away_team": "Ma Rốc",
       "handicap": "-2",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 3,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -86,10 +86,10 @@
       "home_team": "Haiti",
       "away_team": "Scotland",
       "handicap": "1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
