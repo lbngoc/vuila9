@@ -28,19 +28,9 @@ function resolveByPick(pickType, fixture) {
   const h = fixture.handicap != null ? parseFloat(fixture.handicap) : 0;
   const adj = margin + h;
 
-  if (pickType === 'home') {
-    if (adj > 0)  return 'WIN';
-    if (adj === 0) return 'PUSH';
-    return 'LOSE';
-  }
-  if (pickType === 'away') {
-    if (adj < 0)  return 'WIN';
-    if (adj === 0) return 'PUSH';
-    return 'LOSE';
-  }
-  if (pickType === 'draw') {
-    return adj === 0 ? 'WIN' : 'LOSE';
-  }
+  if (pickType === 'home') return adj > 0 ? 'WIN' : 'LOSE';
+  if (pickType === 'away') return adj < 0 ? 'WIN' : 'LOSE';
+  if (pickType === 'draw') return adj === 0 ? 'PUSH' : 'LOSE';
   return null;
 }
 

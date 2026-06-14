@@ -54,10 +54,10 @@ QAT-SUI,Bảng B,2026-06-13T19:00:00.000Z,Qatar,Thụy Sĩ,+0.5,finished,1,2,d�
 **`picks.csv`** (rút gọn — 27 picks, xem đầy đủ tại `data/sample/picks.csv`)
 ```
 pick_id,created_at,user_id,fixture_id,pick_type
-bet_001,2026-06-10T08:00:00.000Z,u_000,MEX-RSA,home
-bet_002,2026-06-10T08:05:00.000Z,u_001,MEX-RSA,draw
-bet_003,2026-06-10T08:10:00.000Z,u_002,MEX-RSA,home
-bet_004,2026-06-10T08:15:00.000Z,u_003,MEX-RSA,home
+pick_001,2026-06-10T08:00:00.000Z,u_000,MEX-RSA,home
+pick_002,2026-06-10T08:05:00.000Z,u_001,MEX-RSA,draw
+pick_003,2026-06-10T08:10:00.000Z,u_002,MEX-RSA,home
+pick_004,2026-06-10T08:15:00.000Z,u_003,MEX-RSA,home
 ```
 
 **Login thử:** username `lam_mau`, passcode `123456`
@@ -231,11 +231,11 @@ curl -X POST "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" \
   }'
 ```
 
-→ Kết quả mong đợi: `{"success":true,"pick_id":"bet_20260523_..."}`
+→ Kết quả mong đợi: `{"success":true,"pick_id":"pick_20260523_..."}`
 
-**Test upsert (đổi dự đoán):** Gửi lại request trên với `"existing_pick_id": "bet_..."` → cập nhật row thay vì tạo mới.
+**Test upsert (đổi dự đoán):** Gửi lại request trên — Apps Script tìm existing pick theo `(user_id, fixture_id)` và cập nhật row thay vì tạo mới.
 
-→ Kết quả mong đợi: `{"success":true,"pick_id":"bet_...","updated":true}`
+→ Kết quả mong đợi: `{"success":true,"pick_id":"pick_...","updated":true}`
 
 **Test đăng ký user mới:**
 ```bash
@@ -360,7 +360,7 @@ Workflow `.github/workflows/daily-sync.yml` fetch data từ Google Sheets, tính
 |---------|---------|----------|
 | 02:00   | 09:00   | Sau các trận đêm khuya (01:00 ICT) |
 | 07:00   | 14:00   | Sau các trận sáng (07:00 ICT) |
-| 14:00   | 21:00   | Trước khung betting tối (trước lock 00:00) |
+| 14:00   | 21:00   | Trước khung dự đoán tối (trước lock 00:00) |
 
 **Manual trigger:** GitHub → Actions → Daily data sync → Run workflow.
 
@@ -498,7 +498,7 @@ points: {
 | | `NO_PICK >= 0` (tắt) | `NO_PICK < 0` (bật) |
 |---|---|---|
 | User bỏ trận | Không xuất hiện trong leaderboard trận đó | `played++`, `no_picks++`, `+POINTS.NO_PICK điểm` |
-| My Bets | Không thấy trận đó | Hiện "— Không dự đoán · Bỏ qua" |
+| My Picks | Không thấy trận đó | Hiện "— Không dự đoán · Bỏ qua" |
 | Cột "Bỏ qua" | Ẩn | Hiện (desktop) |
 
 **Cách bật:**
@@ -524,7 +524,7 @@ Thực tế đo được (2026-05-27/28):
 | 07:00 | 10:44 | +3h44m | 17:44 |
 | **14:00** | **17:25** | **+3h25m** | **00:25 hôm sau** |
 
-Lần sync 14:00 UTC (dự kiến 21:00 ICT — trước cửa sổ lock nửa đêm) thực tế chạy lúc **00:25 ICT**, tức là sau giờ lock betting. Đây là rủi ro thực tế nếu chỉ dùng GitHub cron.
+Lần sync 14:00 UTC (dự kiến 21:00 ICT — trước cửa sổ lock nửa đêm) thực tế chạy lúc **00:25 ICT**, tức là sau giờ lock dự đoán. Đây là rủi ro thực tế nếu chỉ dùng GitHub cron.
 
 ### Giải pháp: External Trigger qua cron-job.org
 

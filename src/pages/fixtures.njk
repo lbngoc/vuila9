@@ -485,21 +485,19 @@ function pickForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
       const p = window.SITE_PUSH_POINTS ?? 0;
       const pushNote = p > 0 ? `+${p}đ` : p < 0 ? `${p}đ` : 'không tính điểm';
       if (this.pick === 'home') {
-        if (H === 0) return `Thắng khi ${a} thắng trận · Hòa chấp (${pushNote}) khi hòa nhau`;
-        const s = `Thắng khi ${a} thắng từ ${minWin} bàn trở lên (vd. ${minWin}-0, ${minWin+1}-1)`;
-        return hw ? s + ` · Hòa chấp (${pushNote}) khi thắng đúng ${pushAt} bàn` : s;
+        if (H === 0) return `Thắng khi ${a} thắng trận`;
+        return `Thắng khi ${a} thắng từ ${minWin} bàn trở lên (vd. ${minWin}-0, ${minWin+1}-1)`;
       }
       if (this.pick === 'away') {
-        if (H === 0) return `Thắng khi ${b} thắng trận · Hòa chấp (${pushNote}) khi hòa nhau`;
+        if (H === 0) return `Thắng khi ${b} thắng trận`;
         const winDesc = maxHome === 0
           ? `${b} thắng hoặc hòa (vd. 0-1, 0-0)`
           : `${b} thắng, hòa, hoặc ${a} thắng không quá ${maxHome} bàn (vd. 0-1, 0-0, ${maxHome}-0)`;
-        const s = `Thắng khi ${winDesc}`;
-        return hw ? s + ` · Hòa chấp (${pushNote}) khi ${a} thắng đúng ${pushAt} bàn` : s;
+        return `Thắng khi ${winDesc}`;
       }
       if (this.pick === 'draw') {
-        if (H === 0) return `Thắng khi hai đội hòa nhau`;
-        return `Thắng khi ${a} thắng đúng ${pushAt} bàn (vd. ${pushAt}-0, ${pushAt+1}-1)`;
+        if (H === 0) return `Hòa chấp (${pushNote}) khi hai đội hòa nhau`;
+        return `Hòa chấp (${pushNote}) khi ${a} thắng đúng ${pushAt} bàn (vd. ${pushAt}-0, ${pushAt+1}-1)`;
       }
       return '';
     },

@@ -22,7 +22,7 @@ Hướng dẫn setup chu kỳ tự động cho môi trường demo: điền tỉ
 
 02:00  resetDemoData()  *(sáng hôm sau)*
          │ restoreTabFromCsv(users)    → Sheet về sample: 5 demo users
-         │ restoreTabFromCsv(bets)     → Sheet về sample: 27 bets
+         │ restoreTabFromCsv(picks)     → Sheet về sample: 27 picks
          │ restoreTabFromCsv(fixtures) → Sheet về sample: 104 fixtures, 6 finished
          └ triggerGitHubSync()         → sync src/_data/ về state ban đầu
 ```
@@ -44,7 +44,7 @@ Vào Apps Script → **Project Settings → Script Properties** → thêm:
 | `GITHUB_REPO` | `lbngoc/vuila9` | mặc định |
 | `RANDOM_SCORE_COUNT` | `5` | mặc định |
 | `SEED_BRANCH` | `main` | mặc định |
-| `RESET_TABS` | `users,bets,fixtures` | mặc định |
+| `RESET_TABS` | `users,picks,fixtures` | mặc định |
 
 ---
 
@@ -129,9 +129,9 @@ Apps Script editor → dropdown → chọn function → ▶ Run
 
 Script Properties → `RANDOM_SCORE_COUNT` = `3` (hoặc số bất kỳ)
 
-### Chỉ reset bets (giữ nguyên users và fixtures)
+### Chỉ reset picks (giữ nguyên users và fixtures)
 
-Script Properties → `RESET_TABS` = `bets`
+Script Properties → `RESET_TABS` = `picks`
 
 ### Dùng sample data từ branch khác
 

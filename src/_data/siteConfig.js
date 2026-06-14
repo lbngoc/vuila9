@@ -48,8 +48,8 @@ module.exports = {
   //   WIN: 3, LOSE: -1, NO_PICK:  0   → thắng +3, thua -1, bỏ qua không tính (NO_PICK tắt)
   //   WIN: 3, LOSE: -1, NO_PICK: -1   → thắng +3, thua/bỏ đều -1 (NO_PICK bật)
   //
-  // PUSH: xảy ra khi home/away pick trúng đúng ranh giới chấp (chấp nguyên bàn).
-  //       Khác với 'draw' pick — draw pick trúng ranh giới cho WIN (+3).
+  // PUSH: chỉ xảy ra với 'draw' pick khi adj === 0 (chấp nguyên bàn, đúng ranh giới).
+  //       home/away pick tại adj === 0 → LOSE — chỉ có thắng hoặc thua.
   //
   // NO_PICK: < 0 → feature bật (ghi nhận trận bỏ qua + trừ điểm); >= 0 → feature tắt.
   points: {
@@ -72,7 +72,7 @@ module.exports = {
 
   // ── Ghi chú điểm chấp ──────────────────────────────────────────────────
   // Chấp nguyên bàn (1, 2, 3...): có thể xảy ra hòa chấp (PUSH)
-  handicap_note: 'Đội mạnh chấp trước một số bàn nguyên. Ví dụ: chấp 2 bàn, Argentina vs Austria — chọn Argentina thắng nếu Argentina thắng cách biệt từ 3 bàn trở lên (3-0, 4-1). Thắng cách đúng 2 bàn (2-0) → hòa chấp (không tính điểm). Thắng 1 bàn hoặc thua/hòa → dự đoán sai.',
+  handicap_note: 'Đội mạnh chấp trước một số bàn nguyên. Ví dụ: chấp 2 bàn, Argentina vs Austria — chọn Argentina thắng nếu Argentina thắng cách biệt từ 3 bàn trở lên (3-0, 4-1). Thắng cách đúng 2 bàn (2-0) → chọn sai (tính thua). Thắng 1 bàn hoặc thua/hòa → chọn sai. Muốn thắng khi đúng ranh giới → chọn nút Hòa chấp.',
 
   // Chấp lẻ (0.5, 1.5, 2.5...): không bao giờ có hòa chấp — chỉ thắng hoặc thua
   handicap_half_note: 'Đội mạnh chấp trước một số bàn lẻ (0.5, 1.5, 2.5...) — không bao giờ có hòa chấp. Ví dụ: chấp 1.5 bàn, Brazil vs Scotland — chọn Brazil thắng nếu Brazil thắng cách biệt từ 2 bàn trở lên (2-0, 3-1). Thắng đúng 1 bàn hoặc thua/hòa → dự đoán sai. Chấp lẻ nút "Hòa" bị tắt vì không thể xảy ra.',

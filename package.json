@@ -1,7 +1,7 @@
 {
   "name": "vuila9",
   "version": "1.0.1",
-  "description": "Vui Là Chính — lightweight football betting tracker powered by Google Sheets",
+  "description": "Vui Là Chính — lightweight football pick tracker powered by Google Sheets",
   "scripts": {
     "build": "npm run pipeline && npm run css && npx @11ty/eleventy",
     "dev": "concurrently \"npx @11ty/eleventy --serve --port=8080\" \"npx @tailwindcss/cli -i src/assets/css/input.css -o src/assets/css/style.css --watch\"",

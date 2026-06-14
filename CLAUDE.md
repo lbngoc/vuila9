@@ -135,16 +135,16 @@ Output là 1 dòng CSV với `passcode_hash` đã hash — paste vào tab users,
 
 | Result | Default | When |
 |---|---|---|
-| WIN | +3 | correct pick |
-| PUSH | 0 | exact handicap boundary (home/away picks, whole-ball only) |
-| LOSE | 0 | wrong pick — change to -1 to penalise |
+| WIN | +1 | home/away pick correct (adj > 0 for home, adj < 0 for away) |
+| PUSH | +2 | draw pick correct — adj === 0 (exact handicap boundary, whole-ball only) |
+| LOSE | -1 | wrong pick — includes home/away at adj === 0 |
 
 `adj = (result_home - result_away) + handicap`
 - `adj > 0` → home WIN / away LOSE
-- `adj = 0` → home PUSH / away PUSH / draw-pick WIN
+- `adj = 0` → home LOSE / away LOSE / draw-pick PUSH
 - `adj < 0` → home LOSE / away WIN
 
-Draw pick: WIN if `adj === 0`, LOSE otherwise — never PUSH.
+Draw pick: PUSH if `adj === 0`, LOSE otherwise — never WIN.
 
 ### Pick lock (PICK_LOCK_MINUTES)
 
