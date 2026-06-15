@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-15T01:54:26.989Z",
+  "generated_at": "2026-06-15T14:48:31.497Z",
   "data": [
     {
       "pick_id": "pick_001",
@@ -169,8 +169,8 @@
       "user_id": "u_000",
       "fixture_id": "BRA-MAR",
       "pick_type": "home",
-      "result": "PUSH",
-      "points": 2
+      "result": "LOSE",
+      "points": -1
     },
     {
       "pick_id": "pick_020",
@@ -178,8 +178,8 @@
       "user_id": "u_001",
       "fixture_id": "BRA-MAR",
       "pick_type": "away",
-      "result": "PUSH",
-      "points": 2
+      "result": "LOSE",
+      "points": -1
     },
     {
       "pick_id": "pick_021",
@@ -187,8 +187,8 @@
       "user_id": "u_002",
       "fixture_id": "BRA-MAR",
       "pick_type": "home",
-      "result": "PUSH",
-      "points": 2
+      "result": "LOSE",
+      "points": -1
     },
     {
       "pick_id": "pick_022",
@@ -196,8 +196,8 @@
       "user_id": "u_003",
       "fixture_id": "BRA-MAR",
       "pick_type": "draw",
-      "result": "WIN",
-      "points": 1
+      "result": "PUSH",
+      "points": 2
     },
     {
       "pick_id": "pick_023",
@@ -205,8 +205,8 @@
       "user_id": "u_004",
       "fixture_id": "BRA-MAR",
       "pick_type": "home",
-      "result": "PUSH",
-      "points": 2
+      "result": "LOSE",
+      "points": -1
     },
     {
       "pick_id": "pick_024",
@@ -286,8 +286,8 @@
       "user_id": "u_000",
       "fixture_id": "AUS-TUR",
       "pick_type": "draw",
-      "result": "WIN",
-      "points": 1
+      "result": "PUSH",
+      "points": 2
     },
     {
       "pick_id": "pick_033",
@@ -295,8 +295,8 @@
       "user_id": "u_001",
       "fixture_id": "AUS-TUR",
       "pick_type": "home",
-      "result": "PUSH",
-      "points": 2
+      "result": "LOSE",
+      "points": -1
     },
     {
       "pick_id": "pick_034",
@@ -304,8 +304,8 @@
       "user_id": "u_002",
       "fixture_id": "AUS-TUR",
       "pick_type": "away",
-      "result": "PUSH",
-      "points": 2
+      "result": "LOSE",
+      "points": -1
     },
     {
       "pick_id": "pick_035",
@@ -313,8 +313,8 @@
       "user_id": "u_003",
       "fixture_id": "AUS-TUR",
       "pick_type": "draw",
-      "result": "WIN",
-      "points": 1
+      "result": "PUSH",
+      "points": 2
     },
     {
       "pick_id": "pick_036",
@@ -322,8 +322,8 @@
       "user_id": "u_004",
       "fixture_id": "AUS-TUR",
       "pick_type": "home",
-      "result": "PUSH",
-      "points": 2
+      "result": "LOSE",
+      "points": -1
     },
     {
       "pick_id": "pick_037",
@@ -457,8 +457,8 @@
       "user_id": "u3",
       "fixture_id": "BRA-MAR",
       "pick_type": "home",
-      "result": "PUSH",
-      "points": 2
+      "result": "LOSE",
+      "points": -1
     },
     {
       "pick_id": "auto_u_004_MEX-RSA",
@@ -845,6 +845,126 @@
       "created_at": "2026-06-15T22:00:00.000Z",
       "user_id": "u3",
       "fixture_id": "KSA-URU",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_000_IRN-NZL",
+      "created_at": "2026-06-16T01:00:00.000Z",
+      "user_id": "u_000",
+      "fixture_id": "IRN-NZL",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_001_IRN-NZL",
+      "created_at": "2026-06-16T01:00:00.000Z",
+      "user_id": "u_001",
+      "fixture_id": "IRN-NZL",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_002_IRN-NZL",
+      "created_at": "2026-06-16T01:00:00.000Z",
+      "user_id": "u_002",
+      "fixture_id": "IRN-NZL",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_003_IRN-NZL",
+      "created_at": "2026-06-16T01:00:00.000Z",
+      "user_id": "u_003",
+      "fixture_id": "IRN-NZL",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_004_IRN-NZL",
+      "created_at": "2026-06-16T01:00:00.000Z",
+      "user_id": "u_004",
+      "fixture_id": "IRN-NZL",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u3_IRN-NZL",
+      "created_at": "2026-06-16T01:00:00.000Z",
+      "user_id": "u3",
+      "fixture_id": "IRN-NZL",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_000_FRA-SEN",
+      "created_at": "2026-06-16T19:00:00.000Z",
+      "user_id": "u_000",
+      "fixture_id": "FRA-SEN",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_001_FRA-SEN",
+      "created_at": "2026-06-16T19:00:00.000Z",
+      "user_id": "u_001",
+      "fixture_id": "FRA-SEN",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_002_FRA-SEN",
+      "created_at": "2026-06-16T19:00:00.000Z",
+      "user_id": "u_002",
+      "fixture_id": "FRA-SEN",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_003_FRA-SEN",
+      "created_at": "2026-06-16T19:00:00.000Z",
+      "user_id": "u_003",
+      "fixture_id": "FRA-SEN",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_004_FRA-SEN",
+      "created_at": "2026-06-16T19:00:00.000Z",
+      "user_id": "u_004",
+      "fixture_id": "FRA-SEN",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u3_FRA-SEN",
+      "created_at": "2026-06-16T19:00:00.000Z",
+      "user_id": "u3",
+      "fixture_id": "FRA-SEN",
       "pick_type": null,
       "result": "NO_PICK",
       "points": -1,
