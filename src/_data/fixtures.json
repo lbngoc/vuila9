@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-15T14:48:31.497Z",
+  "generated_at": "2026-06-16T01:54:25.972Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -168,7 +168,7 @@
       "result_home": 1,
       "result_away": 1,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "BEL-EGY",
@@ -181,7 +181,7 @@
       "result_home": 1,
       "result_away": 0,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "KSA-URU",
@@ -194,7 +194,7 @@
       "result_home": 2,
       "result_away": 0,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "IRN-NZL",
@@ -207,7 +207,7 @@
       "result_home": 1,
       "result_away": 2,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "FRA-SEN",
@@ -229,10 +229,10 @@
       "home_team": "Iraq",
       "away_team": "Na Uy",
       "handicap": "0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 0,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -242,10 +242,10 @@
       "home_team": "Argentina",
       "away_team": "Algérie",
       "handicap": "-1.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 2,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
