@@ -44,14 +44,14 @@ permalink: /leaderboard/
           <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3">
             {% if siteConfig.points.PUSH != siteConfig.points.LOSE %}
               <span class="hidden sm:inline">Đúng / Hòa chấp / Sai</span>
-              <span class="sm:hidden">Đ / H / S</span>
+              <span class="sm:hidden">Đ / H / S{% if siteConfig.points.NO_PICK < 0 %} / -{% endif %}</span>
             {% else %}
               <span class="hidden sm:inline">Đúng / Sai</span>
-              <span class="sm:hidden">Đ / S</span>
+              <span class="sm:hidden">Đ / S{% if siteConfig.points.NO_PICK < 0 %} / -{% endif %}</span>
             {% endif %}
           </th>
           <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3">Điểm</th>
-          <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3 w-20" x-show="currentUser" x-cloak></th>
+          <th class="text-right px-2 py-2.5 sm:px-4 sm:py-3 w-8 sm:w-auto" x-show="currentUser" x-cloak></th>
         </tr>
       </thead>
       <tbody>
@@ -82,6 +82,11 @@ permalink: /leaderboard/
               /
               <span class="text-red-500 dark:text-red-400"
                     x-text="{{ 'user.losses + user.draws' if siteConfig.points.PUSH == siteConfig.points.LOSE else 'user.losses' }}"></span>
+              {% if siteConfig.points.NO_PICK < 0 %}
+              <span class="sm:hidden">/
+                <span class="text-pink-400 dark:text-pink-500" x-text="user.no_picks ?? 0"></span>
+              </span>
+              {% endif %}
             </td>
             <td class="px-2 py-2.5 sm:px-4 sm:py-3 text-right font-bold text-lg"
                 :class="user.points > 0 ? 'text-emerald-500 dark:text-emerald-400' : user.points < 0 ? 'text-red-500 dark:text-red-400' : 'text-gray-400'"
