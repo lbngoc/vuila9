@@ -189,7 +189,7 @@ Khi `points.NO_PICK < 0`, `calculate-results.js` thêm entry synthetic cho mỗi
 - **`login.js`** — rate-limit (10/min) · validate format (username regex, passcode_hash 64 hex) · forward `action:'login'` to Apps Script · trả session `{user_id, username, display_name, _ph}`. `NOT_FOUND`/`WRONG_PASSWORD` đều trả cùng lỗi.
 - **`submit-pick.js`** — rate-limit · honeypot · format validation (required fields, pick_type enum) · forward `{username, fixture_id, pick_type, _session_hash}` to Apps Script. Auth và fixture check do Apps Script xử lý.
 - **`register.js`** — rate-limit · honeypot · format validation (username regex, passcode length) · hash passcode · forward `action:'register'` to Apps Script. Authoritative duplicate check do Apps Script xử lý.
-- **`live-picks.js`** — GET · rate-limit (60/min) · fetch picks CSV từ Google Sheets server-side · trả JSON `{data: [{pick_id, created_at, user_id, fixture_id, pick_type}]}`.
+- **`live-picks.js`** — GET · rate-limit (60/min) · fetch picks CSV từ Google Sheets server-side · trả JSON `{data: [{pick_id, created_at, user_id, fixture_id, pick_type}]}`. Filter tuỳ chọn `?user_id=` / `?fixture_id=` để giảm payload (Google fetch vẫn full CSV; chỉ trim response function→browser). `/my-picks/` dùng `?user_id=` qua `fetchLivePicks({userId})` với cache key riêng — không đụng cache full-list của leaderboard/fixtures.
 - **`live-users.js`** — GET · rate-limit (60/min) · fetch users CSV từ Google Sheets server-side · strip `passcode`/`passcode_hash` · trả JSON `{data: [{id, username, display_name, status, created_at}]}`.
 
 ## Key Implementation Details

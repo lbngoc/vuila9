@@ -40,32 +40,41 @@ function parseCSV(text) {
 
 let _livePicksFlight = null;  // dedup concurrent fetches from N fixture cards
 
-async function fetchLivePicks(force = false) {
+async function fetchLivePicks(opts = {}) {
+  const { force = false, userId = null } = opts;
+  // User-scoped fetch gets its own cache key + query so it never pollutes the shared
+  // full-list cache that leaderboard / fixtures community counts depend on.
+  const cacheKey = userId ? `${_LIVE_CACHE_KEY}_u_${userId}` : _LIVE_CACHE_KEY;
+  const qs       = userId ? `?user_id=${encodeURIComponent(userId)}` : '';
+
   if (!force) {
     try {
-      const cached = JSON.parse(localStorage.getItem(_LIVE_CACHE_KEY) || 'null');
+      const cached = JSON.parse(localStorage.getItem(cacheKey) || 'null');
       if (cached && Date.now() - cached.fetched_at < _LIVE_PICKS_TTL) return cached.data;
     } catch {}
   }
 
-  // Return in-flight promise if one is already running (prevents N concurrent fetches)
-  if (_livePicksFlight) return _livePicksFlight;
+  // Dedup concurrent unfiltered fetches (N fixture cards share one). The user-scoped
+  // fetch has a single caller (/my-picks/), so it skips the shared flight.
+  if (!userId && _livePicksFlight) return _livePicksFlight;
 
-  _livePicksFlight = (async () => {
+  const run = (async () => {
     try {
-      const res  = await fetch('/.netlify/functions/live-picks');
-      if (!res.ok) return JSON.parse(localStorage.getItem(_LIVE_CACHE_KEY) || 'null')?.data || null;
+      const res  = await fetch('/.netlify/functions/live-picks' + qs);
+      if (!res.ok) return JSON.parse(localStorage.getItem(cacheKey) || 'null')?.data || null;
       const { data } = await res.json();
-      localStorage.setItem(_LIVE_CACHE_KEY, JSON.stringify({ fetched_at: Date.now(), data }));
+      localStorage.setItem(cacheKey, JSON.stringify({ fetched_at: Date.now(), data }));
       return data;
     } catch {
-      try { return JSON.parse(localStorage.getItem(_LIVE_CACHE_KEY) || 'null')?.data || null; }
+      try { return JSON.parse(localStorage.getItem(cacheKey) || 'null')?.data || null; }
       catch { return null; }
     } finally {
-      _livePicksFlight = null;
+      if (!userId) _livePicksFlight = null;
     }
   })();
-  return _livePicksFlight;
+
+  if (!userId) _livePicksFlight = run;
+  return run;
 }
 
 // ── Live users helpers ────────────────────────────────────────────────
@@ -161,11 +170,15 @@ function savePendingPick(fixtureId, pickType, pickId) {
 // the live picks so callers can render from them directly. The committed build snapshot
 // lags up to ~8h behind the Sheet, so reading live avoids a window where a just-confirmed
 // pick is in neither pending nor build (Bug 1).
-async function syncOwnPicks(session) {
+async function syncOwnPicks(session, { scope = 'all' } = {}) {
   if (!session) return null;
   // force=true: bỏ qua cache 5 phút để user luôn thấy pick mới nhất của chính mình.
+  // scope='mine': chỉ tải pick của user (filter server-side) — dùng cho /my-picks/, payload nhỏ.
+  // scope='all' (mặc định): tải full để /fixtures/ đếm community picks.
   // Khi fetch lỗi, fetchLivePicks vẫn fallback về cache cũ (graceful, không trả null oan).
-  const all = await fetchLivePicks(true);
+  const all = await fetchLivePicks(
+    scope === 'mine' ? { force: true, userId: session.user_id } : { force: true }
+  );
   if (!all) return null;
   try {
     const confirmedFixtures = new Set(
@@ -453,8 +466,9 @@ function myPicksPage(buildPicksData, fixturesData) {
       if (!this.user) return;
       for (const f of fixturesData) this.fixtures[f.fixture_id] = f;
       this._loadPicks(buildPicksData, null);
-      // Sync from live Sheet then re-render using the live picks (closes the build-lag gap — Bug 1)
-      syncOwnPicks(this.user).then(live => this._loadPicks(buildPicksData, live));
+      // Sync from live Sheet then re-render. scope='mine' → chỉ tải pick của user (payload nhỏ),
+      // và đóng khoảng build-lag (Bug 1) vì live CSV cập nhật hơn build snapshot.
+      syncOwnPicks(this.user, { scope: 'mine' }).then(live => this._loadPicks(buildPicksData, live));
     },
     _loadPicks(buildPicksData, livePicks) {
       const uid        = this.user.user_id;
