@@ -155,20 +155,26 @@ function savePendingPick(fixtureId, pickType, pickId) {
   } catch {}
 }
 
-// Sync own picks: remove _PENDING_KEY entries confirmed in CSV, keep fresh ones (Bug 1)
+// Sync own picks: drop _PENDING_KEY entries already confirmed in live CSV, then return
+// the live picks so callers can render from them directly. The committed build snapshot
+// lags up to ~8h behind the Sheet, so reading live avoids a window where a just-confirmed
+// pick is in neither pending nor build (Bug 1).
 async function syncOwnPicks(session) {
-  if (!session) return;
+  if (!session) return null;
   const all = await fetchLivePicks();
-  if (!all) return;
+  if (!all) return null;
   try {
     const confirmedFixtures = new Set(
       all.filter(b => b.user_id === session.user_id).map(b => b.fixture_id)
     );
-    if (!confirmedFixtures.size) return;
-    const pending = JSON.parse(localStorage.getItem(_PENDING_KEY) || '[]');
-    const stillPending = pending.filter(b => !confirmedFixtures.has(b.fixture_id));
-    localStorage.setItem(_PENDING_KEY, JSON.stringify(stillPending));
+    if (confirmedFixtures.size) {
+      const pending = JSON.parse(localStorage.getItem(_PENDING_KEY) || '[]');
+      localStorage.setItem(_PENDING_KEY, JSON.stringify(
+        pending.filter(b => !confirmedFixtures.has(b.fixture_id))
+      ));
+    }
   } catch {}
+  return all;
 }
 
 // ── Alpine components ─────────────────────────────────────────────────
@@ -442,35 +448,41 @@ function myPicksPage(buildPicksData, fixturesData) {
       catch { this.user = null; }
       if (!this.user) return;
       for (const f of fixturesData) this.fixtures[f.fixture_id] = f;
-      this._loadPicks(buildPicksData);
-      // Sync from live Sheet then reload
-      syncOwnPicks(this.user).then(() => this._loadPicks(buildPicksData));
+      this._loadPicks(buildPicksData, null);
+      // Sync from live Sheet then re-render using the live picks (closes the build-lag gap — Bug 1)
+      syncOwnPicks(this.user).then(live => this._loadPicks(buildPicksData, live));
     },
-    _loadPicks(buildPicksData) {
-      const buildPicks = buildPicksData.filter(b => b.user_id === this.user.user_id);
+    _loadPicks(buildPicksData, livePicks) {
+      const uid        = this.user.user_id;
+      const buildPicks = buildPicksData.filter(b => b.user_id === uid);
+      const live       = (livePicks || []).filter(b => b.user_id === uid);
 
       let pending = [];
       try { pending = JSON.parse(localStorage.getItem(_PENDING_KEY) || '[]'); } catch {}
 
-      // Start with pending (most recent pick for each fixture)
-      const map      = new Map(pending.map(b => [b.fixture_id, { ...b, _pending: true }]));
+      const map      = new Map();
       const finished = new Set();
 
+      // 1. Build snapshot as base. Finished fixtures are authoritative (result + points).
       buildPicks.forEach(b => {
-        if (b.result != null) {
-          // Finished: build is authoritative (has result + points) — always wins
-          map.set(b.fixture_id, b);
-          finished.add(b.fixture_id);
-        } else {
-          const pendingEntry = map.get(b.fixture_id);
-          if (!pendingEntry) {
-            // No pending entry: use build as-is
-            map.set(b.fixture_id, b);
-          } else {
-            // Upcoming + pending: pending has the more recent pick; build has the rest
-            map.set(b.fixture_id, { ...b, pick_type: pendingEntry.pick_type, _pending: pendingEntry._pending });
-          }
-        }
+        map.set(b.fixture_id, b);
+        if (b.result != null) finished.add(b.fixture_id);
+      });
+
+      // 2. Live CSV overrides NOT-finished fixtures — most current, device-independent.
+      //    A pick confirmed in the Sheet shows here even before the build catches up.
+      live.forEach(b => {
+        if (finished.has(b.fixture_id)) return;   // finished: build wins (has points)
+        const base = map.get(b.fixture_id) || {};
+        map.set(b.fixture_id, { ...base, ...b, result: null, points: null });
+      });
+
+      // 3. Pending overrides NOT-finished fixtures — optimistic, covers the few seconds
+      //    before a fresh pick propagates to the published CSV.
+      pending.forEach(b => {
+        if (finished.has(b.fixture_id)) return;
+        const base = map.get(b.fixture_id) || {};
+        map.set(b.fixture_id, { ...base, ...b, _pending: true, result: null, points: null });
       });
 
       // Cleanup pending for finished fixtures (confirmed via result)

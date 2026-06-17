@@ -417,7 +417,8 @@ function pickForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
       }
 
       // Update from fresh CSV: cross-device sync + up-to-date counts
-      if (u) syncOwnPicks(u).then(() => fetchLivePicks()).then(all => {
+      // syncOwnPicks returns the live picks it already fetched — avoid a second fetch.
+      if (u) syncOwnPicks(u).then(all => {
         if (!all) return;
         const csvPick = all.find(b => b.fixture_id === fixtureId && b.user_id === u.user_id);
         if (csvPick) this.selected = csvPick.pick_type;
