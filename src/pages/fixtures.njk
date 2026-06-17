@@ -566,7 +566,9 @@ function pickForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
           this.isError  = false;
           this.pick     = '';
           localStorage.removeItem(_LIVE_CACHE_KEY);
-          fetchLivePicks().then(all => { if (all) this.communityPicks = aggregatePicks(all, this.fixtureId); });
+          // Chỉ cần stats của đúng fixture này → filter server-side cho payload nhỏ.
+          // force=true: lấy count mới nhất ngay sau submit (bỏ qua cache fixture-scoped).
+          fetchLivePicks({ fixtureId: this.fixtureId, force: true }).then(all => { if (all) this.communityPicks = aggregatePicks(all, this.fixtureId); });
         } else {
           this.error   = data.error || 'Lỗi không xác định.';
           this.isError = true;

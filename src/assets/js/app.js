@@ -41,11 +41,15 @@ function parseCSV(text) {
 let _livePicksFlight = null;  // dedup concurrent fetches from N fixture cards
 
 async function fetchLivePicks(opts = {}) {
-  const { force = false, userId = null } = opts;
-  // User-scoped fetch gets its own cache key + query so it never pollutes the shared
-  // full-list cache that leaderboard / fixtures community counts depend on.
-  const cacheKey = userId ? `${_LIVE_CACHE_KEY}_u_${userId}` : _LIVE_CACHE_KEY;
-  const qs       = userId ? `?user_id=${encodeURIComponent(userId)}` : '';
+  const { force = false, userId = null, fixtureId = null } = opts;
+  // Scoped fetches (by user or fixture) get their own cache key + query so they never
+  // pollute the shared full-list cache that leaderboard / fixtures community counts depend on.
+  const params = new URLSearchParams();
+  if (userId)    params.set('user_id', userId);
+  if (fixtureId) params.set('fixture_id', fixtureId);
+  const qs       = params.toString();
+  const scoped   = qs.length > 0;
+  const cacheKey = scoped ? `${_LIVE_CACHE_KEY}?${qs}` : _LIVE_CACHE_KEY;
 
   if (!force) {
     try {
@@ -54,13 +58,13 @@ async function fetchLivePicks(opts = {}) {
     } catch {}
   }
 
-  // Dedup concurrent unfiltered fetches (N fixture cards share one). The user-scoped
-  // fetch has a single caller (/my-picks/), so it skips the shared flight.
-  if (!userId && _livePicksFlight) return _livePicksFlight;
+  // Dedup concurrent unfiltered fetches (N fixture cards share one). Scoped fetches have
+  // a single caller each, so they skip the shared flight.
+  if (!scoped && _livePicksFlight) return _livePicksFlight;
 
   const run = (async () => {
     try {
-      const res  = await fetch('/.netlify/functions/live-picks' + qs);
+      const res  = await fetch('/.netlify/functions/live-picks' + (qs ? '?' + qs : ''));
       if (!res.ok) return JSON.parse(localStorage.getItem(cacheKey) || 'null')?.data || null;
       const { data } = await res.json();
       localStorage.setItem(cacheKey, JSON.stringify({ fetched_at: Date.now(), data }));
@@ -69,11 +73,11 @@ async function fetchLivePicks(opts = {}) {
       try { return JSON.parse(localStorage.getItem(cacheKey) || 'null')?.data || null; }
       catch { return null; }
     } finally {
-      if (!userId) _livePicksFlight = null;
+      if (!scoped) _livePicksFlight = null;
     }
   })();
 
-  if (!userId) _livePicksFlight = run;
+  if (!scoped) _livePicksFlight = run;
   return run;
 }
 
