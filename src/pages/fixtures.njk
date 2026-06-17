@@ -19,7 +19,8 @@ permalink: /fixtures/
     <div>
       <p class="font-bold text-lg leading-tight text-gray-900 dark:text-white">{{ fixture.home_team }} vs {{ fixture.away_team }}</p>
       <p class="text-xs text-gray-500 mt-1">{{ fixture.league }} · {{ fixture.kickoff_at | dateDisplay }} (giờ VN)
-        <span x-show="selected" x-cloak class="text-indigo-600 dark:text-indigo-400 font-semibold">● Đã dự đoán</span>
+        <span x-show="selected && selectedConfirmed" x-cloak class="text-indigo-600 dark:text-indigo-400 font-semibold block sm:inline">● Đã dự đoán</span>
+        <span x-show="selected && !selectedConfirmed" x-cloak class="text-amber-600 dark:text-amber-400 font-semibold block sm:inline">○ Chờ xác nhận</span>
       </p>
       {% set h = (fixture.handicap or 0) | float %}
       {% if h == 0 %}
@@ -41,7 +42,7 @@ permalink: /fixtures/
 
     <!-- Home win -->
     <button @click="selectPick('home')" :disabled="isLocked"
-            :class="selected === 'home' ? 'ring-2 ring-red-500 bg-red-100 dark:bg-red-900/30' : 'hover:bg-red-50 dark:hover:bg-red-900/40 cursor-pointer'"
+            :class="selected !== 'home' ? 'hover:bg-red-50 dark:hover:bg-red-900/40 cursor-pointer' : selectedConfirmed ? 'ring-2 ring-red-500 bg-red-100 dark:bg-red-900/30' : 'outline-dashed outline-2 outline-offset-[-2px] outline-red-500 bg-red-100 dark:bg-red-900/30'"
             class="bg-gray-100 dark:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl p-4 min-h-[4.5rem] text-center transition text-sm group">
       <div class="text-gray-500 group-hover:text-red-600 dark:group-hover:text-red-300 text-xs mb-1.5 transition">Đội nhà</div>
       <div class="font-semibold text-gray-900 dark:text-white leading-tight truncate" title="{{ fixture.home_team }}">{{ fixture.home_team }}</div>
@@ -53,7 +54,7 @@ permalink: /fixtures/
 
     <!-- Draw -->
     <button @click="selectPick('draw')" :disabled="isLocked || isDrawDisabled"
-            :class="isDrawDisabled ? 'opacity-30 cursor-not-allowed' : selected === 'draw' ? 'ring-2 ring-yellow-500 bg-yellow-100 dark:bg-yellow-900/30' : 'hover:bg-yellow-50 dark:hover:bg-yellow-900/40 cursor-pointer'"
+            :class="isDrawDisabled ? 'opacity-30 cursor-not-allowed' : selected !== 'draw' ? 'hover:bg-yellow-50 dark:hover:bg-yellow-900/40 cursor-pointer' : selectedConfirmed ? 'ring-2 ring-yellow-500 bg-yellow-100 dark:bg-yellow-900/30' : 'outline-dashed outline-2 outline-offset-[-2px] outline-yellow-500 bg-yellow-100 dark:bg-yellow-900/30'"
             class="bg-gray-100 dark:bg-gray-800 disabled:opacity-40 rounded-xl p-4 min-h-[4.5rem] text-center transition text-sm group">
       <div class="text-gray-500 group-hover:text-yellow-600 dark:group-hover:text-yellow-300 text-xs mb-1.5 transition"
            x-text="isDrawDisabled ? 'Không khả dụng' : 'Kết quả'">
@@ -70,7 +71,7 @@ permalink: /fixtures/
 
     <!-- Away win -->
     <button @click="selectPick('away')" :disabled="isLocked"
-            :class="selected === 'away' ? 'ring-2 ring-blue-500 bg-blue-100 dark:bg-blue-900/30' : 'hover:bg-blue-50 dark:hover:bg-blue-900/40 cursor-pointer'"
+            :class="selected !== 'away' ? 'hover:bg-blue-50 dark:hover:bg-blue-900/40 cursor-pointer' : selectedConfirmed ? 'ring-2 ring-blue-500 bg-blue-100 dark:bg-blue-900/30' : 'outline-dashed outline-2 outline-offset-[-2px] outline-blue-500 bg-blue-100 dark:bg-blue-900/30'"
             class="bg-gray-100 dark:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl p-4 min-h-[4.5rem] text-center transition text-sm group">
       <div class="text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-300 text-xs mb-1.5 transition">Đội khách</div>
       <div class="font-semibold text-gray-900 dark:text-white leading-tight truncate" title="{{ fixture.away_team }}">{{ fixture.away_team }}</div>
@@ -379,6 +380,7 @@ function pickForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
     _user: null,
     pick: '',
     selected: '',
+    selectedConfirmed: false,   // true = có trong build/live CSV (nét liền); false = pending (nét đứt)
     communityPicks: null,
     _buildPickCount: 0,
     username: '',
@@ -407,6 +409,8 @@ function pickForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
         catch { return null; }
       })();
       this.selected = pendingPick?.pick_type || buildPick?.pick_type || '';
+      // Confirmed chỉ khi build có pick này VÀ không có pending pick khác đè lên
+      this.selectedConfirmed = !!buildPick && (!pendingPick || pendingPick.pick_type === buildPick.pick_type);
 
       // Cache build-snapshot pick count for pickCount getter (computed once, never changes)
       this._buildPickCount = aggregatePicks(window.__BUILD_PICKS__ || [], fixtureId).total;
@@ -421,7 +425,10 @@ function pickForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
       if (u) syncOwnPicks(u).then(all => {
         if (!all) return;
         const csvPick = all.find(b => b.fixture_id === fixtureId && b.user_id === u.user_id);
-        if (csvPick) this.selected = csvPick.pick_type;
+        if (csvPick) {
+          this.selected = csvPick.pick_type;
+          this.selectedConfirmed = true;   // có trong live CSV → confirmed
+        }
         if (this.selected) this.communityPicks = aggregatePicks(all, fixtureId);
       });
 
@@ -431,7 +438,10 @@ function pickForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
         const cu = this.currentUser;
         if (cu) {
           const csvPick = all.find(b => b.fixture_id === fixtureId && b.user_id === cu.user_id);
-          if (csvPick) this.selected = csvPick.pick_type;
+          if (csvPick) {
+            this.selected = csvPick.pick_type;
+            this.selectedConfirmed = true;   // có trong live CSV → confirmed
+          }
         }
         if (this.selected) this.communityPicks = aggregatePicks(all, fixtureId);
       });
@@ -562,13 +572,19 @@ function pickForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
         if (res.ok) {
           savePendingPick(this.fixtureId, this.pick, data.pick_id);
           this.selected = this.pick;
+          this.selectedConfirmed = false;   // vừa gửi → pending cho tới khi live CSV xác nhận
           this.message  = data.updated ? '✅ Đã cập nhật dự đoán!' : '✅ Gửi dự đoán thành công!';
           this.isError  = false;
           this.pick     = '';
           localStorage.removeItem(_LIVE_CACHE_KEY);
           // Chỉ cần stats của đúng fixture này → filter server-side cho payload nhỏ.
           // force=true: lấy count mới nhất ngay sau submit (bỏ qua cache fixture-scoped).
-          fetchLivePicks({ fixtureId: this.fixtureId, force: true }).then(all => { if (all) this.communityPicks = aggregatePicks(all, this.fixtureId); });
+          fetchLivePicks({ fixtureId: this.fixtureId, force: true }).then(all => {
+            if (!all) return;
+            this.communityPicks = aggregatePicks(all, this.fixtureId);
+            const csvPick = all.find(b => b.fixture_id === this.fixtureId && b.user_id === u.user_id);
+            if (csvPick && csvPick.pick_type === this.selected) this.selectedConfirmed = true;
+          });
         } else {
           this.error   = data.error || 'Lỗi không xác định.';
           this.isError = true;
