@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-16T14:48:41.403Z",
+  "generated_at": "2026-06-17T01:54:27.019Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -220,7 +220,7 @@
       "result_home": 2,
       "result_away": 0,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "IRQ-NOR",
@@ -233,7 +233,7 @@
       "result_home": 1,
       "result_away": 0,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "ARG-ALG",
@@ -246,7 +246,7 @@
       "result_home": 2,
       "result_away": 1,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "AUT-JOR",
@@ -281,10 +281,10 @@
       "home_team": "Anh",
       "away_team": "Croatia",
       "handicap": "-1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 2,
+      "result_away": 0,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -294,10 +294,10 @@
       "home_team": "Ghana",
       "away_team": "Panama",
       "handicap": "-0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
