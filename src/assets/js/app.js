@@ -40,11 +40,13 @@ function parseCSV(text) {
 
 let _livePicksFlight = null;  // dedup concurrent fetches from N fixture cards
 
-async function fetchLivePicks() {
-  try {
-    const cached = JSON.parse(localStorage.getItem(_LIVE_CACHE_KEY) || 'null');
-    if (cached && Date.now() - cached.fetched_at < _LIVE_PICKS_TTL) return cached.data;
-  } catch {}
+async function fetchLivePicks(force = false) {
+  if (!force) {
+    try {
+      const cached = JSON.parse(localStorage.getItem(_LIVE_CACHE_KEY) || 'null');
+      if (cached && Date.now() - cached.fetched_at < _LIVE_PICKS_TTL) return cached.data;
+    } catch {}
+  }
 
   // Return in-flight promise if one is already running (prevents N concurrent fetches)
   if (_livePicksFlight) return _livePicksFlight;
@@ -161,7 +163,9 @@ function savePendingPick(fixtureId, pickType, pickId) {
 // pick is in neither pending nor build (Bug 1).
 async function syncOwnPicks(session) {
   if (!session) return null;
-  const all = await fetchLivePicks();
+  // force=true: bỏ qua cache 5 phút để user luôn thấy pick mới nhất của chính mình.
+  // Khi fetch lỗi, fetchLivePicks vẫn fallback về cache cũ (graceful, không trả null oan).
+  const all = await fetchLivePicks(true);
   if (!all) return null;
   try {
     const confirmedFixtures = new Set(
