@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-17T01:54:27.019Z",
+  "generated_at": "2026-06-17T14:48:32.766Z",
   "data": [
     {
       "pick_id": "pick_001",
@@ -1325,6 +1325,126 @@
       "created_at": "2026-06-17T23:00:00.000Z",
       "user_id": "u3",
       "fixture_id": "GHA-PAN",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_000_UZB-COL",
+      "created_at": "2026-06-18T02:00:00.000Z",
+      "user_id": "u_000",
+      "fixture_id": "UZB-COL",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_001_UZB-COL",
+      "created_at": "2026-06-18T02:00:00.000Z",
+      "user_id": "u_001",
+      "fixture_id": "UZB-COL",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_002_UZB-COL",
+      "created_at": "2026-06-18T02:00:00.000Z",
+      "user_id": "u_002",
+      "fixture_id": "UZB-COL",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_003_UZB-COL",
+      "created_at": "2026-06-18T02:00:00.000Z",
+      "user_id": "u_003",
+      "fixture_id": "UZB-COL",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_004_UZB-COL",
+      "created_at": "2026-06-18T02:00:00.000Z",
+      "user_id": "u_004",
+      "fixture_id": "UZB-COL",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u3_UZB-COL",
+      "created_at": "2026-06-18T02:00:00.000Z",
+      "user_id": "u3",
+      "fixture_id": "UZB-COL",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_000_CZE-RSA",
+      "created_at": "2026-06-18T16:00:00.000Z",
+      "user_id": "u_000",
+      "fixture_id": "CZE-RSA",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_001_CZE-RSA",
+      "created_at": "2026-06-18T16:00:00.000Z",
+      "user_id": "u_001",
+      "fixture_id": "CZE-RSA",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_002_CZE-RSA",
+      "created_at": "2026-06-18T16:00:00.000Z",
+      "user_id": "u_002",
+      "fixture_id": "CZE-RSA",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_003_CZE-RSA",
+      "created_at": "2026-06-18T16:00:00.000Z",
+      "user_id": "u_003",
+      "fixture_id": "CZE-RSA",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_004_CZE-RSA",
+      "created_at": "2026-06-18T16:00:00.000Z",
+      "user_id": "u_004",
+      "fixture_id": "CZE-RSA",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u3_CZE-RSA",
+      "created_at": "2026-06-18T16:00:00.000Z",
+      "user_id": "u3",
+      "fixture_id": "CZE-RSA",
       "pick_type": null,
       "result": "NO_PICK",
       "points": -1,

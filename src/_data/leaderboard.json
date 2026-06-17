@@ -1,76 +1,76 @@
 {
-  "generated_at": "2026-06-17T01:54:27.019Z",
+  "generated_at": "2026-06-17T14:48:32.766Z",
   "data": [
     {
       "user_id": "u_003",
       "username": "thich_la_chon",
       "display_name": "Thích Là Chọn",
-      "played": 23,
+      "played": 25,
       "wins": 7,
       "draws": 2,
       "losses": 2,
-      "no_picks": 12,
-      "points": -3,
-      "win_rate": 0.3043
+      "no_picks": 14,
+      "points": -5,
+      "win_rate": 0.28
     },
     {
       "user_id": "u_000",
       "username": "lam_mau",
       "display_name": "Mẫu Chính",
-      "played": 23,
+      "played": 25,
       "wins": 4,
       "draws": 1,
       "losses": 5,
-      "no_picks": 13,
-      "points": -12,
-      "win_rate": 0.1739
+      "no_picks": 15,
+      "points": -14,
+      "win_rate": 0.16
     },
     {
       "user_id": "u_002",
       "username": "choi_cho_vui",
       "display_name": "Chơi Cho Vui",
-      "played": 23,
+      "played": 25,
       "wins": 2,
       "draws": 0,
       "losses": 8,
-      "no_picks": 13,
-      "points": -19,
-      "win_rate": 0.087
+      "no_picks": 15,
+      "points": -21,
+      "win_rate": 0.08
     },
     {
       "user_id": "u_001",
       "username": "vui_la_9",
       "display_name": "Vui Là Chính",
-      "played": 23,
+      "played": 25,
       "wins": 2,
       "draws": 0,
       "losses": 9,
-      "no_picks": 12,
-      "points": -19,
-      "win_rate": 0.087
+      "no_picks": 14,
+      "points": -21,
+      "win_rate": 0.08
     },
     {
       "user_id": "u_004",
       "username": "sao_cung_duoc",
       "display_name": "Sao Cũng Được",
-      "played": 23,
+      "played": 25,
       "wins": 1,
       "draws": 0,
       "losses": 6,
-      "no_picks": 16,
-      "points": -21,
-      "win_rate": 0.0435
+      "no_picks": 18,
+      "points": -23,
+      "win_rate": 0.04
     },
     {
       "user_id": "u3",
       "username": "thuy",
       "display_name": "Thichs",
-      "played": 23,
+      "played": 25,
       "wins": 0,
       "draws": 0,
       "losses": 2,
-      "no_picks": 21,
-      "points": -23,
+      "no_picks": 23,
+      "points": -25,
       "win_rate": 0
     }
   ]
