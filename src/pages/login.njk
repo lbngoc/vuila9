@@ -7,7 +7,7 @@ permalink: /login/
 <div class="max-w-sm mx-auto mt-8">
   <div class="flex items-baseline justify-between mb-6">
     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Đăng nhập</h1>
-    <a href="/#how-to-play" class="text-xs text-gray-500 dark:text-gray-600 hover:text-emerald-600 dark:hover:text-emerald-400 transition">❓ Hướng dẫn chơi</a>
+    <a href="/#how-to-play" class="text-xs text-gray-500 dark:text-gray-600 hover:text-indigo-600 dark:hover:text-indigo-400 transition">❓ Hướng dẫn chơi</a>
   </div>
 
   <div x-data="loginForm()" class="bg-white dark:bg-gray-900 rounded-xl p-6 space-y-4">
@@ -15,21 +15,21 @@ permalink: /login/
     <div>
       <label class="block text-xs text-gray-500 mb-1.5">Username</label>
       <input x-model="username" @keydown.enter="submit()" type="text" autocomplete="username"
-             class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-base text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:border-emerald-500 focus:outline-none transition"
+             class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-base text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:border-indigo-500 focus:outline-none transition"
              placeholder="vd: lam_mau" />
     </div>
 
     <div>
       <label class="block text-xs text-gray-500 mb-1.5">Passcode</label>
       <input x-model="passcode" @keydown.enter="submit()" type="password" autocomplete="current-password"
-             class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-base text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:border-emerald-500 focus:outline-none transition"
+             class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2.5 text-base text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:border-indigo-500 focus:outline-none transition"
              placeholder="••••••" />
     </div>
 
     <p x-show="error" x-text="error" x-cloak class="text-red-500 dark:text-red-400 text-sm"></p>
 
     <button @click="submit()" :disabled="loading"
-            class="w-full bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-lg transition">
+            class="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-lg transition">
       <span x-show="!loading">Đăng nhập</span>
       <span x-show="loading" x-cloak>Đang xử lý...</span>
     </button>
@@ -40,6 +40,6 @@ permalink: /login/
     Chỉ dành cho người trong nhóm. Liên hệ admin nếu quên passcode.
   </p>
   <p class="text-center text-xs text-gray-500 dark:text-gray-600 mt-3">
-    Chưa có tài khoản? <a href="/register/" class="text-emerald-600 dark:text-emerald-400 hover:underline">Đăng ký</a>
+    Chưa có tài khoản? <a href="/register/" class="text-indigo-600 dark:text-indigo-400 hover:underline">Đăng ký</a>
   </p>
 </div>

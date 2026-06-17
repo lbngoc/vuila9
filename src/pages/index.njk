@@ -7,10 +7,10 @@ permalink: /
 <div class="space-y-8">
 
   <section>
-    <h1 class="text-3xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">{{ siteConfig.site_name }}</h1>
+    <h1 class="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">{{ siteConfig.site_name }}</h1>
     <div class="flex items-center gap-4 flex-wrap">
       <p class="text-gray-600 dark:text-gray-400">Dự đoán kết quả World Cup 2026 cùng anh em.</p>
-      <a href="#how-to-play" class="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-gray-600 hover:text-emerald-600 dark:hover:text-emerald-400 transition">
+      <a href="#how-to-play" class="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-gray-600 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
         ❓ Hướng dẫn chơi
         <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
           <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
@@ -23,7 +23,7 @@ permalink: /
   <section>
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-lg font-semibold text-gray-900 dark:text-white">🏆 Top 5 bảng xếp hạng</h2>
-      <a href="/leaderboard/" class="text-sm text-emerald-600 dark:text-emerald-400 hover:underline">Xem đầy đủ →</a>
+      <a href="/leaderboard/" class="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">Xem đầy đủ →</a>
     </div>
 
     {% if leaderboard.data %}
@@ -74,7 +74,7 @@ permalink: /
   <section>
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-lg font-semibold text-gray-900 dark:text-white">📅 Trận sắp diễn ra</h2>
-      <a href="/fixtures/" class="text-sm text-emerald-600 dark:text-emerald-400 hover:underline">Xem tất cả →</a>
+      <a href="/fixtures/" class="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">Xem tất cả →</a>
     </div>
 
     {% set upcomingFixtures = [] %}
@@ -92,7 +92,7 @@ permalink: /
           <p class="font-medium text-gray-900 dark:text-white">{{ fixture.home_team }} vs {{ fixture.away_team }}</p>
           <p class="text-xs text-gray-500 mt-1">{{ fixture.league }} · {{ fixture.kickoff_at | dateDisplay }}</p>
         </div>
-        <a href="/fixtures/#fixture-{{ fixture.fixture_id }}" class="text-xs text-emerald-600 dark:text-emerald-400 hover:underline">Dự đoán →</a>
+        <a href="/fixtures/#fixture-{{ fixture.fixture_id }}" class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">Dự đoán →</a>
       </div>
       {% endfor %}
     </div>
@@ -108,7 +108,7 @@ permalink: /
     <ol class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
       {% for step in siteConfig.how_to_play %}
       <li class="flex gap-3">
-        <span class="text-emerald-500 font-bold flex-shrink-0">{{ loop.index }}.</span>
+        <span class="text-indigo-500 font-bold flex-shrink-0">{{ loop.index }}.</span>
         <span>{{ step }}</span>
       </li>
       {% endfor %}

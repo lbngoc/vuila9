@@ -19,7 +19,7 @@ permalink: /fixtures/
     <div>
       <p class="font-bold text-lg leading-tight text-gray-900 dark:text-white">{{ fixture.home_team }} vs {{ fixture.away_team }}</p>
       <p class="text-xs text-gray-500 mt-1">{{ fixture.league }} · {{ fixture.kickoff_at | dateDisplay }} (giờ VN)
-        <span x-show="selected" x-cloak class="text-emerald-600 dark:text-emerald-500 font-semibold">● Đã dự đoán</span>
+        <span x-show="selected" x-cloak class="text-indigo-600 dark:text-indigo-400 font-semibold">● Đã dự đoán</span>
       </p>
       {% set h = (fixture.handicap or 0) | float %}
       {% if h == 0 %}
@@ -102,13 +102,13 @@ permalink: /fixtures/
           <div>
             <label class="text-xs text-gray-500 mb-1 block">Username</label>
             <input x-model="username" type="text" autocomplete="username"
-                   class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-transparent rounded-lg px-3 py-2 text-base text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                   class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-transparent rounded-lg px-3 py-2 text-base text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                    placeholder="vd: lam_mau" />
           </div>
           <div>
             <label class="text-xs text-gray-500 mb-1 block">Passcode</label>
             <input x-model="passcode" type="password" autocomplete="current-password"
-                   class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-transparent rounded-lg px-3 py-2 text-base text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                   class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-transparent rounded-lg px-3 py-2 text-base text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                    placeholder="••••••" />
           </div>
         </div>
@@ -134,7 +134,7 @@ permalink: /fixtures/
         ← Đổi
       </button>
       <button @click="submitPick()" :disabled="loading || isLocked"
-              class="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:bg-gray-200 dark:disabled:bg-gray-700 disabled:text-gray-400 dark:disabled:text-gray-500 text-white font-semibold py-2 rounded-lg transition text-sm"
+              class="flex-1 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-200 dark:disabled:bg-gray-700 disabled:text-gray-400 dark:disabled:text-gray-500 text-white font-semibold py-2 rounded-lg transition text-sm"
               x-text="loading ? 'Đang xử lý...' : (isLoggedIn ? 'Xác nhận' : 'Đăng nhập & Dự đoán')">
       </button>
     </div>
@@ -143,7 +143,7 @@ permalink: /fixtures/
 
   <!-- Success / error result -->
   <div x-show="message" x-cloak class="text-center py-1 space-y-2">
-    <p :class="isError ? 'text-red-500 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'" class="font-medium" x-text="message"></p>
+    <p :class="isError ? 'text-red-500 dark:text-red-400' : 'text-indigo-600 dark:text-indigo-400'" class="font-medium" x-text="message"></p>
     <button @click="message = ''; isError = false"
             class="text-xs text-gray-500 dark:text-gray-600 hover:text-gray-700 dark:hover:text-gray-400 underline">
       Đặt lại
@@ -195,7 +195,7 @@ permalink: /fixtures/
 
   <!-- Upcoming -->
   <section>
-    <h2 class="text-lg font-semibold text-emerald-600 dark:text-emerald-400 mb-4">Sắp diễn ra ({{ upcoming | length }}) — gửi dự đoán ngay</h2>
+    <h2 class="text-lg font-semibold text-indigo-600 dark:text-indigo-400 mb-4">Sắp diễn ra ({{ upcoming | length }}) — gửi dự đoán ngay</h2>
 
     {% set upcomingGroups = upcoming | groupByDateKey %}
 
@@ -255,13 +255,14 @@ permalink: /fixtures/
 
         {# Nút Xem thêm / Thu gọn #}
         {% set extraCount = upcomingGroups | length - 2 %}
-        <div class="flex justify-center pt-1">
+        <div class="flex justify-center pt-3">
           <button @click="showAll = !showAll"
-                  class="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-medium
-                         bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300
-                         hover:bg-emerald-50 dark:hover:bg-emerald-900/30 hover:text-emerald-700 dark:hover:text-emerald-300
-                         border border-gray-200 dark:border-gray-700
-                         transition-colors duration-150">
+                  class="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full text-sm font-semibold
+                         bg-white dark:bg-gray-900 text-indigo-600 dark:text-indigo-400
+                         border-2 border-indigo-400 dark:border-indigo-500
+                         hover:bg-indigo-500 dark:hover:bg-indigo-600 hover:text-white dark:hover:text-white hover:border-indigo-500
+                         shadow-sm hover:shadow-md
+                         transition-all duration-150">
             <span x-show="!showAll">
               Xem thêm
               <span class="text-xs text-gray-400 dark:text-gray-500 font-normal">({{ extraCount }} ngày nữa)</span>
@@ -337,13 +338,14 @@ permalink: /fixtures/
         {% endfor %}
       </div>
 
-      <div class="flex justify-center pt-1">
+      <div class="flex justify-center pt-3">
         <button @click="showAll = !showAll"
-                class="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-medium
-                       bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300
-                       hover:bg-gray-200 dark:hover:bg-gray-700
-                       border border-gray-200 dark:border-gray-700
-                       transition-colors duration-150">
+                class="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full text-sm font-semibold
+                       bg-white dark:bg-gray-900 text-indigo-600 dark:text-indigo-400
+                       border-2 border-indigo-400 dark:border-indigo-500
+                       hover:bg-indigo-500 dark:hover:bg-indigo-600 hover:text-white dark:hover:text-white hover:border-indigo-500
+                       shadow-sm hover:shadow-md
+                       transition-all duration-150">
           <span x-show="!showAll">
             Xem thêm
             <span class="text-xs text-gray-400 dark:text-gray-500 font-normal">({{ finished | length - 10 }} trận)</span>
@@ -444,7 +446,7 @@ function pickForm(fixtureId, kickoffAt, handicap, homeTeam, awayTeam) {
     get countdownClass() {
       if (this.isLocked) return 'px-2.5 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
       const ttl = this.timeToLock;  // thời gian còn lại để dự đoán (luôn > 0 khi !isLocked)
-      if (ttl >= 86400000) return 'font-medium text-emerald-600 dark:text-emerald-400';  // > 1 ngày: xanh
+      if (ttl >= 86400000) return 'font-medium text-indigo-600 dark:text-indigo-400';  // > 1 ngày: indigo
       if (ttl >= 3600000)  return 'font-medium text-amber-500 dark:text-amber-400';       // 1h–1ngày: vàng
       return 'font-medium text-orange-500 dark:text-orange-400';                           // < 1h: cam
     },

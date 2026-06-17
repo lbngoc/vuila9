@@ -28,7 +28,7 @@
 
   <nav class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
     <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2 text-xl font-bold text-emerald-600 dark:text-emerald-400">
+      <a href="/" class="flex items-center gap-2 text-xl font-bold text-indigo-600 dark:text-indigo-400">
         <img src="/assets/favicon.svg" class="w-8 h-8" alt="" aria-hidden="true">
         {{ siteConfig.site_name }}
       </a>
@@ -49,7 +49,7 @@
         </a>
         <div x-show="currentUser" x-cloak class="relative" x-data="{ open: false }" @click.outside="open = false">
           <button @click="open = !open"
-                  class="flex items-center gap-1 transition {% if page.url == '/my-picks/' %}text-emerald-600 dark:text-emerald-400 font-semibold{% else %}text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300{% endif %}">
+                  class="flex items-center gap-1 transition {% if page.url == '/my-picks/' %}text-indigo-600 dark:text-indigo-400 font-semibold{% else %}text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300{% endif %}">
             <span x-text="currentUser?.display_name"></span>
             <svg class="w-3 h-3 transition-transform duration-150" :class="open ? 'rotate-180' : ''" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
@@ -92,7 +92,7 @@
           Đăng nhập
         </a>
         <a x-show="!currentUser" href="/register/"
-           class="{% if page.url == '/register/' %}bg-emerald-800{% else %}bg-emerald-700 hover:bg-emerald-600{% endif %} text-white px-3 py-1 rounded-lg transition text-xs font-semibold">
+           class="{% if page.url == '/register/' %}bg-indigo-700{% else %}bg-indigo-600 hover:bg-indigo-500{% endif %} text-white px-3 py-1 rounded-lg transition text-xs font-semibold">
           Đăng ký
         </a>
         {% if siteConfig.github_url %}
@@ -172,7 +172,7 @@
         Bảng xếp hạng
       </a>
       <a x-show="currentUser" x-cloak href="/my-picks/"
-         class="transition {% if page.url == '/my-picks/' %}text-emerald-600 dark:text-emerald-400 font-semibold{% else %}text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300{% endif %}"
+         class="transition {% if page.url == '/my-picks/' %}text-indigo-600 dark:text-indigo-400 font-semibold{% else %}text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300{% endif %}"
          x-text="currentUser?.display_name"></a>
       <button x-show="currentUser" x-cloak @click="openRenameModal(); mobileMenuOpen = false"
               class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
@@ -193,7 +193,7 @@
         Đăng nhập
       </a>
       <a x-show="!currentUser" href="/register/" class="transition
-        {% if page.url == '/register/' %}text-emerald-600 dark:text-emerald-400 font-semibold{% else %}text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300{% endif %}">
+        {% if page.url == '/register/' %}text-indigo-600 dark:text-indigo-400 font-semibold{% else %}text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300{% endif %}">
         Đăng ký
       </a>
       {% if siteConfig.github_url %}
@@ -273,7 +273,7 @@
              maxlength="50"
              placeholder="Tên hiển thị mới"
              @keydown.enter="submitRename()"
-             class="w-full bg-gray-100 dark:bg-gray-800 border border-transparent focus:border-emerald-500 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition" />
+             class="w-full bg-gray-100 dark:bg-gray-800 border border-transparent focus:border-indigo-500 rounded-lg px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition" />
       <p x-show="renameError" x-cloak x-text="renameError" class="text-red-500 dark:text-red-400 text-xs mt-2"></p>
       <div class="flex gap-2 mt-4">
         <button @click="renameModal = false"
@@ -282,7 +282,7 @@
         </button>
         <button @click="submitRename()"
                 :disabled="renameLoading"
-                class="flex-1 px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white transition">
+                class="flex-1 px-4 py-2 rounded-lg text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white transition">
           <span x-show="!renameLoading">Xác nhận</span>
           <span x-show="renameLoading" x-cloak>Đang lưu…</span>
         </button>
@@ -300,7 +300,7 @@
        x-transition:leave-end="opacity-0"
        class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 dark:bg-black/40 backdrop-blur-sm">
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl px-8 py-5 flex items-center gap-4 min-w-[220px]">
-      <svg class="w-5 h-5 text-emerald-500 animate-spin flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <svg class="w-5 h-5 text-indigo-500 animate-spin flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
       </svg>
