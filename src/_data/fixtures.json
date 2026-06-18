@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-17T14:48:32.766Z",
+  "generated_at": "2026-06-18T01:54:23.284Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -272,7 +272,7 @@
       "result_home": 1,
       "result_away": 0,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "ENG-CRO",
@@ -285,7 +285,7 @@
       "result_home": 2,
       "result_away": 0,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "GHA-PAN",
@@ -298,7 +298,7 @@
       "result_home": 1,
       "result_away": 1,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "UZB-COL",
@@ -311,7 +311,7 @@
       "result_home": 2,
       "result_away": 2,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "CZE-RSA",
@@ -333,10 +333,10 @@
       "home_team": "Thụy Sĩ",
       "away_team": "Bosnia",
       "handicap": "-0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 0,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -346,10 +346,10 @@
       "home_team": "Canada",
       "away_team": "Qatar",
       "handicap": "-0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 2,
+      "is_finished": true,
       "is_locked": false
     },
     {

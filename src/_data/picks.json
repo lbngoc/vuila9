@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-17T14:48:32.766Z",
+  "generated_at": "2026-06-18T01:54:23.284Z",
   "data": [
     {
       "pick_id": "pick_001",
@@ -459,6 +459,43 @@
       "pick_type": "home",
       "result": "LOSE",
       "points": -1
+    },
+    {
+      "pick_id": "pick_20260618_003252_e9fg",
+      "created_at": "2026-06-17T17:32:49.750Z",
+      "user_id": "u3",
+      "fixture_id": "SUI-BIH",
+      "pick_type": "home",
+      "result": "WIN",
+      "points": 1
+    },
+    {
+      "pick_id": "pick_20260618_011655_1109",
+      "created_at": "2026-06-17T18:16:53.985Z",
+      "user_id": "u_000",
+      "fixture_id": "SUI-BIH",
+      "pick_type": "away",
+      "result": "LOSE",
+      "points": -1
+    },
+    {
+      "pick_id": "pick_20260618_011703_a3r1",
+      "created_at": "2026-06-17T18:17:01.474Z",
+      "user_id": "u_000",
+      "fixture_id": "CAN-QAT",
+      "pick_type": "home",
+      "result": "LOSE",
+      "points": -1
+    },
+    {
+      "pick_id": "pick_20260618_011712_e4i6",
+      "created_at": "2026-06-17T18:17:11.215Z",
+      "user_id": "u_000",
+      "fixture_id": "MEX-KOR",
+      "pick_type": "draw",
+      "result": null,
+      "points": null,
+      "profit": null
     },
     {
       "pick_id": "auto_u_004_MEX-RSA",
@@ -1445,6 +1482,96 @@
       "created_at": "2026-06-18T16:00:00.000Z",
       "user_id": "u3",
       "fixture_id": "CZE-RSA",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_001_SUI-BIH",
+      "created_at": "2026-06-18T19:00:00.000Z",
+      "user_id": "u_001",
+      "fixture_id": "SUI-BIH",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_002_SUI-BIH",
+      "created_at": "2026-06-18T19:00:00.000Z",
+      "user_id": "u_002",
+      "fixture_id": "SUI-BIH",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_003_SUI-BIH",
+      "created_at": "2026-06-18T19:00:00.000Z",
+      "user_id": "u_003",
+      "fixture_id": "SUI-BIH",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_004_SUI-BIH",
+      "created_at": "2026-06-18T19:00:00.000Z",
+      "user_id": "u_004",
+      "fixture_id": "SUI-BIH",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_001_CAN-QAT",
+      "created_at": "2026-06-18T22:00:00.000Z",
+      "user_id": "u_001",
+      "fixture_id": "CAN-QAT",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_002_CAN-QAT",
+      "created_at": "2026-06-18T22:00:00.000Z",
+      "user_id": "u_002",
+      "fixture_id": "CAN-QAT",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_003_CAN-QAT",
+      "created_at": "2026-06-18T22:00:00.000Z",
+      "user_id": "u_003",
+      "fixture_id": "CAN-QAT",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_004_CAN-QAT",
+      "created_at": "2026-06-18T22:00:00.000Z",
+      "user_id": "u_004",
+      "fixture_id": "CAN-QAT",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u3_CAN-QAT",
+      "created_at": "2026-06-18T22:00:00.000Z",
+      "user_id": "u3",
+      "fixture_id": "CAN-QAT",
       "pick_type": null,
       "result": "NO_PICK",
       "points": -1,
