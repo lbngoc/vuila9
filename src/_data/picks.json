@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-18T14:48:32.071Z",
+  "generated_at": "2026-06-19T01:54:24.965Z",
   "data": [
     {
       "pick_id": "pick_001",
@@ -1681,6 +1681,126 @@
       "created_at": "2026-06-19T19:00:00.000Z",
       "user_id": "u3",
       "fixture_id": "USA-AUS",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_000_SCO-MAR",
+      "created_at": "2026-06-19T22:00:00.000Z",
+      "user_id": "u_000",
+      "fixture_id": "SCO-MAR",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_001_SCO-MAR",
+      "created_at": "2026-06-19T22:00:00.000Z",
+      "user_id": "u_001",
+      "fixture_id": "SCO-MAR",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_002_SCO-MAR",
+      "created_at": "2026-06-19T22:00:00.000Z",
+      "user_id": "u_002",
+      "fixture_id": "SCO-MAR",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_003_SCO-MAR",
+      "created_at": "2026-06-19T22:00:00.000Z",
+      "user_id": "u_003",
+      "fixture_id": "SCO-MAR",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_004_SCO-MAR",
+      "created_at": "2026-06-19T22:00:00.000Z",
+      "user_id": "u_004",
+      "fixture_id": "SCO-MAR",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u3_SCO-MAR",
+      "created_at": "2026-06-19T22:00:00.000Z",
+      "user_id": "u3",
+      "fixture_id": "SCO-MAR",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_000_BRA-HAI",
+      "created_at": "2026-06-20T01:00:00.000Z",
+      "user_id": "u_000",
+      "fixture_id": "BRA-HAI",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_001_BRA-HAI",
+      "created_at": "2026-06-20T01:00:00.000Z",
+      "user_id": "u_001",
+      "fixture_id": "BRA-HAI",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_002_BRA-HAI",
+      "created_at": "2026-06-20T01:00:00.000Z",
+      "user_id": "u_002",
+      "fixture_id": "BRA-HAI",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_003_BRA-HAI",
+      "created_at": "2026-06-20T01:00:00.000Z",
+      "user_id": "u_003",
+      "fixture_id": "BRA-HAI",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_004_BRA-HAI",
+      "created_at": "2026-06-20T01:00:00.000Z",
+      "user_id": "u_004",
+      "fixture_id": "BRA-HAI",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u3_BRA-HAI",
+      "created_at": "2026-06-20T01:00:00.000Z",
+      "user_id": "u3",
+      "fixture_id": "BRA-HAI",
       "pick_type": null,
       "result": "NO_PICK",
       "points": -1,
