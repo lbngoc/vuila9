@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-19T01:54:24.965Z",
+  "generated_at": "2026-06-19T14:48:19.816Z",
   "data": [
     {
       "pick_id": "pick_001",
@@ -1801,6 +1801,126 @@
       "created_at": "2026-06-20T01:00:00.000Z",
       "user_id": "u3",
       "fixture_id": "BRA-HAI",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_000_TUR-PAR",
+      "created_at": "2026-06-20T04:00:00.000Z",
+      "user_id": "u_000",
+      "fixture_id": "TUR-PAR",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_001_TUR-PAR",
+      "created_at": "2026-06-20T04:00:00.000Z",
+      "user_id": "u_001",
+      "fixture_id": "TUR-PAR",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_002_TUR-PAR",
+      "created_at": "2026-06-20T04:00:00.000Z",
+      "user_id": "u_002",
+      "fixture_id": "TUR-PAR",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_003_TUR-PAR",
+      "created_at": "2026-06-20T04:00:00.000Z",
+      "user_id": "u_003",
+      "fixture_id": "TUR-PAR",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_004_TUR-PAR",
+      "created_at": "2026-06-20T04:00:00.000Z",
+      "user_id": "u_004",
+      "fixture_id": "TUR-PAR",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u3_TUR-PAR",
+      "created_at": "2026-06-20T04:00:00.000Z",
+      "user_id": "u3",
+      "fixture_id": "TUR-PAR",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_000_NED-SWE",
+      "created_at": "2026-06-20T17:00:00.000Z",
+      "user_id": "u_000",
+      "fixture_id": "NED-SWE",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_001_NED-SWE",
+      "created_at": "2026-06-20T17:00:00.000Z",
+      "user_id": "u_001",
+      "fixture_id": "NED-SWE",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_002_NED-SWE",
+      "created_at": "2026-06-20T17:00:00.000Z",
+      "user_id": "u_002",
+      "fixture_id": "NED-SWE",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_003_NED-SWE",
+      "created_at": "2026-06-20T17:00:00.000Z",
+      "user_id": "u_003",
+      "fixture_id": "NED-SWE",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_004_NED-SWE",
+      "created_at": "2026-06-20T17:00:00.000Z",
+      "user_id": "u_004",
+      "fixture_id": "NED-SWE",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u3_NED-SWE",
+      "created_at": "2026-06-20T17:00:00.000Z",
+      "user_id": "u3",
+      "fixture_id": "NED-SWE",
       "pick_type": null,
       "result": "NO_PICK",
       "points": -1,
