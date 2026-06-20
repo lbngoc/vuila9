@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-19T14:48:19.816Z",
+  "generated_at": "2026-06-20T01:54:24.676Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -376,7 +376,7 @@
       "result_home": 1,
       "result_away": 0,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "SCO-MAR",
@@ -389,7 +389,7 @@
       "result_home": 1,
       "result_away": 0,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "BRA-HAI",
@@ -402,7 +402,7 @@
       "result_home": 2,
       "result_away": 1,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "TUR-PAR",
@@ -437,10 +437,10 @@
       "home_team": "Đức",
       "away_team": "Bờ Biển Ngà",
       "handicap": "-1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 2,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -450,10 +450,10 @@
       "home_team": "Ecuador",
       "away_team": "Curaçao",
       "handicap": "-2",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
