@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-20T14:48:19.065Z",
+  "generated_at": "2026-06-21T01:54:22.568Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -428,7 +428,7 @@
       "result_home": 0,
       "result_away": 1,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "GER-CIV",
@@ -441,7 +441,7 @@
       "result_home": 1,
       "result_away": 2,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "ECU-CUR",
@@ -454,7 +454,7 @@
       "result_home": 1,
       "result_away": 1,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "TUN-JPN",
@@ -489,10 +489,10 @@
       "home_team": "Bỉ",
       "away_team": "Iran",
       "handicap": "-1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 0,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -502,10 +502,10 @@
       "home_team": "Uruguay",
       "away_team": "Cabo Verde",
       "handicap": "-2",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 2,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
