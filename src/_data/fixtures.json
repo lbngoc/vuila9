@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-21T14:48:22.540Z",
+  "generated_at": "2026-06-22T01:54:25.801Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -480,7 +480,7 @@
       "result_home": 2,
       "result_away": 1,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "BEL-IRN",
@@ -493,7 +493,7 @@
       "result_home": 1,
       "result_away": 0,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "URU-CPV",
@@ -506,7 +506,7 @@
       "result_home": 2,
       "result_away": 1,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "NZL-EGY",
@@ -519,7 +519,7 @@
       "result_home": 1,
       "result_away": 2,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "ARG-AUT",
@@ -541,10 +541,10 @@
       "home_team": "Pháp",
       "away_team": "Iraq",
       "handicap": "-2",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 0,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -554,10 +554,10 @@
       "home_team": "Na Uy",
       "away_team": "Senegal",
       "handicap": "0",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 0,
+      "is_finished": true,
       "is_locked": false
     },
     {
