@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-23T14:48:21.012Z",
+  "generated_at": "2026-06-24T01:54:21.699Z",
   "data": [
     {
       "pick_id": "pick_001",
@@ -2881,6 +2881,126 @@
       "created_at": "2026-06-24T19:00:00.000Z",
       "user_id": "u3",
       "fixture_id": "SUI-CAN",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_000_BIH-QAT",
+      "created_at": "2026-06-24T19:00:00.000Z",
+      "user_id": "u_000",
+      "fixture_id": "BIH-QAT",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_001_BIH-QAT",
+      "created_at": "2026-06-24T19:00:00.000Z",
+      "user_id": "u_001",
+      "fixture_id": "BIH-QAT",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_002_BIH-QAT",
+      "created_at": "2026-06-24T19:00:00.000Z",
+      "user_id": "u_002",
+      "fixture_id": "BIH-QAT",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_003_BIH-QAT",
+      "created_at": "2026-06-24T19:00:00.000Z",
+      "user_id": "u_003",
+      "fixture_id": "BIH-QAT",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_004_BIH-QAT",
+      "created_at": "2026-06-24T19:00:00.000Z",
+      "user_id": "u_004",
+      "fixture_id": "BIH-QAT",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u3_BIH-QAT",
+      "created_at": "2026-06-24T19:00:00.000Z",
+      "user_id": "u3",
+      "fixture_id": "BIH-QAT",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_000_SCO-BRA",
+      "created_at": "2026-06-24T22:00:00.000Z",
+      "user_id": "u_000",
+      "fixture_id": "SCO-BRA",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_001_SCO-BRA",
+      "created_at": "2026-06-24T22:00:00.000Z",
+      "user_id": "u_001",
+      "fixture_id": "SCO-BRA",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_002_SCO-BRA",
+      "created_at": "2026-06-24T22:00:00.000Z",
+      "user_id": "u_002",
+      "fixture_id": "SCO-BRA",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_003_SCO-BRA",
+      "created_at": "2026-06-24T22:00:00.000Z",
+      "user_id": "u_003",
+      "fixture_id": "SCO-BRA",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_004_SCO-BRA",
+      "created_at": "2026-06-24T22:00:00.000Z",
+      "user_id": "u_004",
+      "fixture_id": "SCO-BRA",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -1,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u3_SCO-BRA",
+      "created_at": "2026-06-24T22:00:00.000Z",
+      "user_id": "u3",
+      "fixture_id": "SCO-BRA",
       "pick_type": null,
       "result": "NO_PICK",
       "points": -1,

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-23T14:48:21.012Z",
+  "generated_at": "2026-06-24T01:54:21.699Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -584,7 +584,7 @@
       "result_home": 0,
       "result_away": 1,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "ENG-GHA",
@@ -597,7 +597,7 @@
       "result_home": 2,
       "result_away": 1,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "PAN-CRO",
@@ -610,7 +610,7 @@
       "result_home": 1,
       "result_away": 0,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "COL-COD",
@@ -623,7 +623,7 @@
       "result_home": 0,
       "result_away": 2,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "SUI-CAN",
@@ -645,10 +645,10 @@
       "home_team": "Bosnia",
       "away_team": "Qatar",
       "handicap": "-0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -658,10 +658,10 @@
       "home_team": "Scotland",
       "away_team": "Brazil",
       "handicap": "1.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 2,
+      "is_finished": true,
       "is_locked": false
     },
     {
