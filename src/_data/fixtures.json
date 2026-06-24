@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T01:54:21.699Z",
+  "generated_at": "2026-06-24T14:48:23.703Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -671,10 +671,10 @@
       "home_team": "Ma Rốc",
       "away_team": "Haiti",
       "handicap": "-2",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 2,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -684,10 +684,10 @@
       "home_team": "Séc",
       "away_team": "Mexico",
       "handicap": "0",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
