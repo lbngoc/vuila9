@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T14:48:23.703Z",
+  "generated_at": "2026-06-25T01:54:23.631Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -636,7 +636,7 @@
       "result_home": 3,
       "result_away": 2,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "BIH-QAT",
@@ -649,7 +649,7 @@
       "result_home": 1,
       "result_away": 1,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "SCO-BRA",
@@ -662,7 +662,7 @@
       "result_home": 1,
       "result_away": 2,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "MAR-HAI",
@@ -675,7 +675,7 @@
       "result_home": 1,
       "result_away": 2,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "CZE-MEX",
@@ -688,7 +688,7 @@
       "result_home": 0,
       "result_away": 1,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "RSA-KOR",
@@ -697,11 +697,11 @@
       "home_team": "Nam Phi",
       "away_team": "Hàn Quốc",
       "handicap": "0",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
-      "is_locked": false
+      "status": "finished",
+      "result_home": 3,
+      "result_away": 1,
+      "is_finished": true,
+      "is_locked": true
     },
     {
       "fixture_id": "CUR-CIV",
@@ -710,10 +710,10 @@
       "home_team": "Curaçao",
       "away_team": "Bờ Biển Ngà",
       "handicap": "1.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 0,
+      "is_finished": true,
       "is_locked": false
     },
     {
