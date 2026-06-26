@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T01:54:23.090Z",
+  "generated_at": "2026-06-26T14:48:21.362Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -775,10 +775,10 @@
       "home_team": "Paraguay",
       "away_team": "Úc",
       "handicap": "0",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 0,
+      "is_finished": true,
       "is_locked": true
     },
     {
@@ -788,10 +788,10 @@
       "home_team": "Na Uy",
       "away_team": "Pháp",
       "handicap": "1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 0,
+      "is_finished": true,
       "is_locked": false
     },
     {
