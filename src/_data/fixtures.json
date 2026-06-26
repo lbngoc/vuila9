@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T14:48:25.810Z",
+  "generated_at": "2026-06-26T01:54:23.090Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -714,7 +714,7 @@
       "result_home": 0,
       "result_away": 0,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "ECU-GER",
@@ -727,7 +727,7 @@
       "result_home": 1,
       "result_away": 2,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "JPN-SWE",
@@ -740,7 +740,7 @@
       "result_home": 1,
       "result_away": 2,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "TUN-NED",
@@ -749,11 +749,11 @@
       "home_team": "Tunisia",
       "away_team": "Hà Lan",
       "handicap": "1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
-      "is_locked": false
+      "status": "finished",
+      "result_home": 3,
+      "result_away": 1,
+      "is_finished": true,
+      "is_locked": true
     },
     {
       "fixture_id": "TUR-USA",
@@ -762,11 +762,11 @@
       "home_team": "Thổ Nhĩ Kỳ",
       "away_team": "Mỹ",
       "handicap": "0",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
-      "is_locked": false
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 1,
+      "is_finished": true,
+      "is_locked": true
     },
     {
       "fixture_id": "PAR-AUS",
@@ -779,7 +779,7 @@
       "result_home": null,
       "result_away": null,
       "is_finished": false,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "NOR-FRA",
