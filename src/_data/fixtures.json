@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T14:48:21.362Z",
+  "generated_at": "2026-06-27T01:54:31.141Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -792,7 +792,7 @@
       "result_home": 1,
       "result_away": 0,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "SEN-IRQ",
@@ -801,11 +801,11 @@
       "home_team": "Senegal",
       "away_team": "Iraq",
       "handicap": "-0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
-      "is_locked": false
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 1,
+      "is_finished": true,
+      "is_locked": true
     },
     {
       "fixture_id": "CPV-KSA",
@@ -814,11 +814,11 @@
       "home_team": "Cabo Verde",
       "away_team": "Ả Rập Xê Út",
       "handicap": "0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
-      "is_locked": false
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 0,
+      "is_finished": true,
+      "is_locked": true
     },
     {
       "fixture_id": "URU-ESP",
@@ -831,7 +831,7 @@
       "result_home": null,
       "result_away": null,
       "is_finished": false,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "EGY-IRN",
