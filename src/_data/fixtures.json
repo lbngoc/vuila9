@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-27T14:48:23.466Z",
+  "generated_at": "2026-06-28T01:54:26.237Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -853,10 +853,10 @@
       "home_team": "New Zealand",
       "away_team": "Bỉ",
       "handicap": "1.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 2,
+      "is_finished": true,
       "is_locked": true
     },
     {
@@ -866,11 +866,11 @@
       "home_team": "Panama",
       "away_team": "Anh",
       "handicap": "1.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
-      "is_locked": false
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 1,
+      "is_finished": true,
+      "is_locked": true
     },
     {
       "fixture_id": "CRO-GHA",
@@ -883,7 +883,7 @@
       "result_home": null,
       "result_away": null,
       "is_finished": false,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "COL-POR",
@@ -896,7 +896,7 @@
       "result_home": null,
       "result_away": null,
       "is_finished": false,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "COD-UZB",
@@ -909,7 +909,7 @@
       "result_home": null,
       "result_away": null,
       "is_finished": false,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "ALG-AUT",
@@ -922,7 +922,7 @@
       "result_home": null,
       "result_away": null,
       "is_finished": false,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "JOR-ARG",
@@ -935,7 +935,7 @@
       "result_home": null,
       "result_away": null,
       "is_finished": false,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "FIX-001",
