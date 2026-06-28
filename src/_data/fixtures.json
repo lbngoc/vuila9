@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-28T01:54:26.237Z",
+  "generated_at": "2026-06-28T14:48:23.263Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -879,10 +879,10 @@
       "home_team": "Croatia",
       "away_team": "Ghana",
       "handicap": "-0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 2,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": true
     },
     {
@@ -892,10 +892,10 @@
       "home_team": "Colombia",
       "away_team": "Bồ Đào Nha",
       "handicap": "0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 2,
+      "result_away": 0,
+      "is_finished": true,
       "is_locked": true
     },
     {
