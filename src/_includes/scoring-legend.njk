@@ -1,9 +1,54 @@
-<span class="font-semibold text-gray-600 dark:text-gray-400">Điểm:</span>
-<span>✅ Đoán đúng → <span class="text-emerald-500 dark:text-emerald-400 font-bold">{% if siteConfig.points.WIN > 0 %}+{% endif %}{{ siteConfig.points.WIN }} điểm</span></span>
-{% if siteConfig.points.PUSH != siteConfig.points.LOSE %}
-<span>🤝 Hòa chấp → <span class="text-yellow-500 dark:text-yellow-400 font-bold">{% if siteConfig.points.PUSH > 0 %}+{% endif %}{{ siteConfig.points.PUSH }} điểm</span></span>
-{% endif %}
-<span>❌ Đoán sai → <span class="{% if siteConfig.points.LOSE < 0 %}text-red-500 dark:text-red-400{% else %}text-gray-500{% endif %} font-bold">{% if siteConfig.points.LOSE > 0 %}+{% endif %}{{ siteConfig.points.LOSE }} điểm</span></span>
-{% if siteConfig.points.NO_PICK < 0 %}
-<span>📭 Bỏ qua → <span class="text-pink-500 dark:text-pink-400 font-bold">{% if siteConfig.points.NO_PICK > 0 %}+{% endif %}{{ siteConfig.points.NO_PICK }} điểm</span></span>
-{% endif %}
+{# ── Scoring legend table ───────────────────────────────────────────────── #}
+<div class="space-y-2 text-xs text-gray-500 dark:text-gray-500">
+  <p class="font-semibold text-gray-600 dark:text-gray-400">Cách tính điểm</p>
+  <div class="overflow-x-auto">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-b border-gray-200 dark:border-gray-700">
+          <th class="text-left pb-1.5 pr-4 font-medium">Giai đoạn</th>
+          <th class="text-center pb-1.5 px-3 font-medium text-emerald-600 dark:text-emerald-400">WIN</th>
+          {% if siteConfig.points.PUSH != siteConfig.points.LOSE %}
+          <th class="text-center pb-1.5 px-3 font-medium text-yellow-500 dark:text-yellow-400">PUSH</th>
+          {% endif %}
+          <th class="text-center pb-1.5 px-3 font-medium text-red-500 dark:text-red-400">LOSE</th>
+          {% if siteConfig.points.NO_PICK < 0 %}
+          <th class="text-center pb-1.5 px-3 font-medium text-pink-500 dark:text-pink-400">NO_PICK</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+        <tr>
+          <td class="py-1.5 pr-4">{{ siteConfig.default_phase_label }}</td>
+          <td class="py-1.5 px-3 text-center font-bold text-emerald-500 dark:text-emerald-400">{% if siteConfig.points.WIN > 0 %}+{% endif %}{{ siteConfig.points.WIN }}</td>
+          {% if siteConfig.points.PUSH != siteConfig.points.LOSE %}
+          <td class="py-1.5 px-3 text-center font-bold text-yellow-500 dark:text-yellow-400">{% if siteConfig.points.PUSH > 0 %}+{% endif %}{{ siteConfig.points.PUSH }}</td>
+          {% endif %}
+          <td class="py-1.5 px-3 text-center font-bold {% if siteConfig.points.LOSE < 0 %}text-red-500 dark:text-red-400{% else %}text-gray-500{% endif %}">{% if siteConfig.points.LOSE > 0 %}+{% endif %}{{ siteConfig.points.LOSE }}</td>
+          {% if siteConfig.points.NO_PICK < 0 %}
+          <td class="py-1.5 px-3 text-center font-bold text-pink-500 dark:text-pink-400">{{ siteConfig.points.NO_PICK }}</td>
+          {% endif %}
+        </tr>
+        {% for phase in siteConfig.point_phases %}
+        <tr>
+          <td class="py-1.5 pr-4">{{ phase.label }}</td>
+          <td class="py-1.5 px-3 text-center font-bold text-emerald-500 dark:text-emerald-400">{% if phase.points.WIN > 0 %}+{% endif %}{{ phase.points.WIN }}</td>
+          {% if siteConfig.points.PUSH != siteConfig.points.LOSE %}
+          <td class="py-1.5 px-3 text-center font-bold text-yellow-500 dark:text-yellow-400">{% if phase.points.PUSH > 0 %}+{% endif %}{{ phase.points.PUSH }}</td>
+          {% endif %}
+          <td class="py-1.5 px-3 text-center font-bold {% if phase.points.LOSE < 0 %}text-red-500 dark:text-red-400{% else %}text-gray-500{% endif %}">{% if phase.points.LOSE > 0 %}+{% endif %}{{ phase.points.LOSE }}</td>
+          {% if siteConfig.points.NO_PICK < 0 %}
+          <td class="py-1.5 px-3 text-center font-bold text-pink-500 dark:text-pink-400">{% if phase.points.NO_PICK > 0 %}+{% endif %}{{ phase.points.NO_PICK }}</td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="text-gray-400 dark:text-gray-600 border-t border-gray-100 dark:border-gray-800 pt-1.5">
+    <span class="font-medium text-emerald-600 dark:text-emerald-400">WIN</span>: Chọn đúng đội thắng ·
+    {% if siteConfig.points.PUSH != siteConfig.points.LOSE %}<span class="font-medium text-yellow-500 dark:text-yellow-400">PUSH</span>: Hòa chấp đúng ranh giới · {% endif %}
+    <span class="font-medium text-red-500 dark:text-red-400">LOSE</span>: Chọn sai
+    {% if siteConfig.points.NO_PICK < 0 %} · <span class="font-medium text-pink-500 dark:text-pink-400">NO_PICK</span>: Bỏ qua{% endif %}
+    · (đã tính điểm chấp)
+  </p>
+</div>

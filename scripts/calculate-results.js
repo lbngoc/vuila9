@@ -11,7 +11,12 @@ function load(name) {
 }
 
 // ── Scoring config — chỉnh trong src/_data/siteConfig.js ─────────────
-const { points: POINTS } = require('../src/_data/siteConfig');
+const { points: POINTS, point_phases: POINT_PHASES = [] } = require('../src/_data/siteConfig');
+
+function getPoints(fixture) {
+  const phase = POINT_PHASES.find(p => p.leagues.includes(fixture.league));
+  return phase ? phase.points : POINTS;
+}
 
 // ── Resolution ─────────────────────────────────────────────────────────
 //
@@ -53,7 +58,7 @@ function main() {
     if (!result) return { ...pick, result: null, points: null, profit: null };
 
     resolved++;
-    return { ...pick, result, points: POINTS[result] ?? 0 };
+    return { ...pick, result, points: getPoints(fixture)[result] ?? 0 };
   });
 
   // ── No-pick: active users who didn't pick on a finished fixture ──────────
@@ -79,7 +84,7 @@ function main() {
               fixture_id: fixture.fixture_id,
               pick_type:  null,
               result:     'NO_PICK',
-              points:     POINTS.NO_PICK ?? 0,
+              points:     getPoints(fixture).NO_PICK ?? 0,
               _no_pick:    true,
             });
             autoAdded++;

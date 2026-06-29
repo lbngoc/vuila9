@@ -107,10 +107,16 @@ permalink: /my-picks/
                 </span>
               </template>
 
-              <span x-show="pick.points != null"
-                    class="ml-auto font-bold"
-                    :class="pick.points > 0 ? 'text-emerald-500 dark:text-emerald-400' : pick.points < 0 ? 'text-red-500 dark:text-red-400' : 'text-gray-500'"
-                    x-text="ptDisplay(pick.points) + ' điểm'">
+              <span class="ml-auto flex items-center gap-1.5">
+                <template x-if="pick.points != null && pickPhaseLabel(pick)">
+                  <span class="text-xs font-medium px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300"
+                        x-text="pickPhaseLabel(pick)"></span>
+                </template>
+                <span x-show="pick.points != null"
+                      class="font-bold"
+                      :class="pick.points > 0 ? 'text-emerald-500 dark:text-emerald-400' : pick.points < 0 ? 'text-red-500 dark:text-red-400' : 'text-gray-500'"
+                      x-text="ptDisplay(pick.points) + ' điểm'">
+                </span>
               </span>
             </div>
 
@@ -146,7 +152,7 @@ permalink: /my-picks/
     </div>
 
     <!-- Scoring legend -->
-    <div class="bg-white dark:bg-gray-900 rounded-xl p-4 text-xs text-gray-500 dark:text-gray-600 flex flex-wrap gap-x-5 gap-y-1">
+    <div class="bg-white dark:bg-gray-900 rounded-xl p-4">
       {% include "scoring-legend.njk" %}
     </div>
 

@@ -107,25 +107,9 @@ permalink: /leaderboard/
     </table>
   </div>
 
-  <div class="bg-white dark:bg-gray-900 rounded-xl p-4 text-xs text-gray-500 dark:text-gray-600 space-y-1"
+  <div class="bg-white dark:bg-gray-900 rounded-xl p-4"
        x-show="rows.length">
-    <p><span class="font-semibold text-gray-600 dark:text-gray-400">Cách tính điểm:</span></p>
-    <p>✅ Đoán đúng →
-      <span class="text-emerald-500 dark:text-emerald-400 font-semibold">{% if siteConfig.points.WIN > 0 %}+{% endif %}{{ siteConfig.points.WIN }} điểm</span>
-    </p>
-    {% if siteConfig.points.PUSH != siteConfig.points.LOSE %}
-    <p>🤝 Chọn hòa chấp đúng ranh giới (nút "Hòa") →
-      <span class="text-yellow-500 dark:text-yellow-400 font-semibold">{% if siteConfig.points.PUSH > 0 %}+{% endif %}{{ siteConfig.points.PUSH }} điểm</span>
-    </p>
-    {% endif %}
-    <p>❌ Đoán sai →
-      <span class="{% if siteConfig.points.LOSE < 0 %}text-red-500 dark:text-red-400{% else %}text-gray-500{% endif %} font-semibold">{% if siteConfig.points.LOSE > 0 %}+{% endif %}{{ siteConfig.points.LOSE }} điểm</span>
-    </p>
-    {% if siteConfig.points.NO_PICK < 0 %}
-    <p>📭 Không dự đoán →
-      <span class="text-pink-500 dark:text-pink-400 font-semibold">{% if siteConfig.points.NO_PICK > 0 %}+{% endif %}{{ siteConfig.points.NO_PICK }} điểm</span>
-    </p>
-    {% endif %}
+    {% include "scoring-legend.njk" %}
   </div>
 
   <div class="bg-white dark:bg-gray-900 rounded-xl p-12 text-center text-gray-500"
