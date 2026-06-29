@@ -9,7 +9,7 @@ exports.handler = async (event) => {
 
   if (body.website) return ok({ success: true, pick_id: 'ignored' });
 
-  const { fixture_id, pick_type, username, _session_hash } = body;
+  const { fixture_id, pick_type, username, _session_hash, _recovery, client_created_at } = body;
 
   if (!fixture_id || !pick_type || !username)
     return err(400, 'Thiếu thông tin bắt buộc.', 'MISSING_FIELDS');
@@ -20,13 +20,18 @@ exports.handler = async (event) => {
   if (!['home', 'draw', 'away'].includes(pick_type))
     return err(400, 'Loại dự đoán không hợp lệ.', 'INVALID_PICK_TYPE');
 
+  const allowLateResubmit = process.env.ALLOW_LATE_RESUBMIT === 'true';
+  const isRecovery = allowLateResubmit && _recovery === true
+    && typeof client_created_at === 'string' && !isNaN(Date.parse(client_created_at));
+
   try {
     const data = await callScript({
       username:      username.toLowerCase().trim(),
       fixture_id,
       pick_type,
       _session_hash,
-      created_at:    new Date().toISOString(),
+      created_at:    isRecovery ? client_created_at : new Date().toISOString(),
+      ...(isRecovery && { _recovery: true }),
     });
 
     if (!data.success)

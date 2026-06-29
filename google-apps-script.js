@@ -144,37 +144,68 @@ function handlePick(payload) {
   if (!fixture) {
     return jsonResponse({ error: 'Trận đấu không tồn tại.', code: 'FIXTURE_NOT_FOUND', status: 404 });
   }
-  if (fixture.status === 'finished') {
-    return jsonResponse({ error: 'Trận đấu đã kết thúc.', code: 'MATCH_FINISHED', status: 400 });
-  }
   const lockMinutes = parseInt(PropertiesService.getScriptProperties().getProperty('PICK_LOCK_MINUTES')) || 60;
   const kickoffMs   = new Date(fixture.kickoff_at).getTime();
-  if (Date.now() >= kickoffMs - lockMinutes * 60 * 1000) {
-    return jsonResponse({ error: `Đã đóng nhận dự đoán (khoá trước ${lockMinutes} phút khi đá).`, code: 'LOCKED', status: 400 });
-  }
 
-  // 3. Upsert — find existing pick by (user_id, fixture_id)
-  const picksSheet = ss.getSheetByName('picks');
-  if (!picksSheet) return jsonResponse({ error: 'Sheet "picks" not found', code: 'INTERNAL_ERROR', status: 500 });
+  // Recovery: cho phép re-submit pick bị sót nếu created_at < kickoff_at (pick hợp lệ tại thời điểm gửi)
+  const isRecovery = payload._recovery === true
+    && typeof payload.created_at === 'string'
+    && new Date(payload.created_at).getTime() < kickoffMs;
 
-  const picksData = picksSheet.getDataRange().getValues();
-  // columns: pick_id(0) created_at(1) user_id(2) fixture_id(3) pick_type(4)
-  for (let i = 1; i < picksData.length; i++) {
-    if (String(picksData[i][2]) === user.user_id && String(picksData[i][3]) === payload.fixture_id) {
-      const existingId = String(picksData[i][0]);
-      picksSheet.getRange(i + 1, 2).setValue(payload.created_at);
-      picksSheet.getRange(i + 1, 5).setValue(payload.pick_type);
-      return jsonResponse({ success: true, pick_id: existingId, updated: true });
+  if (!isRecovery) {
+    if (fixture.status === 'finished') {
+      return jsonResponse({ error: 'Trận đấu đã kết thúc.', code: 'MATCH_FINISHED', status: 400 });
+    }
+    if (Date.now() >= kickoffMs - lockMinutes * 60 * 1000) {
+      return jsonResponse({ error: `Đã đóng nhận dự đoán (khoá trước ${lockMinutes} phút khi đá).`, code: 'LOCKED', status: 400 });
     }
   }
 
-  // 4. Append new pick
-  const stamp  = Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'yyyyMMdd_HHmmss');
-  const rand   = Math.random().toString(36).slice(2, 6);
-  const pick_id = `pick_${stamp}_${rand}`;
+  // 3. Upsert — find existing pick by (user_id, fixture_id)
+  // LockService prevents concurrent executions from both reading "no row found"
+  // and both appending, which would create duplicate rows in the Sheet.
+  const picksSheet = ss.getSheetByName('picks');
+  if (!picksSheet) return jsonResponse({ error: 'Sheet "picks" not found', code: 'INTERNAL_ERROR', status: 500 });
 
-  picksSheet.appendRow([pick_id, payload.created_at, user.user_id, payload.fixture_id, payload.pick_type]);
-  return jsonResponse({ success: true, pick_id });
+  const lock = LockService.getDocumentLock();
+  try {
+    lock.waitLock(5000);
+  } catch (e) {
+    return jsonResponse({ error: 'Hệ thống bận, vui lòng thử lại sau 5 giây.', code: 'LOCK_TIMEOUT', status: 503 });
+  }
+
+  try {
+    const lastRow = picksSheet.getLastRow();
+    // Read only the 4 columns needed for lookup (pick_id=A, created_at=B, user_id=C, fixture_id=D).
+    // Avoids pulling all 5 columns × 1000+ rows which is slow in Apps Script.
+    const keyData = lastRow > 1
+      ? picksSheet.getRange(2, 1, lastRow - 1, 4).getValues()  // cols A–D: pick_id, created_at, user_id, fixture_id
+      : [];
+    // columns in keyData: pick_id(0) created_at(1) user_id(2) fixture_id(3)
+    for (let i = 0; i < keyData.length; i++) {
+      if (String(keyData[i][2]) === user.user_id && String(keyData[i][3]) === payload.fixture_id) {
+        const existingId = String(keyData[i][0]);
+        if (isRecovery) {
+          // Recovery chỉ cho phép insert pick bị mất — không cho phép thay đổi pick_type
+          // của trận đã diễn ra (ngăn chỉnh sửa kết quả sau khi trận kết thúc).
+          return jsonResponse({ success: true, pick_id: existingId, updated: false });
+        }
+        picksSheet.getRange(i + 2, 2).setValue(payload.created_at);
+        picksSheet.getRange(i + 2, 5).setValue(payload.pick_type);
+        return jsonResponse({ success: true, pick_id: existingId, updated: true });
+      }
+    }
+
+    // 4. Append new pick
+    const stamp   = Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'yyyyMMdd_HHmmss');
+    const rand    = Math.random().toString(36).slice(2, 6);
+    const pick_id = `pick_${stamp}_${rand}`;
+
+    picksSheet.appendRow([pick_id, payload.created_at, user.user_id, payload.fixture_id, payload.pick_type]);
+    return jsonResponse({ success: true, pick_id });
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 // ── Update display name ────────────────────────────────────────────────

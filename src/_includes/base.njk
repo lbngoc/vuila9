@@ -16,10 +16,14 @@
   <link rel="stylesheet" href="/assets/css/style.css" />
   <style>[x-cloak]{display:none!important}</style>
   <script>
-    window.STORAGE_PREFIX   = '{{ siteConfig.storage_prefix }}';
-    window.SITE_TIMEZONE    = '{{ siteConfig.timezone }}';
-    window.PICK_LOCK_MINUTES = {{ siteConfig.pick_lock_minutes }};
-    window.SITE_PUSH_POINTS = {{ siteConfig.points.PUSH }};
+    window.STORAGE_PREFIX      = '{{ siteConfig.storage_prefix }}';
+    window.SITE_TIMEZONE       = '{{ siteConfig.timezone }}';
+    window.PICK_LOCK_MINUTES    = {{ siteConfig.pick_lock_minutes }};
+    window.ALLOW_LATE_RESUBMIT  = {{ siteConfig.allow_late_resubmit | dump }};
+    window.SITE_PUSH_POINTS    = {{ siteConfig.points.PUSH }};
+    window.POINT_PHASES        = {{ siteConfig.point_phases | dump | safe }};
+    window.__UPCOMING_IDS__    = new Set([{% for f in fixtures.data | where("status","upcoming") %}"{{ f.fixture_id }}"{% if not loop.last %},{% endif %}{% endfor %}]);
+    window.__UPCOMING_COUNT__  = {{ fixtures.data | where("status","upcoming") | length }};
   </script>
   <script src="/assets/js/app.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>

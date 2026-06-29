@@ -10,6 +10,11 @@ const _LIVE_USERS_TTL = 15 * 60 * 1000;  // 15 min — dùng cho leaderboard bac
 const _EVT_LOGIN   = _STORAGE + ':login';
 const _EVT_REFRESH = _STORAGE + ':refresh';
 
+function readPendingPicks() {
+  try { return JSON.parse(localStorage.getItem(_PENDING_KEY) || '[]'); }
+  catch { return []; }
+}
+
 async function sha256(message) {
   const data = new TextEncoder().encode(message);
   const buf  = await crypto.subtle.digest('SHA-256', data);
@@ -198,6 +203,130 @@ async function syncOwnPicks(session, { scope = 'all' } = {}) {
   return all;
 }
 
+const _sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+// Re-submit tuning — submit-pick.js rate-limits to 10 req / 60s per IP (429 RATE_LIMITED).
+const _RESUBMIT_GAP        = 1500;   // ms giữa mỗi lần submit — giãn cách để tránh dồn cụm
+const _RESUBMIT_MAX_RETRY  = 4;      // số lần retry tối đa khi bị 429
+const _RESUBMIT_BACKOFF    = [5000, 15000, 30000, 60000];  // ms chờ trước mỗi lần retry 429
+
+function _markPickResubmitted(fixtureId) {
+  try {
+    const current = readPendingPicks();
+    const idx = current.findIndex(b => b.fixture_id === fixtureId);
+    if (idx >= 0) {
+      current[idx] = { ...current[idx], _resubmitted: true };
+      localStorage.setItem(_PENDING_KEY, JSON.stringify(current));
+    }
+  } catch {}
+}
+
+// Đánh dấu pick bị dừng retry do recovery mode tắt.
+// Khác _resubmitted: _stale pick sẽ tự retry lại khi recovery mode được bật.
+function _markPickStale(fixtureId) {
+  try {
+    const current = readPendingPicks();
+    const idx = current.findIndex(b => b.fixture_id === fixtureId);
+    if (idx >= 0) {
+      current[idx] = { ...current[idx], _stale: true };
+      localStorage.setItem(_PENDING_KEY, JSON.stringify(current));
+    }
+  } catch {}
+}
+
+// Submit 1 pick với retry khi gặp 429/5xx. Trả về:
+//   'saved'    — server CHẤP NHẬN (2xx), pick đã vào sheet → an toàn để đánh dấu _resubmitted.
+//   'rejected' — server từ chối hợp lệ (4xx): caller quyết định có đánh dấu _resubmitted không.
+//   false      — 429/5xx hết retry hoặc lỗi mạng → giữ pending, thử lại lần sau.
+async function _submitPickWithRetry(payload) {
+  for (let attempt = 0; attempt <= _RESUBMIT_MAX_RETRY; attempt++) {
+    try {
+      const res = await fetch('/.netlify/functions/submit-pick', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload),
+      });
+      if (res.status === 429 || res.status >= 500) {
+        if (attempt === _RESUBMIT_MAX_RETRY) return false;
+        const wait = _RESUBMIT_BACKOFF[Math.min(attempt, _RESUBMIT_BACKOFF.length - 1)];
+        await _sleep(wait);
+        continue;
+      }
+      return res.ok ? 'saved' : 'rejected';
+    } catch {
+      return false;
+    }
+  }
+  return false;
+}
+
+// Re-submit pending picks missing from live CSV (silent server failure).
+// Safe: only attempts picks NOT in live CSV — won't overwrite data already in sheet.
+// Locked/finished fixtures rejected server-side; pending stays for _missed display.
+async function resubmitMissingPicks(session) {
+  const pending = readPendingPicks();
+  if (!pending.length) return;
+
+  const livePicks = await fetchLivePicks({ userId: session.user_id });  // reuses scoped cache from syncOwnPicks
+  if (!livePicks) return;
+
+  const confirmedPicks = new Set(
+    livePicks.filter(b => b.user_id === session.user_id).map(b => b.fixture_id + '|' + b.pick_type)
+  );
+  const allowLateResubmit = window.ALLOW_LATE_RESUBMIT === true;
+  const missing = pending.filter(b =>
+    !confirmedPicks.has(b.fixture_id + '|' + b.pick_type) &&
+    !b._resubmitted &&
+    (!b._stale || allowLateResubmit)
+  );
+  if (!missing.length) return;
+
+  let submittedAny = false;
+
+  for (let i = 0; i < missing.length; i++) {
+    const pick = missing[i];
+
+    // Recovery mode: re-submit cho trận đã khoá/kết thúc nếu pick được tạo trước kickoff.
+    // Nếu pick.kickoff_at không có (entry cũ), vẫn gửi _recovery: true và để Apps Script validate.
+    const isRecovery = allowLateResubmit
+      && (
+        !pick.kickoff_at
+        || new Date(pick.created_at) < new Date(pick.kickoff_at)
+      );
+
+    const payload = {
+      fixture_id:    pick.fixture_id,
+      pick_type:     pick.pick_type,
+      username:      session.username,
+      _session_hash: session._ph,
+    };
+    if (isRecovery) {
+      payload._recovery         = true;
+      payload.client_created_at = pick.created_at;
+    }
+
+    const result = await _submitPickWithRetry(payload);
+    if (result === 'saved') {
+      submittedAny = true;
+      _markPickResubmitted(pick.fixture_id);
+    } else if (result === 'rejected' && !allowLateResubmit && !window.__UPCOMING_IDS__.has(pick.fixture_id)) {
+      // Fixture đã không còn upcoming và recovery mode tắt → pick không thể submit được.
+      // Dùng _stale (không phải _resubmitted) để khi recovery mode bật lại thì tự retry.
+      _markPickStale(pick.fixture_id);
+    }
+
+    if (i < missing.length - 1) await _sleep(_RESUBMIT_GAP);
+  }
+
+  if (submittedAny) {
+    try {
+      const scopedKey = `${_LIVE_CACHE_KEY}?user_id=${encodeURIComponent(session.user_id)}`;
+      localStorage.removeItem(scopedKey);
+    } catch {}
+    localStorage.removeItem(_LIVE_CACHE_KEY);
+  }
+}
+
 // ── Alpine components ─────────────────────────────────────────────────
 
 function appState() {
@@ -214,7 +343,10 @@ function appState() {
     init() {
       try { this._user = JSON.parse(localStorage.getItem(_KEY) || 'null'); }
       catch { this._user = null; }
-      window.addEventListener(_EVT_LOGIN, (e) => { this._user = e.detail; });
+      window.addEventListener(_EVT_LOGIN, (e) => {
+        this._user = e.detail;
+        this._tryResubmit(e.detail);
+      });
 
       // Ctrl+Shift+R (Windows/Linux) hoặc Cmd+Shift+R (macOS) → làm mới cache
       // preventDefault() để chặn browser hard-reload thay bằng soft-refresh của app
@@ -259,6 +391,15 @@ function appState() {
       } finally {
         this.renameLoading = false;
       }
+    },
+    _tryResubmit(session) {
+      if (!session) return;
+      const allowLateResubmit = window.ALLOW_LATE_RESUBMIT === true;
+      const pending = readPendingPicks().filter(b => !b._resubmitted && (!b._stale || allowLateResubmit));
+      if (!pending.length) return;
+      syncOwnPicks(session)
+        .then(() => resubmitMissingPicks(session))
+        .catch(() => {});
     },
     async refreshCache() {
       if (this.refreshing) return;
@@ -548,6 +689,12 @@ function myPicksPage(buildPicksData, fixturesData) {
     ptDisplay(pts) {
       if (pts == null) return '—';
       return (pts > 0 ? '+' : '') + pts;
+    },
+    pickPhaseLabel(pick) {
+      const fixture = this.fixtures[pick.fixture_id];
+      if (!fixture || !window.POINT_PHASES?.length) return null;
+      const phase = window.POINT_PHASES.find(p => p.leagues.includes(fixture.league));
+      return phase?.label ?? null;
     },
     get totalPoints() { return this.picks.reduce((s, b) => s + (b.points ?? 0), 0); },
     get resolvedCount() { return this.picks.filter(b => b.result != null).length; },

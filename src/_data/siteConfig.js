@@ -1,8 +1,9 @@
 'use strict';
 
 // ── Configurable constants (read early so they can be used in arrays below) ──
-const pick_lock_minutes = parseInt(process.env.PICK_LOCK_MINUTES)  || 60;    // default 60 phút
-const demo_mode        = (process.env.DEMO_MODE        || 'false') === 'true'; // default false
+const pick_lock_minutes    = parseInt(process.env.PICK_LOCK_MINUTES) || 60;    // default 60 phút
+const allow_late_resubmit  = process.env.ALLOW_LATE_RESUBMIT === 'true';       // default false
+const demo_mode            = (process.env.DEMO_MODE        || 'false') === 'true'; // default false
 const public_mode      = (process.env.PUBLIC_MODE      || 'true' ) === 'true'; // default true — hiện link Dữ liệu gốc
 
 // NO_PICK: đặt trực tiếp tại đây — mọi thay đổi có git history
@@ -18,7 +19,8 @@ module.exports = {
   // ── Pick lock ───────────────────────────────────────────────────────────
   // Số phút trước giờ đá mà dự đoán bị khoá.
   // Thay đổi qua env var PICK_LOCK_MINUTES (hoặc trực tiếp đổi số 60 ở trên).
-  pick_lock_minutes,   // default: 60
+  pick_lock_minutes,     // default: 60
+  allow_late_resubmit,   // default: false — set ALLOW_LATE_RESUBMIT=true để bật recovery pick
 
   // ── Demo mode ───────────────────────────────────────────────────────────
   // Nếu true: hiện banner thông báo lịch cập nhật dữ liệu và reset demo.
@@ -58,6 +60,20 @@ module.exports = {
     LOSE:  -1,   // chọn sai
     NO_PICK: no_pick_point,   // không gửi dự đoán; < 0 để bật feature
   },
+
+  // ── Phase-specific scoring ──────────────────────────────────────────────
+  // Ghi đè `points` cho các trận thuộc leagues liệt kê trong mỗi phase.
+  // Nếu fixture.league không khớp phase nào → dùng `points` mặc định ở trên.
+  // Thêm phase mới: thêm entry vào array với `leagues` và `points` tương ứng.
+  default_phase_label: 'Vòng bảng',
+
+  point_phases: [
+    {
+      label:   'Vòng đấu loại',
+      leagues: ['Vòng 32', 'Vòng 16', 'Tứ Kết', 'Bán Kết', 'Chung Kết'],
+      points:  { WIN: 2, PUSH: 2, LOSE: -2, NO_PICK: -2 },
+    },
+  ],
 
   // ── Hướng dẫn chơi ─────────────────────────────────────────────────────
   how_to_play: [
