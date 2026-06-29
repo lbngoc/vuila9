@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-28T14:48:23.263Z",
+  "generated_at": "2026-06-29T01:54:23.832Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -905,10 +905,10 @@
       "home_team": "CH Congo",
       "away_team": "Uzbekistan",
       "handicap": "0",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 2,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": true
     },
     {
@@ -918,10 +918,10 @@
       "home_team": "Algérie",
       "away_team": "Áo",
       "handicap": "0",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": true
     },
     {
@@ -948,7 +948,7 @@
       "result_home": null,
       "result_away": null,
       "is_finished": false,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "FIX-002",
