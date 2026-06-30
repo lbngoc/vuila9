@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T14:48:22.020Z",
+  "generated_at": "2026-06-30T01:54:22.595Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -957,11 +957,11 @@
       "home_team": "Brazil",
       "away_team": "Nhật Bản",
       "handicap": "-1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
-      "is_locked": false
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 1,
+      "is_finished": true,
+      "is_locked": true
     },
     {
       "fixture_id": "FIX-003",
@@ -970,11 +970,11 @@
       "home_team": "Đức",
       "away_team": "Paraguay",
       "handicap": "-1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
-      "is_locked": false
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 3,
+      "is_finished": true,
+      "is_locked": true
     },
     {
       "fixture_id": "FIX-004",
@@ -987,7 +987,7 @@
       "result_home": null,
       "result_away": null,
       "is_finished": false,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "FIX-005",
