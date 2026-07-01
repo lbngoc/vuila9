@@ -1,77 +1,77 @@
 {
-  "generated_at": "2026-07-01T01:54:23.436Z",
+  "generated_at": "2026-07-01T14:48:24.437Z",
   "data": [
     {
       "user_id": "u_003",
       "username": "thich_la_chon",
       "display_name": "Thích Là Chọn",
-      "played": 79,
+      "played": 81,
       "wins": 7,
       "draws": 2,
-      "losses": 5,
-      "no_picks": 65,
-      "points": -66,
-      "win_rate": 0.0886
+      "losses": 6,
+      "no_picks": 66,
+      "points": -70,
+      "win_rate": 0.0864
     },
     {
       "user_id": "u_000",
       "username": "lam_mau",
       "display_name": "Mẫu Chính",
-      "played": 79,
+      "played": 81,
       "wins": 4,
-      "draws": 2,
-      "losses": 11,
+      "draws": 3,
+      "losses": 12,
       "no_picks": 62,
       "points": -72,
-      "win_rate": 0.0506
+      "win_rate": 0.0494
     },
     {
       "user_id": "u_004",
       "username": "sao_cung_duoc",
       "display_name": "Sao Cũng Được",
-      "played": 79,
+      "played": 81,
       "wins": 3,
-      "draws": 0,
+      "draws": 1,
       "losses": 8,
-      "no_picks": 68,
+      "no_picks": 69,
       "points": -76,
-      "win_rate": 0.038
+      "win_rate": 0.037
     },
     {
       "user_id": "u_002",
       "username": "choi_cho_vui",
       "display_name": "Chơi Cho Vui",
-      "played": 79,
-      "wins": 2,
+      "played": 81,
+      "wins": 3,
       "draws": 0,
       "losses": 9,
-      "no_picks": 68,
+      "no_picks": 69,
       "points": -82,
-      "win_rate": 0.0253
+      "win_rate": 0.037
     },
     {
       "user_id": "u_001",
       "username": "vui_la_9",
       "display_name": "Vui Là Chính",
-      "played": 79,
+      "played": 81,
       "wins": 2,
       "draws": 0,
-      "losses": 10,
-      "no_picks": 67,
-      "points": -82,
-      "win_rate": 0.0253
+      "losses": 11,
+      "no_picks": 68,
+      "points": -86,
+      "win_rate": 0.0247
     },
     {
       "user_id": "u3",
       "username": "thuy",
       "display_name": "Thichs",
-      "played": 79,
+      "played": 81,
       "wins": 1,
       "draws": 0,
-      "losses": 2,
+      "losses": 4,
       "no_picks": 76,
-      "points": -84,
-      "win_rate": 0.0127
+      "points": -88,
+      "win_rate": 0.0123
     }
   ]
 }

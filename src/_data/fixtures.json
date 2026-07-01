@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T01:54:23.436Z",
+  "generated_at": "2026-07-01T14:48:24.437Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -1035,10 +1035,10 @@
       "home_team": "Anh",
       "away_team": "CH Congo",
       "handicap": "-1.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 2,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -1048,10 +1048,10 @@
       "home_team": "Bỉ",
       "away_team": "Senegal",
       "handicap": "-1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 0,
+      "is_finished": true,
       "is_locked": false
     },
     {
