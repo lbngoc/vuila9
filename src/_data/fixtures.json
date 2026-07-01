@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T14:48:21.699Z",
+  "generated_at": "2026-07-01T01:54:23.436Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -1000,7 +1000,7 @@
       "result_home": 0,
       "result_away": 2,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "FIX-006",
@@ -1009,11 +1009,11 @@
       "home_team": "Pháp",
       "away_team": "Thụy Điển",
       "handicap": "-2",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
-      "is_locked": false
+      "status": "finished",
+      "result_home": 2,
+      "result_away": 1,
+      "is_finished": true,
+      "is_locked": true
     },
     {
       "fixture_id": "FIX-007",
@@ -1022,11 +1022,11 @@
       "home_team": "Mexico",
       "away_team": "Ecuador",
       "handicap": "-1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
-      "is_locked": false
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 0,
+      "is_finished": true,
+      "is_locked": true
     },
     {
       "fixture_id": "FIX-008",

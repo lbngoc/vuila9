@@ -1,77 +1,77 @@
 {
-  "generated_at": "2026-06-30T14:48:21.699Z",
+  "generated_at": "2026-07-01T01:54:23.436Z",
   "data": [
     {
       "user_id": "u_003",
       "username": "thich_la_chon",
       "display_name": "Thích Là Chọn",
-      "played": 77,
+      "played": 79,
       "wins": 7,
       "draws": 2,
-      "losses": 3,
+      "losses": 5,
       "no_picks": 65,
-      "points": -62,
-      "win_rate": 0.0909
+      "points": -66,
+      "win_rate": 0.0886
     },
     {
       "user_id": "u_000",
       "username": "lam_mau",
       "display_name": "Mẫu Chính",
-      "played": 77,
+      "played": 79,
       "wins": 4,
       "draws": 2,
-      "losses": 10,
-      "no_picks": 61,
-      "points": -68,
-      "win_rate": 0.0519
+      "losses": 11,
+      "no_picks": 62,
+      "points": -72,
+      "win_rate": 0.0506
     },
     {
       "user_id": "u_004",
       "username": "sao_cung_duoc",
       "display_name": "Sao Cũng Được",
-      "played": 77,
+      "played": 79,
       "wins": 3,
       "draws": 0,
-      "losses": 7,
-      "no_picks": 67,
-      "points": -72,
-      "win_rate": 0.039
+      "losses": 8,
+      "no_picks": 68,
+      "points": -76,
+      "win_rate": 0.038
     },
     {
       "user_id": "u_002",
       "username": "choi_cho_vui",
       "display_name": "Chơi Cho Vui",
-      "played": 77,
+      "played": 79,
       "wins": 2,
       "draws": 0,
-      "losses": 8,
-      "no_picks": 67,
-      "points": -78,
-      "win_rate": 0.026
+      "losses": 9,
+      "no_picks": 68,
+      "points": -82,
+      "win_rate": 0.0253
     },
     {
       "user_id": "u_001",
       "username": "vui_la_9",
       "display_name": "Vui Là Chính",
-      "played": 77,
+      "played": 79,
       "wins": 2,
       "draws": 0,
-      "losses": 9,
-      "no_picks": 66,
-      "points": -78,
-      "win_rate": 0.026
+      "losses": 10,
+      "no_picks": 67,
+      "points": -82,
+      "win_rate": 0.0253
     },
     {
       "user_id": "u3",
       "username": "thuy",
       "display_name": "Thichs",
-      "played": 77,
+      "played": 79,
       "wins": 1,
       "draws": 0,
       "losses": 2,
-      "no_picks": 74,
-      "points": -80,
-      "win_rate": 0.013
+      "no_picks": 76,
+      "points": -84,
+      "win_rate": 0.0127
     }
   ]
 }
