@@ -1,77 +1,77 @@
 {
-  "generated_at": "2026-07-01T14:48:24.437Z",
+  "generated_at": "2026-07-02T01:54:23.104Z",
   "data": [
-    {
-      "user_id": "u_003",
-      "username": "thich_la_chon",
-      "display_name": "Thích Là Chọn",
-      "played": 81,
-      "wins": 7,
-      "draws": 2,
-      "losses": 6,
-      "no_picks": 66,
-      "points": -70,
-      "win_rate": 0.0864
-    },
     {
       "user_id": "u_000",
       "username": "lam_mau",
       "display_name": "Mẫu Chính",
-      "played": 81,
-      "wins": 4,
+      "played": 83,
+      "wins": 5,
       "draws": 3,
-      "losses": 12,
+      "losses": 13,
       "no_picks": 62,
       "points": -72,
-      "win_rate": 0.0494
+      "win_rate": 0.0602
+    },
+    {
+      "user_id": "u_003",
+      "username": "thich_la_chon",
+      "display_name": "Thích Là Chọn",
+      "played": 83,
+      "wins": 7,
+      "draws": 2,
+      "losses": 6,
+      "no_picks": 68,
+      "points": -74,
+      "win_rate": 0.0843
     },
     {
       "user_id": "u_004",
       "username": "sao_cung_duoc",
       "display_name": "Sao Cũng Được",
-      "played": 81,
+      "played": 83,
       "wins": 3,
       "draws": 1,
-      "losses": 8,
-      "no_picks": 69,
-      "points": -76,
-      "win_rate": 0.037
+      "losses": 9,
+      "no_picks": 70,
+      "points": -80,
+      "win_rate": 0.0361
     },
     {
       "user_id": "u_002",
       "username": "choi_cho_vui",
       "display_name": "Chơi Cho Vui",
-      "played": 81,
-      "wins": 3,
+      "played": 83,
+      "wins": 4,
       "draws": 0,
       "losses": 9,
-      "no_picks": 69,
+      "no_picks": 70,
       "points": -82,
-      "win_rate": 0.037
-    },
-    {
-      "user_id": "u_001",
-      "username": "vui_la_9",
-      "display_name": "Vui Là Chính",
-      "played": 81,
-      "wins": 2,
-      "draws": 0,
-      "losses": 11,
-      "no_picks": 68,
-      "points": -86,
-      "win_rate": 0.0247
+      "win_rate": 0.0482
     },
     {
       "user_id": "u3",
       "username": "thuy",
       "display_name": "Thichs",
-      "played": 81,
-      "wins": 1,
+      "played": 83,
+      "wins": 2,
       "draws": 0,
-      "losses": 4,
+      "losses": 5,
       "no_picks": 76,
       "points": -88,
-      "win_rate": 0.0123
+      "win_rate": 0.0241
+    },
+    {
+      "user_id": "u_001",
+      "username": "vui_la_9",
+      "display_name": "Vui Là Chính",
+      "played": 83,
+      "wins": 2,
+      "draws": 0,
+      "losses": 11,
+      "no_picks": 70,
+      "points": -90,
+      "win_rate": 0.0241
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T14:48:24.437Z",
+  "generated_at": "2026-07-02T01:54:23.104Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -1039,7 +1039,7 @@
       "result_home": 1,
       "result_away": 2,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "FIX-009",
@@ -1052,7 +1052,7 @@
       "result_home": 1,
       "result_away": 0,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "FIX-010",
@@ -1061,11 +1061,11 @@
       "home_team": "Mỹ",
       "away_team": "Bosnia",
       "handicap": "-1.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
-      "is_locked": false
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 0,
+      "is_finished": true,
+      "is_locked": true
     },
     {
       "fixture_id": "FIX-011",
@@ -1074,10 +1074,10 @@
       "home_team": "Tây Ban Nha",
       "away_team": "Áo",
       "handicap": "-1.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 3,
+      "result_away": 0,
+      "is_finished": true,
       "is_locked": false
     },
     {
