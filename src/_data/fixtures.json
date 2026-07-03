@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T01:54:26.205Z",
+  "generated_at": "2026-07-03T14:48:24.103Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -1104,7 +1104,7 @@
       "result_home": 1,
       "result_away": 0,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "FIX-014",
@@ -1139,10 +1139,10 @@
       "home_team": "Colombia",
       "away_team": "Ghana",
       "handicap": "-1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 1,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
