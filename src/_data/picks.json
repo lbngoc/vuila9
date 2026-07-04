@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T14:48:24.103Z",
+  "generated_at": "2026-07-04T14:48:19.861Z",
   "data": [
     {
       "pick_id": "pick_001",
@@ -502,9 +502,8 @@
       "user_id": "u_002",
       "fixture_id": "FIX-017",
       "pick_type": "home",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "LOSE",
+      "points": -2
     },
     {
       "pick_id": "pick_20260629_120627_tcaw",
@@ -709,9 +708,8 @@
       "user_id": "u_001",
       "fixture_id": "FIX-018",
       "pick_type": "away",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "LOSE",
+      "points": -2
     },
     {
       "pick_id": "pick_20260629_181745_h5nz",
@@ -1050,9 +1048,8 @@
       "user_id": "u_004",
       "fixture_id": "FIX-018",
       "pick_type": "away",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "LOSE",
+      "points": -2
     },
     {
       "pick_id": "pick_20260701_061746_cblo",
@@ -1327,9 +1324,8 @@
       "user_id": "u_001",
       "fixture_id": "FIX-017",
       "pick_type": "draw",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "LOSE",
+      "points": -2
     },
     {
       "pick_id": "pick_20260702_121744_cvem",
@@ -1346,9 +1342,8 @@
       "user_id": "u_003",
       "fixture_id": "FIX-017",
       "pick_type": "away",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "WIN",
+      "points": 2
     },
     {
       "pick_id": "pick_20260702_121745_emr1",
@@ -1444,9 +1439,8 @@
       "user_id": "u3",
       "fixture_id": "FIX-018",
       "pick_type": "home",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "WIN",
+      "points": 2
     },
     {
       "pick_id": "pick_20260703_001744_k338",
@@ -1484,9 +1478,8 @@
       "user_id": "u3",
       "fixture_id": "FIX-017",
       "pick_type": "away",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "WIN",
+      "points": 2
     },
     {
       "pick_id": "pick_20260703_061743_1usc",
@@ -1572,9 +1565,8 @@
       "user_id": "u_000",
       "fixture_id": "FIX-017",
       "pick_type": "away",
-      "result": null,
-      "points": null,
-      "profit": null
+      "result": "WIN",
+      "points": 2
     },
     {
       "pick_id": "pick_20260703_181744_udxp",
@@ -1594,6 +1586,114 @@
       "pick_type": "draw",
       "result": "LOSE",
       "points": -2
+    },
+    {
+      "pick_id": "pick_20260704_001744_bs89",
+      "created_at": "2026-07-03T17:17:44.639Z",
+      "user_id": "u_001",
+      "fixture_id": "FIX-021",
+      "pick_type": "away",
+      "result": null,
+      "points": null,
+      "profit": null
+    },
+    {
+      "pick_id": "pick_20260704_001744_6fdq",
+      "created_at": "2026-07-03T17:17:44.639Z",
+      "user_id": "u_003",
+      "fixture_id": "FIX-018",
+      "pick_type": "draw",
+      "result": "LOSE",
+      "points": -2
+    },
+    {
+      "pick_id": "pick_20260704_001744_9f8f",
+      "created_at": "2026-07-03T17:17:44.639Z",
+      "user_id": "u3",
+      "fixture_id": "FIX-202",
+      "pick_type": "home",
+      "result": null,
+      "points": null,
+      "profit": null
+    },
+    {
+      "pick_id": "pick_20260704_061747_mzv7",
+      "created_at": "2026-07-03T23:17:47.647Z",
+      "user_id": "u_002",
+      "fixture_id": "FIX-202",
+      "pick_type": "draw",
+      "result": null,
+      "points": null,
+      "profit": null
+    },
+    {
+      "pick_id": "pick_20260704_061747_udtd",
+      "created_at": "2026-07-03T23:17:47.647Z",
+      "user_id": "u_004",
+      "fixture_id": "FIX-020",
+      "pick_type": "away",
+      "result": null,
+      "points": null,
+      "profit": null
+    },
+    {
+      "pick_id": "pick_20260704_061748_cb2q",
+      "created_at": "2026-07-03T23:17:47.647Z",
+      "user_id": "u_004",
+      "fixture_id": "FIX-017",
+      "pick_type": "draw",
+      "result": "LOSE",
+      "points": -2
+    },
+    {
+      "pick_id": "pick_20260704_121744_9fx1",
+      "created_at": "2026-07-04T05:17:44.961Z",
+      "user_id": "u_000",
+      "fixture_id": "FIX-206",
+      "pick_type": "home",
+      "result": null,
+      "points": null,
+      "profit": null
+    },
+    {
+      "pick_id": "pick_20260704_121745_5iex",
+      "created_at": "2026-07-04T05:17:44.961Z",
+      "user_id": "u_000",
+      "fixture_id": "FIX-203",
+      "pick_type": "away",
+      "result": null,
+      "points": null,
+      "profit": null
+    },
+    {
+      "pick_id": "pick_20260704_121745_y6dj",
+      "created_at": "2026-07-04T05:17:44.961Z",
+      "user_id": "u_000",
+      "fixture_id": "FIX-201",
+      "pick_type": "draw",
+      "result": null,
+      "points": null,
+      "profit": null
+    },
+    {
+      "pick_id": "pick_20260704_121746_clom",
+      "created_at": "2026-07-04T05:17:44.961Z",
+      "user_id": "u_002",
+      "fixture_id": "FIX-022",
+      "pick_type": "home",
+      "result": null,
+      "points": null,
+      "profit": null
+    },
+    {
+      "pick_id": "pick_20260704_181744_dj61",
+      "created_at": "2026-07-04T11:17:44.066Z",
+      "user_id": "u_000",
+      "fixture_id": "FIX-202",
+      "pick_type": "draw",
+      "result": null,
+      "points": null,
+      "profit": null
     },
     {
       "pick_id": "auto_u_004_MEX-RSA",
@@ -5810,6 +5910,26 @@
       "created_at": "2026-07-03T22:00:00.000Z",
       "user_id": "u3",
       "fixture_id": "FIX-015",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -2,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_000_FIX-018",
+      "created_at": "2026-07-04T21:00:00.000Z",
+      "user_id": "u_000",
+      "fixture_id": "FIX-018",
+      "pick_type": null,
+      "result": "NO_PICK",
+      "points": -2,
+      "_no_pick": true
+    },
+    {
+      "pick_id": "auto_u_002_FIX-018",
+      "created_at": "2026-07-04T21:00:00.000Z",
+      "user_id": "u_002",
+      "fixture_id": "FIX-018",
       "pick_type": null,
       "result": "NO_PICK",
       "points": -2,
