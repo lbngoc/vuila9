@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-05T01:54:26.700Z",
+  "generated_at": "2026-07-05T14:48:24.066Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -1204,10 +1204,10 @@
       "home_team": "Tây Ban Nha",
       "away_team": "Bồ Đào Nha",
       "handicap": "-0.5",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 2,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -1217,10 +1217,10 @@
       "home_team": "Bỉ",
       "away_team": "Mỹ",
       "handicap": "0",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 2,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
