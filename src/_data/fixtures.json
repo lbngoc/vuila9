@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-05T14:48:24.066Z",
+  "generated_at": "2026-07-06T01:54:25.368Z",
   "data": [
     {
       "fixture_id": "MEX-RSA",
@@ -1182,7 +1182,7 @@
       "result_home": 1,
       "result_away": 2,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "FIX-020",
@@ -1195,7 +1195,7 @@
       "result_home": 1,
       "result_away": 3,
       "is_finished": true,
-      "is_locked": false
+      "is_locked": true
     },
     {
       "fixture_id": "FIX-021",
@@ -1230,10 +1230,10 @@
       "home_team": "Argentina",
       "away_team": "Ai Cập",
       "handicap": "1",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 0,
+      "result_away": 2,
+      "is_finished": true,
       "is_locked": false
     },
     {
@@ -1243,10 +1243,10 @@
       "home_team": "Thụy Sĩ",
       "away_team": "Colombia",
       "handicap": "0",
-      "status": "upcoming",
-      "result_home": null,
-      "result_away": null,
-      "is_finished": false,
+      "status": "finished",
+      "result_home": 3,
+      "result_away": 1,
+      "is_finished": true,
       "is_locked": false
     },
     {
